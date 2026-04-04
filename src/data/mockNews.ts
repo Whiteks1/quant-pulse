@@ -1,0 +1,280 @@
+export interface NewsItem {
+  id: string;
+  title: string;
+  source: string;
+  url: string;
+  publishedAt: string;
+  category: string;
+  section: "Technology" | "Crypto & Markets";
+  summary: string;
+  whyItMatters: string;
+  impact: string;
+  relevance: "high" | "medium" | "low";
+  tags: string[];
+  signalVsNoise: "signal" | "noise";
+  featured: boolean;
+}
+
+export interface WatchItem {
+  id: string;
+  title: string;
+  date: string;
+  type: "earnings" | "regulation" | "event" | "market";
+  description: string;
+}
+
+export const mockNews: NewsItem[] = [
+  {
+    id: "1",
+    title: "Bitcoin ETFs see renewed inflows after three weeks of outflows",
+    source: "Bloomberg",
+    url: "https://example.com",
+    publishedAt: "2026-04-04",
+    category: "ETF",
+    section: "Crypto & Markets",
+    summary: "Bitcoin spot ETFs recorded $420M in net inflows on Thursday, breaking a three-week streak of outflows. BlackRock's IBIT led the charge with $280M alone.",
+    whyItMatters: "Signals renewed institutional conviction and may indicate a floor has been established for BTC around $68K.",
+    impact: "Bullish sentiment shift",
+    relevance: "high",
+    tags: ["BTC", "ETF", "Institutional"],
+    signalVsNoise: "signal",
+    featured: true,
+  },
+  {
+    id: "2",
+    title: "OpenAI launches GPT-5 with real-time reasoning capabilities",
+    source: "The Verge",
+    url: "https://example.com",
+    publishedAt: "2026-04-04",
+    category: "AI",
+    section: "Technology",
+    summary: "OpenAI unveiled GPT-5 with native real-time reasoning, multimodal input processing, and a 1M token context window. Available to enterprise customers first.",
+    whyItMatters: "Represents the largest capability jump since GPT-4. Enterprise adoption could accelerate across legal, finance, and healthcare sectors.",
+    impact: "Major industry catalyst",
+    relevance: "high",
+    tags: ["AI", "OpenAI", "LLM"],
+    signalVsNoise: "signal",
+    featured: true,
+  },
+  {
+    id: "3",
+    title: "EU passes comprehensive AI regulation framework",
+    source: "Reuters",
+    url: "https://example.com",
+    publishedAt: "2026-04-04",
+    category: "Regulation",
+    section: "Technology",
+    summary: "The European Parliament approved the AI Act with new compliance requirements for high-risk AI systems. Companies have 12 months to comply.",
+    whyItMatters: "Sets global precedent for AI governance. US-based AI companies will need EU-compliant versions of their products.",
+    impact: "Regulatory headwind for AI sector",
+    relevance: "high",
+    tags: ["AI", "Regulation", "EU"],
+    signalVsNoise: "signal",
+    featured: true,
+  },
+  {
+    id: "4",
+    title: "Ethereum completes Pectra upgrade, gas fees drop 40%",
+    source: "CoinDesk",
+    url: "https://example.com",
+    publishedAt: "2026-04-04",
+    category: "Blockchain",
+    section: "Crypto & Markets",
+    summary: "Ethereum's Pectra upgrade went live, reducing average gas fees from $2.40 to $1.44 and improving validator efficiency by 25%.",
+    whyItMatters: "Makes Ethereum more competitive against Solana and L2s for everyday transactions. Could drive DeFi activity back to mainnet.",
+    impact: "Positive for ETH ecosystem",
+    relevance: "high",
+    tags: ["ETH", "Upgrade", "DeFi"],
+    signalVsNoise: "signal",
+    featured: false,
+  },
+  {
+    id: "5",
+    title: "Apple acquires edge AI startup for $2B",
+    source: "Financial Times",
+    url: "https://example.com",
+    publishedAt: "2026-04-04",
+    category: "Big Tech",
+    section: "Technology",
+    summary: "Apple acquired DarwinAI, a startup specializing in on-device AI inference, for $2B. The deal signals Apple's commitment to local AI processing.",
+    whyItMatters: "Positions Apple to run advanced AI models directly on iPhone/Mac without cloud dependency, a key privacy advantage.",
+    impact: "Strategic move for Apple AI",
+    relevance: "medium",
+    tags: ["Apple", "AI", "M&A"],
+    signalVsNoise: "signal",
+    featured: false,
+  },
+  {
+    id: "6",
+    title: "Solana TVL hits all-time high as memecoin activity surges",
+    source: "DeFi Llama",
+    url: "https://example.com",
+    publishedAt: "2026-04-04",
+    category: "DeFi",
+    section: "Crypto & Markets",
+    summary: "Solana's total value locked reached $14.2B driven primarily by memecoin trading on pump.fun and Jupiter. SOL price up 12% this week.",
+    whyItMatters: "While TVL is up, the quality of activity matters. Memecoin-driven TVL is volatile and may not sustain.",
+    impact: "Mixed — activity up, sustainability unclear",
+    relevance: "medium",
+    tags: ["SOL", "DeFi", "Memecoins"],
+    signalVsNoise: "noise",
+    featured: false,
+  },
+  {
+    id: "7",
+    title: "CrowdStrike discovers new state-sponsored cyber campaign targeting energy sector",
+    source: "Wired",
+    url: "https://example.com",
+    publishedAt: "2026-04-03",
+    category: "Cybersecurity",
+    section: "Technology",
+    summary: "CrowdStrike identified a sophisticated APT campaign targeting US energy infrastructure. The attack uses novel supply chain compromise techniques.",
+    whyItMatters: "Critical infrastructure attacks are escalating. Expect increased government cybersecurity spending and stricter compliance requirements.",
+    impact: "Bullish for cybersecurity stocks",
+    relevance: "high",
+    tags: ["Cybersecurity", "Infrastructure"],
+    signalVsNoise: "signal",
+    featured: false,
+  },
+  {
+    id: "8",
+    title: "New crypto project claims to 'revolutionize' social media with tokens",
+    source: "CryptoSlate",
+    url: "https://example.com",
+    publishedAt: "2026-04-04",
+    category: "Startups",
+    section: "Crypto & Markets",
+    summary: "A new project called SocialFi Pro launched with $50M in VC funding, promising to tokenize social interactions. Vague whitepaper with aggressive marketing.",
+    whyItMatters: "Another iteration of the SocialFi narrative without clear product-market fit. High VC valuation without user traction is a red flag.",
+    impact: "Low — likely noise",
+    relevance: "low",
+    tags: ["SocialFi", "VC"],
+    signalVsNoise: "noise",
+    featured: false,
+  },
+  {
+    id: "9",
+    title: "NVIDIA reports record datacenter revenue driven by AI demand",
+    source: "CNBC",
+    url: "https://example.com",
+    publishedAt: "2026-04-03",
+    category: "Big Tech",
+    section: "Technology",
+    summary: "NVIDIA's datacenter segment posted $35B in quarterly revenue, up 80% YoY. CEO Jensen Huang highlighted 'insatiable demand' for AI compute.",
+    whyItMatters: "Confirms AI infrastructure spending is not slowing down. Key signal for the entire AI hardware and cloud compute supply chain.",
+    impact: "Validates AI capex cycle",
+    relevance: "high",
+    tags: ["NVIDIA", "AI", "Earnings"],
+    signalVsNoise: "signal",
+    featured: true,
+  },
+  {
+    id: "10",
+    title: "SEC delays decision on Ethereum ETF options trading",
+    source: "The Block",
+    url: "https://example.com",
+    publishedAt: "2026-04-03",
+    category: "Regulation",
+    section: "Crypto & Markets",
+    summary: "The SEC pushed its decision on ETH ETF options to June, citing the need for additional public comment. Market reaction was muted.",
+    whyItMatters: "Expected delay — not a rejection. Options on ETH ETFs would significantly increase institutional trading strategies available.",
+    impact: "Neutral short-term",
+    relevance: "medium",
+    tags: ["ETH", "ETF", "SEC"],
+    signalVsNoise: "noise",
+    featured: false,
+  },
+  {
+    id: "11",
+    title: "Cloudflare launches AI-powered zero-trust network access",
+    source: "TechCrunch",
+    url: "https://example.com",
+    publishedAt: "2026-04-04",
+    category: "Cybersecurity",
+    section: "Technology",
+    summary: "Cloudflare introduced AI-driven anomaly detection for its Zero Trust platform, analyzing network behavior patterns in real-time to detect threats.",
+    whyItMatters: "Combines two hot sectors — AI and cybersecurity. Could pressure legacy security vendors to accelerate AI integration.",
+    impact: "Competitive pressure on legacy vendors",
+    relevance: "medium",
+    tags: ["Cloudflare", "AI", "Security"],
+    signalVsNoise: "signal",
+    featured: false,
+  },
+  {
+    id: "12",
+    title: "Celebrity launches another NFT collection promising 'exclusive access'",
+    source: "Decrypt",
+    url: "https://example.com",
+    publishedAt: "2026-04-04",
+    category: "NFT",
+    section: "Crypto & Markets",
+    summary: "A major celebrity launched a 10K NFT collection on Ethereum with vague promises of metaverse access and concert tickets. Floor price dropping fast.",
+    whyItMatters: "Celebrity NFT projects have a 95%+ failure rate. This is textbook noise — no utility, no roadmap, pure hype extraction.",
+    impact: "None — pure noise",
+    relevance: "low",
+    tags: ["NFT", "Hype"],
+    signalVsNoise: "noise",
+    featured: false,
+  },
+];
+
+export const executiveBrief = [
+  "Bitcoin ETFs broke a 3-week outflow streak with $420M in net inflows — institutional interest is returning.",
+  "OpenAI launched GPT-5 with real-time reasoning and 1M context window — largest capability jump since GPT-4.",
+  "EU approved comprehensive AI regulation — 12-month compliance deadline for high-risk systems.",
+  "NVIDIA posted $35B datacenter revenue (+80% YoY) — AI infrastructure demand shows no signs of slowing.",
+  "Ethereum Pectra upgrade live — gas fees down 40%, improving mainnet competitiveness.",
+];
+
+export const watchItems: WatchItem[] = [
+  {
+    id: "w1",
+    title: "Federal Reserve Interest Rate Decision",
+    date: "2026-04-09",
+    type: "market",
+    description: "FOMC meeting outcome could impact risk assets across tech and crypto.",
+  },
+  {
+    id: "w2",
+    title: "Apple WWDC 2026",
+    date: "2026-04-14",
+    type: "event",
+    description: "Expected to unveil on-device AI features leveraging DarwinAI acquisition.",
+  },
+  {
+    id: "w3",
+    title: "SEC Crypto Roundtable",
+    date: "2026-04-11",
+    type: "regulation",
+    description: "New SEC chair to outline stance on crypto asset classification.",
+  },
+  {
+    id: "w4",
+    title: "Google Q1 2026 Earnings",
+    date: "2026-04-15",
+    type: "earnings",
+    description: "Focus on Gemini adoption metrics and cloud AI revenue growth.",
+  },
+  {
+    id: "w5",
+    title: "Bitcoin Halving Anniversary Analysis",
+    date: "2026-04-20",
+    type: "market",
+    description: "One year post-halving — historical cycle analysis suggests key inflection point.",
+  },
+];
+
+export const categories = [
+  "All",
+  "AI",
+  "Big Tech",
+  "Cybersecurity",
+  "ETF",
+  "Blockchain",
+  "DeFi",
+  "Regulation",
+  "Startups",
+  "NFT",
+];
+
+export const sections = ["All", "Technology", "Crypto & Markets"];
