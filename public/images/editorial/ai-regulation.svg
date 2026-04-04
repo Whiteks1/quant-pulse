@@ -1,0 +1,14 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="675" fill="#090D14"/>
+  <rect x="48" y="48" width="1104" height="579" rx="32" fill="#0B111B" stroke="#1B2638"/>
+  <rect x="104" y="110" width="350" height="460" rx="26" fill="#0F1725" stroke="#20314B"/>
+  <path d="M171 195H387M171 255H387M171 315H355M171 375H387M171 435H323" stroke="#3B597D" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="846" cy="282" r="142" fill="#0D1623" stroke="#27415F"/>
+  <path d="M846 202L919 241V323C919 374 886 421 846 437C806 421 773 374 773 323V241L846 202Z" fill="#14253B" stroke="#6FA8DC" stroke-width="8"/>
+  <path d="M814 320L840 346L883 292" stroke="#7DD3FC" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="566" y="130" fill="#7DD3FC" font-family="JetBrains Mono, monospace" font-size="22">REGULATORY SIGNAL</text>
+  <text x="566" y="188" fill="#ECF3FB" font-family="Inter, Arial, sans-serif" font-size="50" font-weight="700">AI compliance framework</text>
+  <text x="566" y="230" fill="#93A6BD" font-family="Inter, Arial, sans-serif" font-size="24">Formal rulemaking with operational impact</text>
+  <rect x="566" y="472" width="358" height="78" rx="18" fill="#101725" stroke="#20314B"/>
+  <text x="606" y="520" fill="#ECF3FB" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700">12-month compliance</text>
+</svg>

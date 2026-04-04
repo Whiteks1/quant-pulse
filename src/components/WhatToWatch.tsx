@@ -1,5 +1,5 @@
 import type { WatchItem } from "@/data/mockNews";
-import { Eye, Calendar, Landmark, BarChart3, Radio } from "lucide-react";
+import { Eye, Calendar, Landmark, BarChart3, Radio, ExternalLink } from "lucide-react";
 
 const typeIcons = {
   earnings: BarChart3,
@@ -34,10 +34,23 @@ export function WhatToWatch({ items }: { items: WatchItem[] }) {
               <div className={`shrink-0 mt-0.5 ${typeColors[item.type]}`}>
                 <Icon className="h-4 w-4" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-sm font-semibold text-foreground">{item.title}</p>
                 <p className="text-xs text-muted-foreground font-mono mt-1">{item.date}</p>
-                <p className="text-xs text-secondary-foreground mt-1.5">{item.description}</p>
+                <p className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground mt-1.5">
+                  {item.section} · {item.source}
+                </p>
+                <p className="text-xs text-secondary-foreground mt-2">{item.description}</p>
+                <p className="text-xs text-primary mt-2 leading-relaxed">{item.whyWatch}</p>
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary/80 transition-colors mt-2"
+                >
+                  Open source
+                  <ExternalLink className="h-3 w-3" />
+                </a>
               </div>
             </div>
           );
