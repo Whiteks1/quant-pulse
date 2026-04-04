@@ -1,11 +1,12 @@
 # Quant Pulse — Arquitectura por fases
 
-Documento operativo para humanos, Cursor y Codex. Resume la estrategia acordada: primero conocimiento estático, después API y Actions.
+Documento operativo para humanos, Cursor y Codex. Resume la estrategia acordada: primero feed estático generado por pipeline y consumido por la web; después API y Actions.
 
 ## Fase 1 (ahora)
 
 - **GitHub Pages** como frontend estático.
-- **Datos en el repo**: el feed publicado vive en `public/data/pulse.json` (se copia tal cual a `dist/` en el build). El pipeline editorial puede **sustituir o generar** ese archivo en commits.
+- **Datos en el repo**: la fuente editorial vive en `content/pulse.source.json` y el feed publicado se genera en `public/data/pulse.json` (se copia tal cual a `dist/` en el build).
+- **Pipeline editorial**: una tarea o script genera/actualiza `public/data/pulse.json` a partir de la fuente editorial, validación y criterio editorial. El GPT no publica.
 - **Custom GPT con Knowledge** (sin backend ni Actions todavía). Subir al GPT:
   - `AGENTS.md`
   - `docs/editorial-manual.es.md`
@@ -17,9 +18,9 @@ Documento operativo para humanos, Cursor y Codex. Resume la estrategia acordada:
   - `docs/voice-summary-style.es.md`
   - `config/approved-sources.yaml`
 
-**Objetivo:** el GPT aplica las reglas editoriales de Quant Pulse; la web lee el JSON estático vía `fetch` usando `import.meta.env.BASE_URL` (correcto bajo subpath en Pages).
+**Objetivo:** el pipeline produce el feed desde una fuente reproducible, la web lo lee desde Pages y el GPT aplica las reglas editoriales de Quant Pulse sobre ese contenido.
 
-**No en esta fase:** chat embebido en la web, llamadas a OpenAI desde el navegador, Custom GPT Actions sin servidor.
+**No en esta fase:** backend propio, endpoints dinámicos, chat embebido en la web, llamadas a OpenAI desde el navegador, Custom GPT Actions sin servidor.
 
 ## Fase 2 (después)
 
@@ -41,4 +42,4 @@ También accesible en el árbol del repo: `public/data/pulse.json`.
 
 ## Instrucción corta para agentes
 
-Primero GPT con conocimiento interno y `pulse.json` en repo. Después GPT con Actions y backend. No invertir el orden.
+Primero `content/pulse.source.json` + pipeline + `pulse.json` + Pages + GPT con Knowledge. Después backend y GPT con Actions. No invertir el orden.

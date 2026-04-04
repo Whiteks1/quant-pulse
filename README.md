@@ -22,11 +22,17 @@ En local, `npm run build` usa base `/` (raíz). Para probar un build como en Pag
 
 ## Datos del feed (Fase 1)
 
-La app carga [`public/data/pulse.json`](public/data/pulse.json) en runtime (`fetch` con `BASE_URL`). Un pipeline o edición manual puede actualizar ese archivo; en GitHub Pages queda público en `/data/pulse.json` bajo el subpath del repo.
+La arquitectura operativa de Fase 1 es:
+
+`fuentes -> content/pulse.source.json -> build:feed -> public/data/pulse.json -> GitHub Pages -> GPT con Knowledge`
+
+La app carga [`public/data/pulse.json`](public/data/pulse.json) en runtime (`fetch` con `BASE_URL`). Ese archivo es el artefacto publicado de Fase 1. La edición manual debe hacerse sobre [`content/pulse.source.json`](content/pulse.source.json), y después regenerar el feed con `npm run build:feed`.
+
+El workflow de Pages comprueba además que el feed publicado esté sincronizado con la fuente editorial (`npm run check:feed`) antes del build.
 
 ## Documentación editorial
 
-Ver [`AGENTS.md`](AGENTS.md), [`docs/architecture-phases.es.md`](docs/architecture-phases.es.md) y el resto de [`docs/`](docs/).
+Ver [`AGENTS.md`](AGENTS.md), [`docs/architecture-phases.es.md`](docs/architecture-phases.es.md), [`docs/feed-workflow.es.md`](docs/feed-workflow.es.md) y el resto de [`docs/`](docs/).
 
 ## Scripts
 
@@ -34,6 +40,9 @@ Ver [`AGENTS.md`](AGENTS.md), [`docs/architecture-phases.es.md`](docs/architectu
 | ------------- | ------------------ |
 | `npm run dev` | Servidor Vite      |
 | `npm run build` | Build producción |
+| `npm run build:feed` | Genera `public/data/pulse.json` desde `content/pulse.source.json` |
+| `npm run check:feed` | Falla si el feed publicado no coincide con la fuente editorial |
 | `npm run lint`  | ESLint           |
 | `npm test`      | Vitest           |
+| `npm run validate:feed` | Valida la estructura base de `content/pulse.source.json` |
 | `npm run test:e2e` | Playwright    |

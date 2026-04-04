@@ -13,11 +13,7 @@
       "summary": "Bitcoin spot ETFs recorded $420M in net inflows on Thursday, breaking a three-week streak of outflows. BlackRock's IBIT led the charge with $280M alone.",
       "whyItMatters": "Signals renewed institutional conviction and may indicate a floor has been established for BTC around $68K.",
       "impact": "Bullish sentiment shift",
-      "tags": [
-        "BTC",
-        "flows",
-        "institutional"
-      ],
+      "tags": ["BTC", "flows", "institutional"],
       "signalVsNoise": "signal",
       "priority": "P1",
       "relevanceScore": 88,
@@ -35,11 +31,7 @@
       "summary": "OpenAI unveiled GPT-5 with native real-time reasoning, multimodal input processing, and a 1M token context window. Available to enterprise customers first.",
       "whyItMatters": "Represents the largest capability jump since GPT-4. Enterprise adoption could accelerate across legal, finance, and healthcare sectors.",
       "impact": "Major industry catalyst",
-      "tags": [
-        "OpenAI",
-        "LLM",
-        "enterprise"
-      ],
+      "tags": ["OpenAI", "LLM", "enterprise"],
       "signalVsNoise": "signal",
       "priority": "P1",
       "relevanceScore": 82,
@@ -57,11 +49,7 @@
       "summary": "The European Parliament approved the AI Act with new compliance requirements for high-risk AI systems. Companies have 12 months to comply.",
       "whyItMatters": "Sets global precedent for AI governance. US-based AI companies will need EU-compliant versions of their products.",
       "impact": "Regulatory headwind for AI sector",
-      "tags": [
-        "Regulation",
-        "EU",
-        "compliance"
-      ],
+      "tags": ["Regulation", "EU", "compliance"],
       "signalVsNoise": "signal",
       "priority": "P1",
       "relevanceScore": 85,
@@ -79,11 +67,7 @@
       "summary": "Ethereum's Pectra upgrade went live, reducing average gas fees from $2.40 to $1.44 and improving validator efficiency by 25%.",
       "whyItMatters": "Makes Ethereum more competitive against Solana and L2s for everyday transactions. Could drive DeFi activity back to mainnet.",
       "impact": "Positive for ETH ecosystem",
-      "tags": [
-        "upgrade",
-        "DeFi",
-        "mainnet"
-      ],
+      "tags": ["upgrade", "DeFi", "mainnet"],
       "signalVsNoise": "signal",
       "priority": "P1",
       "relevanceScore": 72,
@@ -101,11 +85,7 @@
       "summary": "Apple acquired DarwinAI, a startup specializing in on-device AI inference, for $2B. The deal signals Apple's commitment to local AI processing.",
       "whyItMatters": "Positions Apple to run advanced AI models directly on iPhone/Mac without cloud dependency, a key privacy advantage.",
       "impact": "Strategic move for Apple AI",
-      "tags": [
-        "Apple",
-        "M&A",
-        "on-device"
-      ],
+      "tags": ["Apple", "M&A", "on-device"],
       "signalVsNoise": "signal",
       "priority": "P2",
       "relevanceScore": 55,
@@ -123,11 +103,7 @@
       "summary": "Solana's total value locked reached $14.2B driven primarily by memecoin trading on pump.fun and Jupiter. SOL price up 12% this week.",
       "whyItMatters": "While TVL is up, the quality of activity matters. Memecoin-driven TVL is volatile and may not sustain.",
       "impact": "Mixed — activity up, sustainability unclear",
-      "tags": [
-        "SOL",
-        "memecoins",
-        "TVL"
-      ],
+      "tags": ["SOL", "memecoins", "TVL"],
       "signalVsNoise": "noise",
       "priority": "P3",
       "relevanceScore": 35,
@@ -145,11 +121,7 @@
       "summary": "CrowdStrike identified a sophisticated APT campaign targeting US energy infrastructure. The attack uses novel supply chain compromise techniques.",
       "whyItMatters": "Critical infrastructure attacks are escalating. Expect increased government cybersecurity spending and stricter compliance requirements.",
       "impact": "Bullish for cybersecurity stocks",
-      "tags": [
-        "APT",
-        "infrastructure",
-        "energy"
-      ],
+      "tags": ["APT", "infrastructure", "energy"],
       "signalVsNoise": "signal",
       "priority": "P1",
       "relevanceScore": 78,
@@ -167,11 +139,7 @@
       "summary": "A new project called SocialFi Pro launched with $50M in VC funding, promising to tokenize social interactions. Vague whitepaper with aggressive marketing.",
       "whyItMatters": "Another iteration of the SocialFi narrative without clear product-market fit. High VC valuation without user traction is a red flag.",
       "impact": "Low — likely noise",
-      "tags": [
-        "SocialFi",
-        "VC",
-        "hype"
-      ],
+      "tags": ["SocialFi", "VC", "hype"],
       "signalVsNoise": "noise",
       "priority": "P3",
       "relevanceScore": 22,
@@ -189,11 +157,7 @@
       "summary": "NVIDIA's datacenter segment posted $35B in quarterly revenue, up 80% YoY. CEO Jensen Huang highlighted 'insatiable demand' for AI compute.",
       "whyItMatters": "Confirms AI infrastructure spending is not slowing down. Key signal for the entire AI hardware and cloud compute supply chain.",
       "impact": "Validates AI capex cycle",
-      "tags": [
-        "NVIDIA",
-        "earnings",
-        "AI"
-      ],
+      "tags": ["NVIDIA", "earnings", "AI"],
       "signalVsNoise": "signal",
       "priority": "P1",
       "relevanceScore": 90,
@@ -211,11 +175,7 @@
       "summary": "The SEC pushed its decision on ETH ETF options to June, citing the need for additional public comment. Market reaction was muted.",
       "whyItMatters": "Expected delay — not a rejection. Options on ETH ETFs would significantly increase institutional trading strategies available.",
       "impact": "Neutral short-term",
-      "tags": [
-        "ETH",
-        "SEC",
-        "ETFs"
-      ],
+      "tags": ["ETH", "SEC", "ETFs"],
       "signalVsNoise": "noise",
       "priority": "P3",
       "relevanceScore": 38,
@@ -233,11 +193,7 @@
       "summary": "Cloudflare introduced AI-driven anomaly detection for its Zero Trust platform, analyzing network behavior patterns in real-time to detect threats.",
       "whyItMatters": "Combines two hot sectors — AI and cybersecurity. Could pressure legacy security vendors to accelerate AI integration.",
       "impact": "Competitive pressure on legacy vendors",
-      "tags": [
-        "Cloudflare",
-        "Zero Trust",
-        "AI"
-      ],
+      "tags": ["Cloudflare", "Zero Trust", "AI"],
       "signalVsNoise": "signal",
       "priority": "P2",
       "relevanceScore": 52,
@@ -255,11 +211,7 @@
       "summary": "A major celebrity launched a 10K NFT collection on Ethereum with vague promises of metaverse access and concert tickets. Floor price dropping fast.",
       "whyItMatters": "Celebrity NFT projects have a 95%+ failure rate. This is textbook noise — no utility, no roadmap, pure hype extraction.",
       "impact": "None — pure noise",
-      "tags": [
-        "NFT",
-        "hype",
-        "Ethereum"
-      ],
+      "tags": ["NFT", "hype", "Ethereum"],
       "signalVsNoise": "noise",
       "priority": "P3",
       "relevanceScore": 18,
@@ -277,11 +229,7 @@
       "summary": "Minutes and commentary from the latest FOMC cycle pointed to fewer cuts than markets priced for H2, with emphasis on services inflation stickiness.",
       "whyItMatters": "Liquidity and discount-rate narratives drive risk assets; a higher-for-longer bias weighs on high-duration tech and speculative crypto.",
       "impact": "Headwind for risk sentiment until data turns",
-      "tags": [
-        "FOMC",
-        "liquidity",
-        "risk"
-      ],
+      "tags": ["FOMC", "liquidity", "risk"],
       "signalVsNoise": "signal",
       "priority": "P2",
       "relevanceScore": 65,
