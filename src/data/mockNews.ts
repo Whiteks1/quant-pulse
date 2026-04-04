@@ -1,11 +1,30 @@
 export type QuantPulseSection = "Technology" | "Crypto & Markets" | "Macro";
 export type QuantPulsePriority = "P1" | "P2" | "P3";
+export type QuantPulseSourceTier = "primary" | "tier_1" | "tier_2" | "tier_3" | "unlisted";
+export type QuantPulseLinkType = "article" | "source-section" | "source-home";
+
+export interface ScoreJustification {
+  recency: number;
+  marketImpact: number;
+  structuralImpact: number;
+  sourceQuality: number;
+  crossValidation: number;
+  thematicRelevance: number;
+  rationale: string;
+}
+
+export interface EditorialOverride {
+  field: "priority" | "relevanceScore" | "signalVsNoise" | "section" | "category";
+  reason: string;
+}
 
 export interface NewsItem {
   id: string;
   title: string;
   source: string;
+  sourceTier: QuantPulseSourceTier;
   url: string;
+  linkType: QuantPulseLinkType;
   /** ISO 8601 UTC (canónico) */
   publishedAt: string;
   category: string;
@@ -17,7 +36,9 @@ export interface NewsItem {
   signalVsNoise: "signal" | "noise";
   priority: QuantPulsePriority;
   relevanceScore: number;
+  scoreJustification: ScoreJustification;
   dedupeKey: string;
+  editorialOverride?: EditorialOverride;
   imageUrl?: string;
   imageAlt?: string;
   imageSource?: string;
@@ -25,12 +46,23 @@ export interface NewsItem {
   featured?: boolean;
 }
 
+export interface ExecutiveBriefItem {
+  id: string;
+  itemId: string;
+  text: string;
+}
+
 export interface WatchItem {
   id: string;
   title: string;
   date: string;
+  section: QuantPulseSection;
+  category: string;
   type: "earnings" | "regulation" | "event" | "market";
+  source: string;
+  url: string;
   description: string;
+  whyWatch: string;
 }
 
 /** Categorías permitidas por taxonomía (`docs/category-taxonomy.es.md`) + "All" para filtros. */

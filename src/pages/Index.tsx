@@ -1,5 +1,5 @@
 import { useRef, useState, useMemo, useEffect } from "react";
-import type { NewsItem, WatchItem } from "@/data/mockNews";
+import type { ExecutiveBriefItem, NewsItem, WatchItem } from "@/data/mockNews";
 import { fetchPulseData } from "@/data/loadPulseData";
 import { Hero } from "@/components/Hero";
 import { ExecutiveBrief } from "@/components/ExecutiveBrief";
@@ -17,7 +17,7 @@ const Index = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState<NewsItem[]>([]);
-  const [executiveBrief, setExecutiveBrief] = useState<string[]>([]);
+  const [executiveBrief, setExecutiveBrief] = useState<ExecutiveBriefItem[]>([]);
   const [watchItems, setWatchItems] = useState<WatchItem[]>([]);
   const [loadState, setLoadState] = useState<"loading" | "ok" | "error">("loading");
   const [loadError, setLoadError] = useState<string | null>(null);

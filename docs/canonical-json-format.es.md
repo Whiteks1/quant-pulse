@@ -9,7 +9,9 @@ Definir el contrato canónico de una noticia procesada por Quant Pulse.
 - id
 - title
 - source
+- sourceTier
 - url
+- linkType
 - publishedAt
 - section
 - category
@@ -19,6 +21,7 @@ Definir el contrato canónico de una noticia procesada por Quant Pulse.
 - signalVsNoise
 - priority
 - relevanceScore
+- scoreJustification
 - tags
 - dedupeKey
 
@@ -29,7 +32,9 @@ Definir el contrato canónico de una noticia procesada por Quant Pulse.
   "id": "2026-04-04_btc-etf-inflows_bloomberg",
   "title": "Los ETF de Bitcoin registran nuevas entradas netas",
   "source": "Bloomberg",
-  "url": "https://example.com/article",
+  "sourceTier": "tier_1",
+  "url": "https://www.bloomberg.com/crypto",
+  "linkType": "source-section",
   "publishedAt": "2026-04-04T09:12:00Z",
   "section": "Crypto & Markets",
   "category": "ETFs",
@@ -39,6 +44,15 @@ Definir el contrato canónico de una noticia procesada por Quant Pulse.
   "signalVsNoise": "signal",
   "priority": "P1",
   "relevanceScore": 88,
+  "scoreJustification": {
+    "recency": 10,
+    "marketImpact": 25,
+    "structuralImpact": 20,
+    "sourceQuality": 12,
+    "crossValidation": 10,
+    "thematicRelevance": 10,
+    "rationale": "La reversión de flujos afecta directamente a una narrativa prioritaria."
+  },
   "tags": ["BTC", "ETF", "flows", "institutional"],
   "dedupeKey": "btc-etf-inflows"
 }
@@ -58,9 +72,22 @@ Titular limpio, claro y no sensacionalista.
 
 Nombre normalizado de la fuente.
 
+### sourceTier
+
+Calidad editorial de la fuente.
+
 ### url
 
-Enlace canónico a la noticia.
+Enlace real a artículo, sección o fuente oficial. No usar placeholders.
+
+### linkType
+
+Tipo de enlace:
+
+- article
+- source-section
+- source-home
+
 
 ### publishedAt
 
@@ -109,6 +136,10 @@ Valores permitidos:
 
 Número entre 0 y 100.
 
+### scoreJustification
+
+Desglose editorial del score por bloques y una explicación corta del porqué.
+
 ### tags
 
 Lista de etiquetas auxiliares (recomendado entre 2 y 6).
@@ -119,7 +150,13 @@ Clave estable para deduplicación.
 
 ## Bundle de feed en Pages (`pulse.json`)
 
-Para la web estática, los ítems canónicos se agrupan en `public/data/pulse.json` junto con `executiveBrief`, `watchItems`, y metadatos `version` / `updatedAt`. Cada elemento de `items` debe cumplir los campos obligatorios de este documento (más `featured` opcional para la UI).
+Para la web estática, los ítems canónicos se agrupan en `public/data/pulse.json` junto con:
+
+- `executiveBrief`: objetos con `id`, `itemId` y `text`
+- `watchItems`: eventos con trazabilidad mínima (`section`, `source`, `url`, `whyWatch`)
+- metadatos `version` / `updatedAt`
+
+Cada elemento de `items` debe cumplir los campos obligatorios de este documento, con `featured`, `imageUrl`, `imageAlt`, `imageSource` y `editorialOverride` como campos opcionales.
 
 ## Validación en repo
 

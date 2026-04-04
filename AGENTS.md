@@ -7,6 +7,7 @@ Quant Pulse
 ## Source of truth
 
 - docs/architecture-phases.es.md (fases: Pages + Knowledge → backend + Actions)
+- docs/roadmap.es.md
 - docs/editorial-manual.es.md
 - docs/scoring-system.es.md
 - docs/priority-rules.es.md
@@ -17,6 +18,7 @@ Quant Pulse
 - config/approved-sources.yaml
 - config/news.schema.json
 - public/data/pulse.json (feed estático servido en Pages; el pipeline lo actualiza)
+- npm run validate:feed (comprobación mínima de consistencia editorial y de contrato)
 
 ## Rules
 

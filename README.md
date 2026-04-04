@@ -22,11 +22,11 @@ En local, `npm run build` usa base `/` (raíz). Para probar un build como en Pag
 
 ## Datos del feed (Fase 1)
 
-La app carga [`public/data/pulse.json`](public/data/pulse.json) en runtime (`fetch` con `BASE_URL`). Un pipeline o edición manual puede actualizar ese archivo; en GitHub Pages queda público en `/data/pulse.json` bajo el subpath del repo.
+La app carga [`public/data/pulse.json`](public/data/pulse.json) en runtime (`fetch` con `BASE_URL`). Un pipeline o edición manual puede actualizar ese archivo; en GitHub Pages queda público en `/data/pulse.json` bajo el subpath del repo. El feed incluye ahora trazabilidad editorial mínima (`sourceTier`, `linkType`, `scoreJustification`) y puede validarse con `npm run validate:feed`.
 
 ## Documentación editorial
 
-Ver [`AGENTS.md`](AGENTS.md), [`docs/architecture-phases.es.md`](docs/architecture-phases.es.md) y el resto de [`docs/`](docs/).
+Ver [`AGENTS.md`](AGENTS.md), [`docs/architecture-phases.es.md`](docs/architecture-phases.es.md), [`docs/roadmap.es.md`](docs/roadmap.es.md) y el resto de [`docs/`](docs/).
 
 ## Scripts
 
@@ -36,4 +36,5 @@ Ver [`AGENTS.md`](AGENTS.md), [`docs/architecture-phases.es.md`](docs/architectu
 | `npm run build` | Build producción |
 | `npm run lint`  | ESLint           |
 | `npm test`      | Vitest           |
+| `npm run validate:feed` | Valida consistencia editorial del feed |
 | `npm run test:e2e` | Playwright    |
