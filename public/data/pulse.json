@@ -18,6 +18,9 @@
       "priority": "P1",
       "relevanceScore": 88,
       "dedupeKey": "btc-etf-inflows",
+      "imageUrl": "images/editorial/bitcoin-etf.svg",
+      "imageAlt": "Visual editorial sobre entradas netas en ETF de Bitcoin",
+      "imageSource": "Quant Pulse Studio",
       "featured": true
     },
     {
@@ -36,6 +39,9 @@
       "priority": "P1",
       "relevanceScore": 82,
       "dedupeKey": "openai-gpt5-launch",
+      "imageUrl": "images/editorial/ai-launch.svg",
+      "imageAlt": "Visual editorial sobrio sobre lanzamiento de modelo de IA",
+      "imageSource": "Quant Pulse Studio",
       "featured": true
     },
     {
@@ -54,6 +60,9 @@
       "priority": "P1",
       "relevanceScore": 85,
       "dedupeKey": "eu-ai-act-passage",
+      "imageUrl": "images/editorial/ai-regulation.svg",
+      "imageAlt": "Visual editorial sobre marco regulatorio de inteligencia artificial",
+      "imageSource": "Quant Pulse Studio",
       "featured": true
     },
     {
@@ -162,6 +171,9 @@
       "priority": "P1",
       "relevanceScore": 90,
       "dedupeKey": "nvidia-datacenter-earnings",
+      "imageUrl": "images/editorial/nvidia-earnings.svg",
+      "imageAlt": "Visual editorial sobre resultados de infraestructura de IA de NVIDIA",
+      "imageSource": "Quant Pulse Studio",
       "featured": true
     },
     {

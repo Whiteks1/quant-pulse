@@ -18,6 +18,9 @@ export interface NewsItem {
   priority: QuantPulsePriority;
   relevanceScore: number;
   dedupeKey: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  imageSource?: string;
   /** Destacado en UI; debe ser coherente con priority/score editorial */
   featured?: boolean;
 }

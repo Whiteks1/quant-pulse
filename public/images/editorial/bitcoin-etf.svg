@@ -1,0 +1,22 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="675" fill="#090D14"/>
+  <rect x="32" y="32" width="1136" height="611" rx="28" fill="url(#panel)"/>
+  <rect x="72" y="84" width="260" height="112" rx="18" fill="#0F1725" stroke="#1E2B41"/>
+  <text x="104" y="132" fill="#9FB3C8" font-family="Inter, Arial, sans-serif" font-size="24" letter-spacing="0.12em">QUANT PULSE</text>
+  <text x="104" y="170" fill="#E7EEF7" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="700">ETF Flow Signal</text>
+  <path d="M120 420C216 398 279 372 353 333C423 296 515 246 621 226C729 206 829 222 934 255C990 273 1044 296 1080 322" stroke="#31A8FF" stroke-width="8" stroke-linecap="round"/>
+  <path d="M120 494C207 486 287 471 360 442C450 406 544 350 657 336C762 323 842 351 942 392C989 411 1043 439 1084 470" stroke="#1F7DD6" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+  <circle cx="350" cy="334" r="16" fill="#F3BA2F"/>
+  <circle cx="621" cy="226" r="16" fill="#31A8FF"/>
+  <circle cx="934" cy="255" r="16" fill="#29C08A"/>
+  <rect x="817" y="103" width="255" height="148" rx="22" fill="#0F1725" stroke="#1E2B41"/>
+  <text x="856" y="150" fill="#7DD3FC" font-family="JetBrains Mono, monospace" font-size="20">BTC ETF</text>
+  <text x="856" y="196" fill="#E7EEF7" font-family="Inter, Arial, sans-serif" font-size="48" font-weight="700">+$420M</text>
+  <text x="856" y="226" fill="#90A1B9" font-family="Inter, Arial, sans-serif" font-size="20">net inflows</text>
+  <defs>
+    <linearGradient id="panel" x1="600" y1="32" x2="600" y2="643" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0C111B"/>
+      <stop offset="1" stop-color="#0A0F18"/>
+    </linearGradient>
+  </defs>
+</svg>
