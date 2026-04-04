@@ -13,12 +13,12 @@ La app usa el puerto **8080** por defecto.
 
 ## GitHub Pages
 
-El workflow [`.github/workflows/pages.yml`](.github/workflows/pages.yml) construye con `VITE_BASE_PATH` apuntando al nombre del repositorio y despliega en GitHub Pages.
+El workflow [`.github/workflows/pages.yml`](.github/workflows/pages.yml) construye con `VITE_BASE_PATH=/quant-pulse/` y despliega en GitHub Pages.
 
 1. En el repo: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-2. Haz push a `main`; la URL será `https://<usuario>.github.io/<nombre-del-repo>/`.
+2. Haz push a `main`; la URL será `https://whiteks1.github.io/quant-pulse/`.
 
-En local, `npm run build` usa base `/` (raíz). Para probar un build como en Pages: `VITE_BASE_PATH=/<nombre-repo>/ npm run build` y `npm run preview`.
+En local, `npm run build` usa base `/` (raíz). Para probar un build como en Pages: `VITE_BASE_PATH=/quant-pulse/ npm run build` y `npm run preview`.
 
 ## Datos del feed (Fase 1)
 
