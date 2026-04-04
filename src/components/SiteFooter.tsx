@@ -1,6 +1,8 @@
 import { Activity } from "lucide-react";
 
 export function SiteFooter() {
+  const privacyHref = `${import.meta.env.BASE_URL}privacy.html`;
+
   return (
     <footer className="border-t border-border bg-card">
       <div className="container py-10 md:py-12 flex flex-col md:flex-row items-center justify-between gap-4">
@@ -13,9 +15,17 @@ export function SiteFooter() {
             Signal over noise in tech & crypto
           </p>
         </div>
-        <p className="text-xs text-muted-foreground text-center md:text-right max-w-sm">
-          Curated summaries for technology and crypto signals. Built for fast decision-making.
-        </p>
+        <div className="flex max-w-sm flex-col items-center gap-2 text-center md:items-end md:text-right">
+          <p className="text-xs text-muted-foreground">
+            Curated summaries for technology and crypto signals. Built for fast decision-making.
+          </p>
+          <a
+            href={privacyHref}
+            className="text-xs font-mono text-muted-foreground transition-colors hover:text-foreground"
+          >
+            Privacy Policy
+          </a>
+        </div>
       </div>
     </footer>
   );
