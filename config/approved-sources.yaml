@@ -1,0 +1,48 @@
+version: 1
+updated_at: 2026-04-04
+
+tiers:
+  tier_1:
+    description: "Fuentes prioritarias. Alta fiabilidad. Preferencia editorial."
+    sources:
+      - Bloomberg
+      - Reuters
+      - Financial Times
+      - The Block
+      - SEC
+      - Federal Reserve
+      - European Commission
+      - ESMA
+      - company newsrooms
+      - official blogs and filings
+
+  tier_2:
+    description: "Fuentes sólidas, útiles para ampliar cobertura."
+    sources:
+      - TechCrunch
+      - The Verge
+      - Ars Technica
+      - CoinDesk
+      - CNBC
+      - The Information
+
+  tier_3:
+    description: "Fuentes de apoyo. Requieren validación adicional."
+    sources:
+      - Cointelegraph
+      - specialized blogs
+      - analyst notes
+      - ecosystem newsletters
+
+rules:
+  use_primary_sources_first: true
+  require_extra_validation_for_tier_3: true
+  reject_unverified_rumors: true
+  reject_social_hype_without_evidence: true
+  prefer_official_regulatory_and_company_sources: true
+
+blocked_patterns:
+  - "rumor sin fuente"
+  - "captura sin contexto"
+  - "viral sin confirmación"
+  - "opinión sin dato"

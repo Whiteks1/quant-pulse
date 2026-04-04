@@ -56,6 +56,7 @@ const Index = () => {
       <FeaturedStories items={filteredNews} />
       <NewsSection title="Technology" section="Technology" items={filteredNews} />
       <NewsSection title="Crypto & Markets" section="Crypto & Markets" items={filteredNews} />
+      <NewsSection title="Macro" section="Macro" items={filteredNews} />
       <SignalVsNoise items={filteredNews} />
       <WhatToWatch />
       <ArchivePreview />

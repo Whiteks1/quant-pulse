@@ -1,16 +1,17 @@
-import type { NewsItem } from "@/data/mockNews";
+import type { NewsItem, QuantPulseSection } from "@/data/mockNews";
 import { NewsCard } from "./NewsCard";
-import { Cpu, TrendingUp } from "lucide-react";
+import { Cpu, Globe, TrendingUp } from "lucide-react";
 
 interface NewsSectionProps {
   title: string;
-  section: "Technology" | "Crypto & Markets";
+  section: QuantPulseSection;
   items: NewsItem[];
 }
 
-const sectionIcons = {
+const sectionIcons: Record<QuantPulseSection, typeof Cpu> = {
   Technology: Cpu,
   "Crypto & Markets": TrendingUp,
+  Macro: Globe,
 };
 
 export function NewsSection({ title, section, items }: NewsSectionProps) {

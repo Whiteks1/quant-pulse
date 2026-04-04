@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://quant-pulse.local/schemas/canonical-news.json",
+  "title": "Quant Pulse canonical news item",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "source",
+    "url",
+    "publishedAt",
+    "section",
+    "category",
+    "summary",
+    "whyItMatters",
+    "impact",
+    "signalVsNoise",
+    "priority",
+    "relevanceScore",
+    "tags",
+    "dedupeKey"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Identificador único y estable"
+    },
+    "title": { "type": "string", "minLength": 1 },
+    "source": { "type": "string", "minLength": 1 },
+    "url": { "type": "string", "format": "uri" },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 en UTC"
+    },
+    "section": {
+      "type": "string",
+      "enum": ["Technology", "Crypto & Markets", "Macro"]
+    },
+    "category": { "type": "string", "minLength": 1 },
+    "summary": { "type": "string", "minLength": 1 },
+    "whyItMatters": { "type": "string", "minLength": 1 },
+    "impact": { "type": "string", "minLength": 1 },
+    "signalVsNoise": { "type": "string", "enum": ["signal", "noise"] },
+    "priority": { "type": "string", "enum": ["P1", "P2", "P3"] },
+    "relevanceScore": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 2,
+      "maxItems": 6
+    },
+    "dedupeKey": { "type": "string", "minLength": 1 },
+    "featured": {
+      "type": "boolean",
+      "description": "Solo UI/app: destacado en feed; no sustituye priority ni score"
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import type { NewsItem } from "@/data/mockNews";
+import { relevanceTierFromScore } from "@/lib/relevance";
 import { CategoryBadge } from "./CategoryBadge";
 import { RelevanceDot } from "./RelevanceDot";
 import { ExternalLink } from "lucide-react";
@@ -10,6 +11,7 @@ interface NewsCardProps {
 
 export function NewsCard({ item, variant = "default" }: NewsCardProps) {
   const isFeatured = variant === "featured";
+  const relevance = relevanceTierFromScore(item.relevanceScore);
 
   return (
     <article
@@ -20,7 +22,7 @@ export function NewsCard({ item, variant = "default" }: NewsCardProps) {
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 flex-wrap">
           <CategoryBadge category={item.category} />
-          <RelevanceDot relevance={item.relevance} />
+          <RelevanceDot relevance={relevance} />
         </div>
         <span className="text-xs text-muted-foreground font-mono shrink-0">
           {item.source}
