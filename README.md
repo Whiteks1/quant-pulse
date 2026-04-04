@@ -20,9 +20,13 @@ El workflow [`.github/workflows/pages.yml`](.github/workflows/pages.yml) constru
 
 En local, `npm run build` usa base `/` (raíz). Para probar un build como en Pages: `VITE_BASE_PATH=/<nombre-repo>/ npm run build` y `npm run preview`.
 
+## Datos del feed (Fase 1)
+
+La app carga [`public/data/pulse.json`](public/data/pulse.json) en runtime (`fetch` con `BASE_URL`). Un pipeline o edición manual puede actualizar ese archivo; en GitHub Pages queda público en `/data/pulse.json` bajo el subpath del repo.
+
 ## Documentación editorial
 
-Ver [`AGENTS.md`](AGENTS.md) y la carpeta [`docs/`](docs/).
+Ver [`AGENTS.md`](AGENTS.md), [`docs/architecture-phases.es.md`](docs/architecture-phases.es.md) y el resto de [`docs/`](docs/).
 
 ## Scripts
 

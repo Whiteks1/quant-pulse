@@ -117,9 +117,13 @@ Lista de etiquetas auxiliares (recomendado entre 2 y 6).
 
 Clave estable para deduplicación.
 
+## Bundle de feed en Pages (`pulse.json`)
+
+Para la web estática, los ítems canónicos se agrupan en `public/data/pulse.json` junto con `executiveBrief`, `watchItems`, y metadatos `version` / `updatedAt`. Cada elemento de `items` debe cumplir los campos obligatorios de este documento (más `featured` opcional para la UI).
+
 ## Validación en repo
 
-El esquema JSON en `config/news.schema.json` puede usarse para validar payloads (p. ej. en pipelines o con herramientas de agentes).
+El esquema JSON en `config/news.schema.json` puede usarse para validar cada ítem de `items` (p. ej. en pipelines o con herramientas de agentes).
 
 ## Reglas de estilo del contenido
 

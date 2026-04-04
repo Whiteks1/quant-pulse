@@ -1,4 +1,4 @@
-import { watchItems } from "@/data/mockNews";
+import type { WatchItem } from "@/data/mockNews";
 import { Eye, Calendar, Landmark, BarChart3, Radio } from "lucide-react";
 
 const typeIcons = {
@@ -15,7 +15,7 @@ const typeColors = {
   market: "text-accent",
 };
 
-export function WhatToWatch() {
+export function WhatToWatch({ items }: { items: WatchItem[] }) {
   return (
     <section className="container py-12 md:py-16">
       <div className="flex items-center gap-2 mb-6">
@@ -24,7 +24,7 @@ export function WhatToWatch() {
       </div>
 
       <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-        {watchItems.map((item) => {
+        {items.map((item) => {
           const Icon = typeIcons[item.type];
           return (
             <div

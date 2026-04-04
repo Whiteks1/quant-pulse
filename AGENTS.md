@@ -6,6 +6,7 @@ Quant Pulse
 
 ## Source of truth
 
+- docs/architecture-phases.es.md (fases: Pages + Knowledge → backend + Actions)
 - docs/editorial-manual.es.md
 - docs/scoring-system.es.md
 - docs/priority-rules.es.md
@@ -15,6 +16,7 @@ Quant Pulse
 - docs/voice-summary-style.es.md
 - config/approved-sources.yaml
 - config/news.schema.json
+- public/data/pulse.json (feed estático servido en Pages; el pipeline lo actualiza)
 
 ## Rules
 
@@ -25,3 +27,9 @@ Quant Pulse
 - Treat signal vs noise as a first-class classification.
 - Ask for a plan before large refactors.
 - Prefer small, verifiable changes.
+
+## Phased delivery (summary)
+
+1. **Fase 1:** GitHub Pages + `public/data/pulse.json` + Custom GPT Knowledge (listado en `docs/architecture-phases.es.md`). No backend, no GPT Actions, no OpenAI en el frontend.
+2. **Fase 2:** Backend mínimo + OpenAPI + GPT Actions para datos vivos.
+3. **Fase 3 (opcional):** chat u otras integraciones con API key solo en servidor.

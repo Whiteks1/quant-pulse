@@ -1,7 +1,6 @@
-import { executiveBrief } from "@/data/mockNews";
 import { Zap } from "lucide-react";
 
-export function ExecutiveBrief() {
+export function ExecutiveBrief({ points }: { points: string[] }) {
   return (
     <section className="container py-12 md:py-16">
       <div className="flex items-center gap-2 mb-6">
@@ -11,7 +10,7 @@ export function ExecutiveBrief() {
 
       <div className="rounded-lg border border-highlight/20 bg-card p-5 md:p-6">
         <ol className="space-y-3">
-          {executiveBrief.map((point, i) => (
+          {points.map((point, i) => (
             <li key={i} className="flex gap-3 text-sm md:text-base">
               <span className="shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-highlight/15 text-highlight font-mono text-xs font-bold">
                 {i + 1}
