@@ -1,10 +1,10 @@
-import type { NewsItem, WatchItem } from "./mockNews";
+import type { ExecutiveBriefItem, NewsItem, WatchItem } from "./mockNews";
 
 export interface PulseBundle {
   version: number;
   updatedAt: string;
   items: NewsItem[];
-  executiveBrief: string[];
+  executiveBrief: ExecutiveBriefItem[];
   watchItems: WatchItem[];
 }
 

@@ -1,0 +1,20 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="675" fill="#090D14"/>
+  <rect x="38" y="38" width="1124" height="599" rx="30" fill="#0A111A" stroke="#1A2739"/>
+  <rect x="82" y="92" width="430" height="491" rx="26" fill="#0E1623" stroke="#20314B"/>
+  <rect x="128" y="444" width="58" height="92" rx="12" fill="#2B4D73"/>
+  <rect x="214" y="392" width="58" height="144" rx="12" fill="#3A6EA5"/>
+  <rect x="300" y="322" width="58" height="214" rx="12" fill="#4C8ACC"/>
+  <rect x="386" y="236" width="58" height="300" rx="12" fill="#29C08A"/>
+  <path d="M128 221C182 212 217 195 265 170C310 146 364 123 435 111" stroke="#7DD3FC" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="435" cy="111" r="14" fill="#7DD3FC"/>
+  <text x="586" y="164" fill="#7DD3FC" font-family="JetBrains Mono, monospace" font-size="22">EARNINGS SIGNAL</text>
+  <text x="586" y="222" fill="#ECF3FB" font-family="Inter, Arial, sans-serif" font-size="52" font-weight="700">AI infrastructure demand</text>
+  <text x="586" y="278" fill="#91A5BD" font-family="Inter, Arial, sans-serif" font-size="24">Datacenter revenue confirms capex momentum</text>
+  <rect x="586" y="346" width="362" height="150" rx="24" fill="#101726" stroke="#20314B"/>
+  <text x="632" y="406" fill="#EAF2FB" font-family="Inter, Arial, sans-serif" font-size="68" font-weight="700">$35B</text>
+  <text x="636" y="450" fill="#90A1B9" font-family="Inter, Arial, sans-serif" font-size="24">datacenter revenue</text>
+  <rect x="972" y="346" width="118" height="150" rx="24" fill="#0F1724" stroke="#20314B"/>
+  <text x="1003" y="426" fill="#29C08A" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="700">+80%</text>
+  <text x="1006" y="458" fill="#90A1B9" font-family="Inter, Arial, sans-serif" font-size="18">YoY</text>
+</svg>

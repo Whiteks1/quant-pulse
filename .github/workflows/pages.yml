@@ -31,8 +31,8 @@ jobs:
 
       - name: Build
         env:
-          VITE_BASE_PATH: /${{ github.event.repository.name }}/
-          VITE_OG_IMAGE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/placeholder.svg
+          VITE_BASE_PATH: /quant-pulse/
+          VITE_OG_IMAGE_URL: https://${{ github.repository_owner }}.github.io/quant-pulse/placeholder.svg
         run: npm run build
 
       # GitHub Pages sirve 404.html para rutas inexistentes; copia del index permite SPA (react-router).

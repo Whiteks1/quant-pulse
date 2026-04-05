@@ -9,9 +9,20 @@ interface NewsCardProps {
   variant?: "default" | "featured";
 }
 
+function resolveImageUrl(imageUrl?: string): string | null {
+  if (!imageUrl) return null;
+  if (/^(https?:)?\/\//.test(imageUrl) || imageUrl.startsWith("data:")) return imageUrl;
+
+  const base = import.meta.env.BASE_URL;
+  const normalizedBase = base.endsWith("/") ? base : `${base}/`;
+  const normalizedPath = imageUrl.startsWith("/") ? imageUrl.slice(1) : imageUrl;
+  return `${normalizedBase}${normalizedPath}`;
+}
+
 export function NewsCard({ item, variant = "default" }: NewsCardProps) {
   const isFeatured = variant === "featured";
   const relevance = relevanceTierFromScore(item.relevanceScore);
+  const imageUrl = resolveImageUrl(item.imageUrl);
 
   return (
     <article
@@ -28,6 +39,26 @@ export function NewsCard({ item, variant = "default" }: NewsCardProps) {
           {item.source}
         </span>
       </div>
+
+      {imageUrl ? (
+        <figure className="overflow-hidden rounded-md border border-border/70 bg-surface-raised">
+          <div className={`relative overflow-hidden ${isFeatured ? "aspect-[16/9]" : "aspect-[16/10]"}`}>
+            <img
+              src={imageUrl}
+              alt={item.imageAlt || item.title}
+              className="h-full w-full object-cover saturate-[0.9]"
+              loading="lazy"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/25 via-transparent to-transparent" />
+          </div>
+          {item.imageSource ? (
+            <figcaption className="flex items-center justify-between border-t border-border/70 px-3 py-2 text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+              <span>Visual</span>
+              <span>{item.imageSource}</span>
+            </figcaption>
+          ) : null}
+        </figure>
+      ) : null}
 
       <h3 className={`font-semibold leading-snug text-foreground ${isFeatured ? "text-lg" : "text-base"}`}>
         {item.title}
