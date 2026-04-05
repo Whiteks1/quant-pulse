@@ -1,7 +1,14 @@
 import { Activity } from "lucide-react";
+import { formatFeedTimestamp, getFeedFreshness } from "@/lib/feed-status";
 
-export function SiteFooter() {
+interface SiteFooterProps {
+  updatedAt: string;
+  version: number;
+}
+
+export function SiteFooter({ updatedAt, version }: SiteFooterProps) {
   const privacyHref = `${import.meta.env.BASE_URL}privacy.html`;
+  const freshness = getFeedFreshness(updatedAt);
 
   return (
     <footer className="border-t border-border bg-card">
@@ -18,6 +25,9 @@ export function SiteFooter() {
         <div className="flex max-w-sm flex-col items-center gap-2 text-center md:items-end md:text-right">
           <p className="text-xs text-muted-foreground">
             Curated summaries for technology and crypto signals. Built for fast decision-making.
+          </p>
+          <p className="text-[11px] font-mono text-muted-foreground">
+            Feed {freshness.state} • updated {formatFeedTimestamp(updatedAt)} UTC • v{version}
           </p>
           <a
             href={privacyHref}

@@ -10,6 +10,9 @@ import { WhatToWatch } from "@/components/WhatToWatch";
 import { ArchivePreview } from "@/components/ArchivePreview";
 import { SiteFooter } from "@/components/SiteFooter";
 import { FilterBar } from "@/components/FilterBar";
+import { FeedStatusBar } from "@/components/FeedStatusBar";
+import { EmptyFeedState } from "@/components/EmptyFeedState";
+import { getFeedStats, hasActiveFilters } from "@/lib/feed-status";
 
 const Index = () => {
   const pulseRef = useRef<HTMLDivElement>(null);
@@ -19,6 +22,8 @@ const Index = () => {
   const [items, setItems] = useState<NewsItem[]>([]);
   const [executiveBrief, setExecutiveBrief] = useState<ExecutiveBriefItem[]>([]);
   const [watchItems, setWatchItems] = useState<WatchItem[]>([]);
+  const [updatedAt, setUpdatedAt] = useState("");
+  const [version, setVersion] = useState(0);
   const [loadState, setLoadState] = useState<"loading" | "ok" | "error">("loading");
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -30,6 +35,8 @@ const Index = () => {
         setItems(bundle.items);
         setExecutiveBrief(bundle.executiveBrief);
         setWatchItems(bundle.watchItems);
+        setUpdatedAt(bundle.updatedAt);
+        setVersion(bundle.version);
         setLoadState("ok");
         setLoadError(null);
       })
@@ -59,8 +66,17 @@ const Index = () => {
     });
   }, [items, activeSection, activeCategory, searchQuery]);
 
+  const stats = useMemo(() => getFeedStats(items), [items]);
+  const showEmptyState = filteredNews.length === 0 && hasActiveFilters(activeSection, activeCategory, searchQuery);
+
   const handleViewPulse = () => {
     pulseRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleResetFilters = () => {
+    setActiveSection("All");
+    setActiveCategory("All");
+    setSearchQuery("");
   };
 
   if (loadState === "loading") {
@@ -82,11 +98,24 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Hero onViewPulse={handleViewPulse} />
+      <Hero
+        onViewPulse={handleViewPulse}
+        updatedAt={updatedAt}
+        totalItems={stats.totalItems}
+        signalCount={stats.signalCount}
+      />
 
       <div ref={pulseRef}>
         <ExecutiveBrief points={executiveBrief} />
       </div>
+
+      <FeedStatusBar
+        updatedAt={updatedAt}
+        version={version}
+        totalItems={stats.totalItems}
+        signalCount={stats.signalCount}
+        p1Count={stats.p1Count}
+      />
 
       <FilterBar
         activeSection={activeSection}
@@ -97,14 +126,25 @@ const Index = () => {
         onSearchChange={setSearchQuery}
       />
 
-      <FeaturedStories items={filteredNews} />
-      <NewsSection title="Technology" section="Technology" items={filteredNews} />
-      <NewsSection title="Crypto & Markets" section="Crypto & Markets" items={filteredNews} />
-      <NewsSection title="Macro" section="Macro" items={filteredNews} />
-      <SignalVsNoise items={filteredNews} />
+      {showEmptyState ? (
+        <EmptyFeedState
+          activeSection={activeSection}
+          activeCategory={activeCategory}
+          searchQuery={searchQuery}
+          onReset={handleResetFilters}
+        />
+      ) : (
+        <>
+          <FeaturedStories items={filteredNews} />
+          <NewsSection title="Technology" section="Technology" items={filteredNews} />
+          <NewsSection title="Crypto & Markets" section="Crypto & Markets" items={filteredNews} />
+          <NewsSection title="Macro" section="Macro" items={filteredNews} />
+          <SignalVsNoise items={filteredNews} />
+        </>
+      )}
       <WhatToWatch items={watchItems} />
       <ArchivePreview />
-      <SiteFooter />
+      <SiteFooter updatedAt={updatedAt} version={version} />
     </div>
   );
 };
