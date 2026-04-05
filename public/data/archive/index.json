@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-04-05T00:10:00Z",
+  "currentEditionSlug": "current",
+  "editions": [
+    {
+      "slug": "current",
+      "label": "Current edition",
+      "updatedAt": "2026-04-05T00:10:00Z",
+      "version": 2,
+      "path": "data/archive/current.json",
+      "isCurrent": true,
+      "totalItems": 13,
+      "signalCount": 9,
+      "p1Count": 5
+    }
+  ]
+}

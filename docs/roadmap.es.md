@@ -107,12 +107,10 @@ Cerrar bien la base estática para que la web sea estable, coherente y mantenibl
 
 ### Trabajo
 
-- revisar que `public/data/pulse.json` cumpla siempre `config/news.schema.json`
-- eliminar placeholders obvios en `url` y reemplazarlos por enlaces reales o marcarlos explícitamente como demo
+- mantener `public/data/pulse.json` y `public/data/archive/` sincronizados con la fuente editorial
 - decidir si la UI final queda en inglés, español o bilingüe
-- convertir `ArchivePreview` de bloque visual a contrato funcional aunque sea con datos estáticos
-- añadir estados de empty state y stale data usando `updatedAt`
-- reforzar tests del feed y del render principal
+- consolidar el archivo navegable con manifiesto estático de ediciones
+- reforzar tests del feed, filtros y utilidades del archivo
 
 ### Entregables
 
@@ -267,17 +265,15 @@ Quant Pulse ya funciona como radar, no solo como frontend de resúmenes.
 
 ## Prioridad alta
 
-- validar `pulse.json` automáticamente contra `news.schema.json`
-- sustituir enlaces `example.com`
-- reforzar tests del feed y filtros
 - documentar el flujo editorial manual de Fase 1B
+- publicar y mantener snapshots estáticos de edición en `content/archive/editions/`
 - decidir idioma final del producto
+- conectar el archivo a un histórico real de ediciones estáticas
 
 ## Prioridad media
 
-- hacer el archivo navegable
-- introducir histórico real de ediciones
-- preparar scripts de generación/validación del feed
+- preparar histórico real de ediciones sobre el manifiesto estático
+- consolidar scripts de generación/validación del feed
 
 ## Prioridad baja
 

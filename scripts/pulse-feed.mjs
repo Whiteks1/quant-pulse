@@ -4,6 +4,11 @@ import path from "node:path";
 export const rootDir = process.cwd();
 export const sourcePath = path.join(rootDir, "content", "pulse.source.json");
 export const outputPath = path.join(rootDir, "public", "data", "pulse.json");
+export const archiveSourceDir = path.join(rootDir, "content", "archive", "editions");
+export const archiveOutputDir = path.join(rootDir, "public", "data", "archive");
+export const archiveCurrentOutputPath = path.join(archiveOutputDir, "current.json");
+export const archiveIndexOutputPath = path.join(archiveOutputDir, "index.json");
+export const archiveEditionOutputDir = path.join(archiveOutputDir, "editions");
 
 function assert(condition, message, errors) {
   if (!condition) errors.push(message);
@@ -26,6 +31,10 @@ function scoreBand(score) {
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
+}
+
+function serializeJson(value) {
+  return `${JSON.stringify(value, null, 2)}\n`;
 }
 
 export function normalizePulseBundle(bundle) {
@@ -121,5 +130,119 @@ export function readSourceBundle() {
 }
 
 export function serializePulseBundle(bundle) {
-  return `${JSON.stringify(bundle, null, 2)}\n`;
+  return serializeJson(bundle);
+}
+
+function editionStats(bundle) {
+  const totalItems = bundle.items.length;
+  const signalCount = bundle.items.filter((item) => item.signalVsNoise === "signal").length;
+  const p1Count = bundle.items.filter((item) => item.priority === "P1").length;
+
+  return {
+    totalItems,
+    signalCount,
+    p1Count,
+  };
+}
+
+function readArchiveSourceEntries() {
+  if (!fs.existsSync(archiveSourceDir)) {
+    return [];
+  }
+
+  return fs
+    .readdirSync(archiveSourceDir, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && entry.name.endsWith(".json"))
+    .map((entry) => {
+      const slug = entry.name.replace(/\.json$/, "");
+      const filePath = path.join(archiveSourceDir, entry.name);
+
+      return {
+        slug,
+        filePath,
+        bundle: readJson(filePath),
+      };
+    });
+}
+
+function buildEditionIndexItem({
+  slug,
+  label,
+  bundle,
+  relativePath,
+  isCurrent = false,
+}) {
+  return {
+    slug,
+    label,
+    updatedAt: bundle.updatedAt,
+    version: bundle.version,
+    path: relativePath.replaceAll(path.sep, "/"),
+    isCurrent,
+    ...editionStats(bundle),
+  };
+}
+
+export function buildArchiveArtifacts(currentBundle) {
+  const errors = [];
+  const archiveEditionFiles = [];
+  const archiveIndexItems = [
+    buildEditionIndexItem({
+      slug: "current",
+      label: "Current edition",
+      bundle: currentBundle,
+      relativePath: path.join("data", "archive", "current.json"),
+      isCurrent: true,
+    }),
+  ];
+
+  for (const entry of readArchiveSourceEntries()) {
+    const { errors: entryErrors, bundle } = normalizePulseBundle(entry.bundle);
+
+    for (const error of entryErrors) {
+      errors.push(`Archive edition ${entry.slug}: ${error}`);
+    }
+
+    if (entryErrors.length > 0) {
+      continue;
+    }
+
+    archiveEditionFiles.push({
+      slug: entry.slug,
+      outputPath: path.join(archiveEditionOutputDir, `${entry.slug}.json`),
+      content: serializePulseBundle(bundle),
+    });
+
+    archiveIndexItems.push(
+      buildEditionIndexItem({
+        slug: entry.slug,
+        label: entry.slug,
+        bundle,
+        relativePath: path.join("data", "archive", "editions", `${entry.slug}.json`),
+      })
+    );
+  }
+
+  archiveIndexItems.sort((a, b) => {
+    if (b.updatedAt !== a.updatedAt) {
+      return b.updatedAt.localeCompare(a.updatedAt);
+    }
+
+    if (a.isCurrent === b.isCurrent) {
+      return a.slug.localeCompare(b.slug);
+    }
+
+    return a.isCurrent ? -1 : 1;
+  });
+
+  return {
+    errors,
+    currentContent: serializePulseBundle(currentBundle),
+    indexContent: serializeJson({
+      generatedAt: currentBundle.updatedAt,
+      currentEditionSlug: "current",
+      editions: archiveIndexItems,
+    }),
+    archiveEditionFiles,
+  };
 }
