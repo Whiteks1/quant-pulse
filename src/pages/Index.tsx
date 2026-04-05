@@ -107,6 +107,16 @@ const Index = () => {
     setSearchQuery("");
   };
 
+  const handleArchiveCategorySelect = (value: string) => {
+    setActiveCategory(value);
+    pulseRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleArchiveSourceSelect = (value: string) => {
+    setSearchQuery(value);
+    pulseRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   if (loadState === "loading") {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
@@ -171,7 +181,13 @@ const Index = () => {
         </>
       )}
       <WhatToWatch items={watchItems} />
-      <ArchivePreview />
+      <ArchivePreview
+        items={items}
+        activeCategory={activeCategory}
+        searchQuery={searchQuery}
+        onCategorySelect={handleArchiveCategorySelect}
+        onSourceSelect={handleArchiveSourceSelect}
+      />
       <SiteFooter updatedAt={updatedAt} version={version} />
     </div>
   );
