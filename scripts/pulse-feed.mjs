@@ -1,0 +1,125 @@
+import fs from "node:fs";
+import path from "node:path";
+
+export const rootDir = process.cwd();
+export const sourcePath = path.join(rootDir, "content", "pulse.source.json");
+export const outputPath = path.join(rootDir, "public", "data", "pulse.json");
+
+function assert(condition, message, errors) {
+  if (!condition) errors.push(message);
+}
+
+function isHttpUrl(value) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function scoreBand(score) {
+  if (score >= 70) return "P1";
+  if (score >= 40) return "P2";
+  return "P3";
+}
+
+function readJson(filePath) {
+  return JSON.parse(fs.readFileSync(filePath, "utf8"));
+}
+
+export function normalizePulseBundle(bundle) {
+  const errors = [];
+
+  assert(typeof bundle.version === "number", "pulse.version must be a number", errors);
+  assert(typeof bundle.updatedAt === "string", "pulse.updatedAt must be a string", errors);
+  assert(Array.isArray(bundle.items), "pulse.items must be an array", errors);
+  assert(Array.isArray(bundle.executiveBrief), "pulse.executiveBrief must be an array", errors);
+  assert(Array.isArray(bundle.watchItems), "pulse.watchItems must be an array", errors);
+
+  const briefItemIds = new Set();
+  const itemIds = new Set();
+  const dedupeKeys = new Set();
+  const watchItemIds = new Set();
+
+  for (const brief of bundle.executiveBrief ?? []) {
+    assert(typeof brief.id === "string" && brief.id.length > 0, "Each executiveBrief item needs id", errors);
+    assert(typeof brief.itemId === "string" && brief.itemId.length > 0, "Each executiveBrief item needs itemId", errors);
+    assert(typeof brief.text === "string" && brief.text.length > 0, "Each executiveBrief item needs text", errors);
+    if (typeof brief.itemId === "string") briefItemIds.add(brief.itemId);
+  }
+
+  for (const item of bundle.items ?? []) {
+    assert(typeof item.id === "string" && item.id.length > 0, "Each item needs id", errors);
+    if (typeof item.id === "string") {
+      assert(!itemIds.has(item.id), `Duplicate item id: ${item.id}`, errors);
+      itemIds.add(item.id);
+    }
+
+    assert(typeof item.dedupeKey === "string" && item.dedupeKey.length > 0, `Item ${item.id} must include dedupeKey`, errors);
+    if (typeof item.dedupeKey === "string") {
+      assert(!dedupeKeys.has(item.dedupeKey), `Duplicate dedupeKey: ${item.dedupeKey}`, errors);
+      dedupeKeys.add(item.dedupeKey);
+    }
+
+    assert(typeof item.sourceTier === "string", `Item ${item.id} must include sourceTier`, errors);
+    assert(typeof item.linkType === "string", `Item ${item.id} must include linkType`, errors);
+    assert(isHttpUrl(item.url), `Item ${item.id} must have a real HTTP URL`, errors);
+    assert(!item.url.includes("example.com"), `Item ${item.id} cannot use example.com`, errors);
+    assert(item.scoreJustification && typeof item.scoreJustification === "object", `Item ${item.id} must include scoreJustification`, errors);
+
+    if (item.scoreJustification && typeof item.scoreJustification === "object") {
+      const score =
+        item.scoreJustification.recency +
+        item.scoreJustification.marketImpact +
+        item.scoreJustification.structuralImpact +
+        item.scoreJustification.sourceQuality +
+        item.scoreJustification.crossValidation +
+        item.scoreJustification.thematicRelevance;
+
+      if (!item.editorialOverride || item.editorialOverride.field !== "relevanceScore") {
+        assert(
+          score === item.relevanceScore,
+          `Item ${item.id} scoreJustification total (${score}) must match relevanceScore (${item.relevanceScore}) or declare editorialOverride`,
+          errors
+        );
+      }
+    }
+
+    if (!item.editorialOverride || item.editorialOverride.field !== "priority") {
+      assert(
+        scoreBand(item.relevanceScore) === item.priority,
+        `Item ${item.id} priority (${item.priority}) must match score band (${scoreBand(item.relevanceScore)}) or declare editorialOverride`,
+        errors
+      );
+    }
+  }
+
+  for (const item of bundle.items ?? []) {
+    if (item.priority === "P1") {
+      assert(briefItemIds.has(item.id), `P1 item ${item.id} must appear in executiveBrief`, errors);
+    }
+  }
+
+  for (const watchItem of bundle.watchItems ?? []) {
+    assert(typeof watchItem.id === "string" && watchItem.id.length > 0, "Each watchItem needs id", errors);
+    if (typeof watchItem.id === "string") {
+      assert(!watchItemIds.has(watchItem.id), `Duplicate watch item id: ${watchItem.id}`, errors);
+      watchItemIds.add(watchItem.id);
+    }
+    assert(typeof watchItem.section === "string" && watchItem.section.length > 0, `Watch item ${watchItem.id} must include section`, errors);
+    assert(typeof watchItem.source === "string" && watchItem.source.length > 0, `Watch item ${watchItem.id} must include source`, errors);
+    assert(typeof watchItem.whyWatch === "string" && watchItem.whyWatch.length > 0, `Watch item ${watchItem.id} must include whyWatch`, errors);
+    assert(isHttpUrl(watchItem.url), `Watch item ${watchItem.id} must include a real HTTP URL`, errors);
+  }
+
+  return { errors, bundle };
+}
+
+export function readSourceBundle() {
+  return readJson(sourcePath);
+}
+
+export function serializePulseBundle(bundle) {
+  return `${JSON.stringify(bundle, null, 2)}\n`;
+}

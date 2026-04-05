@@ -8,6 +8,7 @@ Quant Pulse
 
 - docs/architecture-phases.es.md (fases: Pages + Knowledge → backend + Actions)
 - docs/roadmap.es.md
+- docs/feed-workflow.es.md
 - docs/editorial-manual.es.md
 - docs/scoring-system.es.md
 - docs/priority-rules.es.md
@@ -17,13 +18,15 @@ Quant Pulse
 - docs/voice-summary-style.es.md
 - config/approved-sources.yaml
 - config/news.schema.json
-- public/data/pulse.json (feed estático servido en Pages; el pipeline lo actualiza)
+- content/pulse.source.json (fuente editorial de Fase 1)
+- public/data/pulse.json (feed estático servido en Pages; debe salir del pipeline)
 - npm run validate:feed (comprobación mínima de consistencia editorial y de contrato)
 
 ## Rules
 
 - Do not invent categories outside the taxonomy in `docs/category-taxonomy.es.md`.
 - Do not output JSON that breaks the canonical format in `docs/canonical-json-format.es.md` and `config/news.schema.json`.
+- Do not edit `public/data/pulse.json` manually if the same change belongs in `content/pulse.source.json`.
 - Keep summaries readable aloud in Spanish when producing Spanish copy; the UI may stay in English until localized.
 - Prefer primary and tier_1 sources per `config/approved-sources.yaml`.
 - Treat signal vs noise as a first-class classification.
@@ -32,6 +35,6 @@ Quant Pulse
 
 ## Phased delivery (summary)
 
-1. **Fase 1:** GitHub Pages + `public/data/pulse.json` + Custom GPT Knowledge (listado en `docs/architecture-phases.es.md`). No backend, no GPT Actions, no OpenAI en el frontend.
+1. **Fase 1:** `content/pulse.source.json` + build pipeline + GitHub Pages + `public/data/pulse.json` + Custom GPT Knowledge (listado en `docs/architecture-phases.es.md`). No backend, no GPT Actions, no OpenAI en el frontend.
 2. **Fase 2:** Backend mínimo + OpenAPI + GPT Actions para datos vivos.
 3. **Fase 3 (opcional):** chat u otras integraciones con API key solo en servidor.

@@ -2,15 +2,35 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 
+const root = path.resolve(__dirname, "../..");
+const sourcePath = path.join(root, "content", "pulse.source.json");
+const outputPath = path.join(root, "public", "data", "pulse.json");
+
 function readPulse() {
-  const pulsePath = path.resolve(process.cwd(), "public", "data", "pulse.json");
-  return JSON.parse(fs.readFileSync(pulsePath, "utf8")) as {
+  return JSON.parse(fs.readFileSync(outputPath, "utf8")) as {
     items: Array<{ id: string; url: string; priority: string }>;
     executiveBrief: Array<{ itemId: string }>;
   };
 }
 
 describe("pulse feed", () => {
+  it("keeps the published feed aligned with the editorial source file", () => {
+    const source = JSON.parse(fs.readFileSync(sourcePath, "utf8"));
+    const output = JSON.parse(fs.readFileSync(outputPath, "utf8"));
+
+    expect(output.version).toBe(source.version);
+    expect(output.updatedAt).toBe(source.updatedAt);
+    expect(output.items.map((item: { id: string }) => item.id)).toEqual(
+      source.items.map((item: { id: string }) => item.id)
+    );
+    expect(output.executiveBrief.map((item: { id: string }) => item.id)).toEqual(
+      source.executiveBrief.map((item: { id: string }) => item.id)
+    );
+    expect(output.watchItems.map((item: { id: string }) => item.id)).toEqual(
+      source.watchItems.map((item: { id: string }) => item.id)
+    );
+  });
+
   it("does not use placeholder URLs", () => {
     const pulse = readPulse();
     for (const item of pulse.items) {

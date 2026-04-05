@@ -15,11 +15,7 @@
       "summary": "Bitcoin spot ETFs recorded $420M in net inflows on Thursday, breaking a three-week streak of outflows. BlackRock's IBIT led the move with the largest single-day contribution.",
       "whyItMatters": "A reversal in ETF flows changes the near-term demand narrative and matters directly for institutional sentiment around BTC.",
       "impact": "Supports a short-term improvement in BTC risk appetite.",
-      "tags": [
-        "BTC",
-        "flows",
-        "institutional"
-      ],
+      "tags": ["BTC", "flows", "institutional"],
       "signalVsNoise": "signal",
       "priority": "P1",
       "relevanceScore": 87,
@@ -51,11 +47,7 @@
       "summary": "OpenAI unveiled GPT-5 with real-time reasoning, multimodal workflows and a materially larger context window aimed at enterprise use cases.",
       "whyItMatters": "A frontier model release from a dominant actor changes competitive expectations across enterprise AI, model infrastructure and adjacent software vendors.",
       "impact": "Raises the bar for enterprise AI platform competition.",
-      "tags": [
-        "OpenAI",
-        "LLM",
-        "enterprise"
-      ],
+      "tags": ["OpenAI", "LLM", "enterprise"],
       "signalVsNoise": "signal",
       "priority": "P1",
       "relevanceScore": 80,
@@ -87,11 +79,7 @@
       "summary": "EU institutions advanced the AI Act framework with compliance obligations for high-risk systems and enforcement implications for model providers and distributors.",
       "whyItMatters": "This is a real regulatory change with operational consequences for AI product design, go-to-market decisions and compliance costs.",
       "impact": "Introduces a meaningful compliance headwind for AI vendors operating in Europe.",
-      "tags": [
-        "Regulation",
-        "EU",
-        "compliance"
-      ],
+      "tags": ["Regulation", "EU", "compliance"],
       "signalVsNoise": "signal",
       "priority": "P1",
       "relevanceScore": 80,
@@ -123,11 +111,7 @@
       "summary": "Ethereum's Pectra upgrade went live with changes aimed at lowering transaction costs and improving validator efficiency on the network.",
       "whyItMatters": "Protocol upgrades that materially affect cost and throughput can shift competitiveness across L1s and influence where activity accrues.",
       "impact": "Constructive for Ethereum's medium-term network competitiveness.",
-      "tags": [
-        "upgrade",
-        "DeFi",
-        "mainnet"
-      ],
+      "tags": ["upgrade", "DeFi", "mainnet"],
       "signalVsNoise": "signal",
       "priority": "P2",
       "relevanceScore": 68,
@@ -156,11 +140,7 @@
       "summary": "Apple acquired DarwinAI, a startup focused on on-device inference, reinforcing Apple's push toward local AI execution on consumer hardware.",
       "whyItMatters": "This has strategic importance for privacy, device-level differentiation and the competitive shape of consumer AI platforms.",
       "impact": "Strengthens the on-device AI narrative around Apple.",
-      "tags": [
-        "Apple",
-        "M&A",
-        "on-device"
-      ],
+      "tags": ["Apple", "M&A", "on-device"],
       "signalVsNoise": "signal",
       "priority": "P2",
       "relevanceScore": 62,
@@ -189,11 +169,7 @@
       "summary": "Solana's total value locked reached a new high as memecoin-related activity accelerated across key applications and venues.",
       "whyItMatters": "The headline metric is noteworthy, but the quality and durability of that activity remain questionable when it is heavily driven by speculative flows.",
       "impact": "Interesting activity signal, but weak as a durable market conclusion.",
-      "tags": [
-        "SOL",
-        "memecoins",
-        "TVL"
-      ],
+      "tags": ["SOL", "memecoins", "TVL"],
       "signalVsNoise": "noise",
       "priority": "P3",
       "relevanceScore": 33,
@@ -222,11 +198,7 @@
       "summary": "CrowdStrike described a coordinated campaign targeting energy infrastructure through supply-chain compromise patterns and post-exploitation persistence.",
       "whyItMatters": "Credible reporting on critical infrastructure threats can shift both policy attention and enterprise security spending assumptions.",
       "impact": "Supports a stronger cybersecurity spending and risk-management narrative.",
-      "tags": [
-        "APT",
-        "infrastructure",
-        "energy"
-      ],
+      "tags": ["APT", "infrastructure", "energy"],
       "signalVsNoise": "signal",
       "priority": "P1",
       "relevanceScore": 76,
@@ -255,11 +227,7 @@
       "summary": "A SocialFi-branded token project launched with aggressive marketing and VC backing, but without clear evidence of product traction or durable utility.",
       "whyItMatters": "It matters mainly as an example of hype conditions, not as a signal that changes market structure or adoption.",
       "impact": "Low informational value beyond identifying speculative noise.",
-      "tags": [
-        "SocialFi",
-        "VC",
-        "hype"
-      ],
+      "tags": ["SocialFi", "VC", "hype"],
       "signalVsNoise": "noise",
       "priority": "P3",
       "relevanceScore": 23,
@@ -288,11 +256,7 @@
       "summary": "NVIDIA reported datacenter revenue of $35B, up sharply year over year, with management citing continued strength in AI infrastructure demand.",
       "whyItMatters": "This is one of the clearest direct reads on AI capex, hardware demand and the durability of infrastructure spending across the stack.",
       "impact": "Reinforces the AI infrastructure bull case.",
-      "tags": [
-        "NVIDIA",
-        "earnings",
-        "AI"
-      ],
+      "tags": ["NVIDIA", "earnings", "AI"],
       "signalVsNoise": "signal",
       "priority": "P1",
       "relevanceScore": 82,
@@ -324,11 +288,7 @@
       "summary": "The SEC delayed its decision on ETH ETF options trading and requested additional time before formal action.",
       "whyItMatters": "Options matter for institutional tooling, but a delay without new substance does not materially change the current market narrative.",
       "impact": "Limited near-term consequence unless the regulatory stance changes materially.",
-      "tags": [
-        "ETH",
-        "SEC",
-        "ETFs"
-      ],
+      "tags": ["ETH", "SEC", "ETFs"],
       "signalVsNoise": "noise",
       "priority": "P3",
       "relevanceScore": 37,
@@ -357,11 +317,7 @@
       "summary": "Cloudflare introduced AI-assisted anomaly detection inside its Zero Trust stack to improve threat detection and policy response.",
       "whyItMatters": "This matters as a product and competitive signal, but it is not yet on the level of a market-moving security event or infrastructure break.",
       "impact": "Constructive competitive signal for the AI-plus-security thesis.",
-      "tags": [
-        "Cloudflare",
-        "Zero Trust",
-        "AI"
-      ],
+      "tags": ["Cloudflare", "Zero Trust", "AI"],
       "signalVsNoise": "signal",
       "priority": "P2",
       "relevanceScore": 65,
@@ -390,11 +346,7 @@
       "summary": "A celebrity-backed NFT collection launched with broad marketing claims around utility, but without evidence of durable product value or meaningful adoption.",
       "whyItMatters": "It mostly matters as a negative screen for hype and for understanding where attention may be wasted.",
       "impact": "No meaningful strategic implication beyond filtering out noise.",
-      "tags": [
-        "NFT",
-        "hype",
-        "Ethereum"
-      ],
+      "tags": ["NFT", "hype", "Ethereum"],
       "signalVsNoise": "noise",
       "priority": "P3",
       "relevanceScore": 18,
@@ -423,11 +375,7 @@
       "summary": "Fed communication pointed to a slower easing path than markets had priced, with continued focus on persistent services inflation.",
       "whyItMatters": "Higher-for-longer rate assumptions matter directly for liquidity, valuation multiples, and risk appetite across both tech and crypto.",
       "impact": "Keeps pressure on risk assets until macro data softens.",
-      "tags": [
-        "FOMC",
-        "liquidity",
-        "risk"
-      ],
+      "tags": ["FOMC", "liquidity", "risk"],
       "signalVsNoise": "signal",
       "priority": "P2",
       "relevanceScore": 67,
