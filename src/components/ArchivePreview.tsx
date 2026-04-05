@@ -35,6 +35,7 @@ export function ArchivePreview({ items }: ArchivePreviewProps) {
                 <Link
                   key={edition.dateKey}
                   to={buildArchiveHref({
+                    edition: "current",
                     section: "All",
                     category: "All",
                     query: "",
@@ -65,6 +66,7 @@ export function ArchivePreview({ items }: ArchivePreviewProps) {
                 <Button key={entry.value} variant="outline" size="sm" className="gap-2" asChild>
                   <Link
                     to={buildArchiveHref({
+                      edition: "current",
                       section: "All",
                       category: entry.value,
                       query: "",
@@ -90,6 +92,7 @@ export function ArchivePreview({ items }: ArchivePreviewProps) {
                 <Button key={entry.value} variant="outline" size="sm" className="gap-2" asChild>
                   <Link
                     to={buildArchiveHref({
+                      edition: "current",
                       section: "All",
                       category: "All",
                       query: "",

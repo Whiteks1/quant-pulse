@@ -7,7 +7,7 @@ import { FeedStatusBar } from "@/components/FeedStatusBar";
 import { FilterBar } from "@/components/FilterBar";
 import { NewsCard } from "@/components/NewsCard";
 import { SiteFooter } from "@/components/SiteFooter";
-import { usePulseData } from "@/hooks/usePulseData";
+import { useArchiveEdition } from "@/hooks/useArchiveEdition";
 import { buildArchivePreviewData, groupArchiveItemsByDate } from "@/lib/archive-preview";
 import { buildArchiveRouteSearchParams, parseArchiveRouteState } from "@/lib/archive-route";
 import { getFeedStats } from "@/lib/feed-status";
@@ -15,14 +15,18 @@ import { getFeedStats } from "@/lib/feed-status";
 const ArchivePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialState = useMemo(() => parseArchiveRouteState(searchParams), [searchParams]);
+  const [activeEdition, setActiveEdition] = useState(initialState.edition);
   const [activeSection, setActiveSection] = useState(initialState.section);
   const [activeCategory, setActiveCategory] = useState(initialState.category);
   const [searchQuery, setSearchQuery] = useState(initialState.query);
   const [activeDate, setActiveDate] = useState(initialState.date);
   const [activeSource, setActiveSource] = useState(initialState.source);
-  const { items, updatedAt, version, loadState, loadError } = usePulseData();
+  const { index, selectedEdition, bundle, loadState, loadError } = useArchiveEdition(activeEdition);
 
   useEffect(() => {
+    if (activeEdition !== initialState.edition) {
+      setActiveEdition(initialState.edition);
+    }
     if (activeSection !== initialState.section) {
       setActiveSection(initialState.section);
     }
@@ -39,10 +43,12 @@ const ArchivePage = () => {
       setActiveSource(initialState.source);
     }
   }, [
+    activeEdition,
     activeCategory,
     activeDate,
     activeSection,
     activeSource,
+    initialState.edition,
     initialState.category,
     initialState.date,
     initialState.query,
@@ -53,6 +59,7 @@ const ArchivePage = () => {
 
   useEffect(() => {
     const nextParams = buildArchiveRouteSearchParams({
+      edition: activeEdition,
       section: activeSection,
       category: activeCategory,
       query: searchQuery,
@@ -64,6 +71,7 @@ const ArchivePage = () => {
       setSearchParams(nextParams, { replace: true });
     }
   }, [
+    activeEdition,
     activeCategory,
     activeDate,
     activeSection,
@@ -72,6 +80,16 @@ const ArchivePage = () => {
     searchQuery,
     setSearchParams,
   ]);
+
+  useEffect(() => {
+    if (selectedEdition && activeEdition !== selectedEdition.slug) {
+      setActiveEdition(selectedEdition.slug);
+    }
+  }, [activeEdition, selectedEdition]);
+
+  const items = useMemo(() => bundle?.items ?? [], [bundle]);
+  const updatedAt = bundle?.updatedAt ?? "";
+  const version = bundle?.version ?? 0;
 
   const baseFilteredItems = useMemo(() => {
     return items.filter((item) => {
@@ -159,8 +177,8 @@ const ArchivePage = () => {
               Review archive editions and source concentration
             </h1>
             <p className="max-w-2xl text-sm md:text-base text-secondary-foreground leading-relaxed">
-              Archive mode keeps the same editorial feed but makes date and source facets navigable,
-              so the published JSON can act as an actual static archive surface.
+              Archive mode now loads a published edition manifest, so each archived snapshot can be
+              explored without introducing backend infrastructure.
             </p>
           </div>
 
@@ -186,6 +204,37 @@ const ArchivePage = () => {
         p1Count={stats.p1Count}
       />
 
+      <section className="container py-8 space-y-4">
+        <div className="rounded-xl border border-border bg-card p-5">
+          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.18em] text-muted-foreground">
+            <Archive className="h-3.5 w-3.5" />
+            Published Editions
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            {index?.editions.map((edition) => (
+              <Button
+                key={edition.slug}
+                variant={activeEdition === edition.slug ? "default" : "outline"}
+                size="sm"
+                className="gap-2"
+                onClick={() => setActiveEdition(edition.slug)}
+              >
+                {edition.label}
+                <span className="text-[11px] font-mono opacity-80">v{edition.version}</span>
+              </Button>
+            ))}
+          </div>
+
+          {selectedEdition ? (
+            <p className="mt-4 text-xs font-mono text-muted-foreground">
+              Selected edition: {selectedEdition.label} • {selectedEdition.totalItems} stories •{" "}
+              {selectedEdition.signalCount} signals • {selectedEdition.p1Count} P1
+            </p>
+          ) : null}
+        </div>
+      </section>
+
       <FilterBar
         activeSection={activeSection}
         activeCategory={activeCategory}
@@ -200,7 +249,7 @@ const ArchivePage = () => {
           <div className="rounded-xl border border-border bg-card p-5">
             <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.18em] text-muted-foreground">
               <Calendar className="h-3.5 w-3.5" />
-              Editions
+              Dates in Edition
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
               {archivePreview.editions.map((edition) => (

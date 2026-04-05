@@ -5,6 +5,7 @@ import {
 } from "@/lib/feed-filters";
 
 export interface ArchiveRouteState extends FeedFilterState {
+  edition: string;
   date: string;
   source: string;
 }
@@ -18,12 +19,14 @@ export function parseArchiveRouteState(searchParams: URLSearchParams): ArchiveRo
 
   return {
     ...baseState,
+    edition: (searchParams.get("edition") ?? "current").trim() || "current",
     date: datePattern.test(date) ? date : "",
     source,
   };
 }
 
 export function buildArchiveRouteSearchParams({
+  edition,
   section,
   category,
   query,
@@ -31,6 +34,10 @@ export function buildArchiveRouteSearchParams({
   source,
 }: ArchiveRouteState): URLSearchParams {
   const params = buildFeedFilterSearchParams({ section, category, query });
+
+  if (edition !== "current") {
+    params.set("edition", edition);
+  }
 
   if (datePattern.test(date)) {
     params.set("date", date);
