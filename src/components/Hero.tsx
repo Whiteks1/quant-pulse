@@ -1,11 +1,15 @@
 import { Activity, Archive } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { formatFeedTimestamp } from "@/lib/feed-status";
 
 interface HeroProps {
   onViewPulse: () => void;
+  updatedAt: string;
+  totalItems: number;
+  signalCount: number;
 }
 
-export function Hero({ onViewPulse }: HeroProps) {
+export function Hero({ onViewPulse, updatedAt, totalItems, signalCount }: HeroProps) {
   return (
     <section className="bg-gradient-hero relative overflow-hidden">
       {/* Subtle grid */}
@@ -54,7 +58,7 @@ export function Hero({ onViewPulse }: HeroProps) {
         </div>
 
         <p className="text-xs text-muted-foreground font-mono mt-6">
-          April 4, 2026 • 12 signals tracked
+          Updated {formatFeedTimestamp(updatedAt)} UTC • {totalItems} stories tracked • {signalCount} signals
         </p>
       </div>
     </section>
