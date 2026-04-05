@@ -4,12 +4,19 @@ import { formatFeedTimestamp } from "@/lib/feed-status";
 
 interface HeroProps {
   onViewPulse: () => void;
+  onBrowseArchive: () => void;
   updatedAt: string;
   totalItems: number;
   signalCount: number;
 }
 
-export function Hero({ onViewPulse, updatedAt, totalItems, signalCount }: HeroProps) {
+export function Hero({
+  onViewPulse,
+  onBrowseArchive,
+  updatedAt,
+  totalItems,
+  signalCount,
+}: HeroProps) {
   return (
     <section className="bg-gradient-hero relative overflow-hidden">
       {/* Subtle grid */}
@@ -50,6 +57,7 @@ export function Hero({ onViewPulse, updatedAt, totalItems, signalCount }: HeroPr
           <Button
             variant="outline"
             size="lg"
+            onClick={onBrowseArchive}
             className="border-border text-foreground hover:bg-secondary"
           >
             <Archive className="mr-2 h-4 w-4" />

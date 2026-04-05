@@ -5,6 +5,7 @@ interface EmptyFeedStateProps {
   activeSection: string;
   activeCategory: string;
   searchQuery: string;
+  extraFilters?: string[];
   onReset: () => void;
 }
 
@@ -12,12 +13,14 @@ export function EmptyFeedState({
   activeSection,
   activeCategory,
   searchQuery,
+  extraFilters = [],
   onReset,
 }: EmptyFeedStateProps) {
   const filters = [
     activeSection !== "All" ? `section: ${activeSection}` : null,
     activeCategory !== "All" ? `category: ${activeCategory}` : null,
     searchQuery.trim() ? `query: "${searchQuery.trim()}"` : null,
+    ...extraFilters,
   ].filter(Boolean);
 
   return (

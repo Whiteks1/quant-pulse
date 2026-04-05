@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildArchivePreviewData } from "./archive-preview";
+import { buildArchivePreviewData, groupArchiveItemsByDate } from "./archive-preview";
 
 describe("buildArchivePreviewData", () => {
   it("groups items by date and counts signals", () => {
@@ -64,5 +64,27 @@ describe("buildArchivePreviewData", () => {
 
     expect(preview.categories[0]).toEqual({ value: "AI", count: 2 });
     expect(preview.sources[0]).toEqual({ value: "OpenAI", count: 2 });
+  });
+
+  it("builds date groups with items sorted from newest to oldest", () => {
+    const groups = groupArchiveItemsByDate([
+      {
+        id: "older",
+        publishedAt: "2026-04-05T09:00:00Z",
+      },
+      {
+        id: "newer",
+        publishedAt: "2026-04-05T12:00:00Z",
+      },
+      {
+        id: "previous-day",
+        publishedAt: "2026-04-04T08:00:00Z",
+      },
+    ] as never[]);
+
+    expect(groups).toHaveLength(2);
+    expect(groups[0]?.dateKey).toBe("2026-04-05");
+    expect(groups[0]?.items.map((item) => item.id)).toEqual(["newer", "older"]);
+    expect(groups[1]?.dateKey).toBe("2026-04-04");
   });
 });

@@ -1,23 +1,15 @@
+import { Link } from "react-router-dom";
 import { Archive, Calendar, Tag, Globe, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { NewsItem } from "@/data/mockNews";
 import { buildArchivePreviewData } from "@/lib/archive-preview";
+import { buildArchiveHref } from "@/lib/archive-route";
 
 interface ArchivePreviewProps {
   items: NewsItem[];
-  activeCategory: string;
-  searchQuery: string;
-  onCategorySelect: (value: string) => void;
-  onSourceSelect: (value: string) => void;
 }
 
-export function ArchivePreview({
-  items,
-  activeCategory,
-  searchQuery,
-  onCategorySelect,
-  onSourceSelect,
-}: ArchivePreviewProps) {
+export function ArchivePreview({ items }: ArchivePreviewProps) {
   const preview = buildArchivePreviewData(items);
 
   return (
@@ -40,9 +32,16 @@ export function ArchivePreview({
             </div>
             <div className="grid gap-2">
               {preview.editions.map((edition) => (
-                <div
+                <Link
                   key={edition.dateKey}
-                  className="rounded-md bg-surface-raised px-4 py-3 text-sm text-secondary-foreground flex items-center justify-between"
+                  to={buildArchiveHref({
+                    section: "All",
+                    category: "All",
+                    query: "",
+                    date: edition.dateKey,
+                    source: "",
+                  })}
+                  className="rounded-md bg-surface-raised px-4 py-3 text-sm text-secondary-foreground flex items-center justify-between transition-colors hover:bg-secondary"
                 >
                   <div>
                     <p className="font-mono text-xs text-foreground">{edition.label}</p>
@@ -51,7 +50,7 @@ export function ArchivePreview({
                     </p>
                   </div>
                   <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-                </div>
+                </Link>
               ))}
             </div>
           </div>
@@ -63,15 +62,19 @@ export function ArchivePreview({
             </div>
             <div className="flex flex-wrap gap-2">
               {preview.categories.map((entry) => (
-                <Button
-                  key={entry.value}
-                  variant={activeCategory === entry.value ? "default" : "outline"}
-                  size="sm"
-                  className="gap-2"
-                  onClick={() => onCategorySelect(entry.value)}
-                >
-                  {entry.value}
-                  <span className="text-[11px] font-mono opacity-80">{entry.count}</span>
+                <Button key={entry.value} variant="outline" size="sm" className="gap-2" asChild>
+                  <Link
+                    to={buildArchiveHref({
+                      section: "All",
+                      category: entry.value,
+                      query: "",
+                      date: "",
+                      source: "",
+                    })}
+                  >
+                    {entry.value}
+                    <span className="text-[11px] font-mono opacity-80">{entry.count}</span>
+                  </Link>
                 </Button>
               ))}
             </div>
@@ -84,19 +87,32 @@ export function ArchivePreview({
             </div>
             <div className="flex flex-wrap gap-2">
               {preview.sources.map((entry) => (
-                <Button
-                  key={entry.value}
-                  variant={searchQuery === entry.value ? "default" : "outline"}
-                  size="sm"
-                  className="gap-2"
-                  onClick={() => onSourceSelect(entry.value)}
-                >
-                  {entry.value}
-                  <span className="text-[11px] font-mono opacity-80">{entry.count}</span>
+                <Button key={entry.value} variant="outline" size="sm" className="gap-2" asChild>
+                  <Link
+                    to={buildArchiveHref({
+                      section: "All",
+                      category: "All",
+                      query: "",
+                      date: "",
+                      source: entry.value,
+                    })}
+                  >
+                    {entry.value}
+                    <span className="text-[11px] font-mono opacity-80">{entry.count}</span>
+                  </Link>
                 </Button>
               ))}
             </div>
           </div>
+        </div>
+
+        <div className="mt-6 flex justify-end">
+          <Button variant="ghost" asChild>
+            <Link to="/archive">
+              Open full archive
+              <ChevronRight className="h-4 w-4" />
+            </Link>
+          </Button>
         </div>
       </div>
     </section>

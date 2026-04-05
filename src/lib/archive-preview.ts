@@ -19,6 +19,12 @@ export interface ArchivePreviewData {
   sources: ArchiveFacetPreview[];
 }
 
+export interface ArchiveDateGroup {
+  dateKey: string;
+  label: string;
+  items: NewsItem[];
+}
+
 export function buildArchivePreviewData(items: NewsItem[]): ArchivePreviewData {
   const editionMap = new Map<string, ArchiveEditionPreview>();
   const categoryMap = new Map<string, number>();
@@ -52,6 +58,30 @@ export function buildArchivePreviewData(items: NewsItem[]): ArchivePreviewData {
     categories: sortFacetMap(categoryMap).slice(0, 6),
     sources: sortFacetMap(sourceMap).slice(0, 6),
   };
+}
+
+export function groupArchiveItemsByDate(items: NewsItem[]): ArchiveDateGroup[] {
+  const sortedItems = [...items].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  const groups = new Map<string, ArchiveDateGroup>();
+
+  for (const item of sortedItems) {
+    const publishedDate = parseISO(item.publishedAt);
+    const dateKey = format(publishedDate, "yyyy-MM-dd");
+    const existingGroup = groups.get(dateKey);
+
+    if (existingGroup) {
+      existingGroup.items.push(item);
+      continue;
+    }
+
+    groups.set(dateKey, {
+      dateKey,
+      label: format(publishedDate, "MMMM d, yyyy"),
+      items: [item],
+    });
+  }
+
+  return [...groups.values()].sort((a, b) => b.dateKey.localeCompare(a.dateKey));
 }
 
 function sortFacetMap(map: Map<string, number>): ArchiveFacetPreview[] {
