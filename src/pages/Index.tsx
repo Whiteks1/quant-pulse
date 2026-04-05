@@ -1,6 +1,7 @@
 import { useRef, useState, useMemo, useEffect } from "react";
 import type { ExecutiveBriefItem, NewsItem, WatchItem } from "@/data/mockNews";
 import { fetchPulseData } from "@/data/loadPulseData";
+import { useSearchParams } from "react-router-dom";
 import { Hero } from "@/components/Hero";
 import { ExecutiveBrief } from "@/components/ExecutiveBrief";
 import { FeaturedStories } from "@/components/FeaturedStories";
@@ -13,12 +14,15 @@ import { FilterBar } from "@/components/FilterBar";
 import { FeedStatusBar } from "@/components/FeedStatusBar";
 import { EmptyFeedState } from "@/components/EmptyFeedState";
 import { getFeedStats, hasActiveFilters } from "@/lib/feed-status";
+import { buildFeedFilterSearchParams, parseFeedFilterState } from "@/lib/feed-filters";
 
 const Index = () => {
   const pulseRef = useRef<HTMLDivElement>(null);
-  const [activeSection, setActiveSection] = useState("All");
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialFilters = useMemo(() => parseFeedFilterState(searchParams), [searchParams]);
+  const [activeSection, setActiveSection] = useState(initialFilters.section);
+  const [activeCategory, setActiveCategory] = useState(initialFilters.category);
+  const [searchQuery, setSearchQuery] = useState(initialFilters.query);
   const [items, setItems] = useState<NewsItem[]>([]);
   const [executiveBrief, setExecutiveBrief] = useState<ExecutiveBriefItem[]>([]);
   const [watchItems, setWatchItems] = useState<WatchItem[]>([]);
@@ -49,6 +53,30 @@ const Index = () => {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (activeSection !== initialFilters.section) {
+      setActiveSection(initialFilters.section);
+    }
+    if (activeCategory !== initialFilters.category) {
+      setActiveCategory(initialFilters.category);
+    }
+    if (searchQuery !== initialFilters.query) {
+      setSearchQuery(initialFilters.query);
+    }
+  }, [activeCategory, activeSection, initialFilters.category, initialFilters.query, initialFilters.section, searchQuery]);
+
+  useEffect(() => {
+    const nextParams = buildFeedFilterSearchParams({
+      section: activeSection,
+      category: activeCategory,
+      query: searchQuery,
+    });
+
+    if (nextParams.toString() !== searchParams.toString()) {
+      setSearchParams(nextParams, { replace: true });
+    }
+  }, [activeCategory, activeSection, searchParams, searchQuery, setSearchParams]);
 
   const filteredNews = useMemo(() => {
     return items.filter((item) => {
