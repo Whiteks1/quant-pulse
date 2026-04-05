@@ -1,58 +1,30 @@
-import { useRef, useState, useMemo, useEffect } from "react";
-import type { ExecutiveBriefItem, NewsItem, WatchItem } from "@/data/mockNews";
-import { fetchPulseData } from "@/data/loadPulseData";
-import { useSearchParams } from "react-router-dom";
-import { Hero } from "@/components/Hero";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { ArchivePreview } from "@/components/ArchivePreview";
+import { EmptyFeedState } from "@/components/EmptyFeedState";
 import { ExecutiveBrief } from "@/components/ExecutiveBrief";
 import { FeaturedStories } from "@/components/FeaturedStories";
+import { FeedStatusBar } from "@/components/FeedStatusBar";
+import { FilterBar } from "@/components/FilterBar";
+import { Hero } from "@/components/Hero";
 import { NewsSection } from "@/components/NewsSection";
 import { SignalVsNoise } from "@/components/SignalVsNoise";
-import { WhatToWatch } from "@/components/WhatToWatch";
-import { ArchivePreview } from "@/components/ArchivePreview";
 import { SiteFooter } from "@/components/SiteFooter";
-import { FilterBar } from "@/components/FilterBar";
-import { FeedStatusBar } from "@/components/FeedStatusBar";
-import { EmptyFeedState } from "@/components/EmptyFeedState";
-import { getFeedStats, hasActiveFilters } from "@/lib/feed-status";
+import { WhatToWatch } from "@/components/WhatToWatch";
+import { usePulseData } from "@/hooks/usePulseData";
 import { buildFeedFilterSearchParams, parseFeedFilterState } from "@/lib/feed-filters";
+import { getFeedStats, hasActiveFilters } from "@/lib/feed-status";
 
 const Index = () => {
   const pulseRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialFilters = useMemo(() => parseFeedFilterState(searchParams), [searchParams]);
   const [activeSection, setActiveSection] = useState(initialFilters.section);
   const [activeCategory, setActiveCategory] = useState(initialFilters.category);
   const [searchQuery, setSearchQuery] = useState(initialFilters.query);
-  const [items, setItems] = useState<NewsItem[]>([]);
-  const [executiveBrief, setExecutiveBrief] = useState<ExecutiveBriefItem[]>([]);
-  const [watchItems, setWatchItems] = useState<WatchItem[]>([]);
-  const [updatedAt, setUpdatedAt] = useState("");
-  const [version, setVersion] = useState(0);
-  const [loadState, setLoadState] = useState<"loading" | "ok" | "error">("loading");
-  const [loadError, setLoadError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetchPulseData()
-      .then((bundle) => {
-        if (cancelled) return;
-        setItems(bundle.items);
-        setExecutiveBrief(bundle.executiveBrief);
-        setWatchItems(bundle.watchItems);
-        setUpdatedAt(bundle.updatedAt);
-        setVersion(bundle.version);
-        setLoadState("ok");
-        setLoadError(null);
-      })
-      .catch((e: unknown) => {
-        if (cancelled) return;
-        setLoadState("error");
-        setLoadError(e instanceof Error ? e.message : "Unknown error");
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const { items, executiveBrief, watchItems, updatedAt, version, loadState, loadError } =
+    usePulseData();
 
   useEffect(() => {
     if (activeSection !== initialFilters.section) {
@@ -64,7 +36,14 @@ const Index = () => {
     if (searchQuery !== initialFilters.query) {
       setSearchQuery(initialFilters.query);
     }
-  }, [activeCategory, activeSection, initialFilters.category, initialFilters.query, initialFilters.section, searchQuery]);
+  }, [
+    activeCategory,
+    activeSection,
+    initialFilters.category,
+    initialFilters.query,
+    initialFilters.section,
+    searchQuery,
+  ]);
 
   useEffect(() => {
     const nextParams = buildFeedFilterSearchParams({
@@ -83,38 +62,33 @@ const Index = () => {
       if (activeSection !== "All" && item.section !== activeSection) return false;
       if (activeCategory !== "All" && item.category !== activeCategory) return false;
       if (searchQuery) {
-        const q = searchQuery.toLowerCase();
+        const normalizedQuery = searchQuery.toLowerCase();
         return (
-          item.title.toLowerCase().includes(q) ||
-          item.summary.toLowerCase().includes(q) ||
-          item.tags.some((t) => t.toLowerCase().includes(q))
+          item.title.toLowerCase().includes(normalizedQuery) ||
+          item.summary.toLowerCase().includes(normalizedQuery) ||
+          item.tags.some((tag) => tag.toLowerCase().includes(normalizedQuery))
         );
       }
       return true;
     });
-  }, [items, activeSection, activeCategory, searchQuery]);
+  }, [activeCategory, activeSection, items, searchQuery]);
 
   const stats = useMemo(() => getFeedStats(items), [items]);
-  const showEmptyState = filteredNews.length === 0 && hasActiveFilters(activeSection, activeCategory, searchQuery);
+  const showEmptyState =
+    filteredNews.length === 0 && hasActiveFilters(activeSection, activeCategory, searchQuery);
 
   const handleViewPulse = () => {
     pulseRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleBrowseArchive = () => {
+    navigate("/archive");
   };
 
   const handleResetFilters = () => {
     setActiveSection("All");
     setActiveCategory("All");
     setSearchQuery("");
-  };
-
-  const handleArchiveCategorySelect = (value: string) => {
-    setActiveCategory(value);
-    pulseRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const handleArchiveSourceSelect = (value: string) => {
-    setSearchQuery(value);
-    pulseRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   if (loadState === "loading") {
@@ -138,6 +112,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Hero
         onViewPulse={handleViewPulse}
+        onBrowseArchive={handleBrowseArchive}
         updatedAt={updatedAt}
         totalItems={stats.totalItems}
         signalCount={stats.signalCount}
@@ -181,13 +156,7 @@ const Index = () => {
         </>
       )}
       <WhatToWatch items={watchItems} />
-      <ArchivePreview
-        items={items}
-        activeCategory={activeCategory}
-        searchQuery={searchQuery}
-        onCategorySelect={handleArchiveCategorySelect}
-        onSourceSelect={handleArchiveSourceSelect}
-      />
+      <ArchivePreview items={items} />
       <SiteFooter updatedAt={updatedAt} version={version} />
     </div>
   );
