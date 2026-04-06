@@ -97,4 +97,56 @@ describe("normalizePulseBundle contract checks", () => {
       result.errors.some((error) => error.includes("must include date in YYYY-MM-DD"))
     ).toBe(true);
   });
+
+  it("rejects duplicate executive brief references to the same item", () => {
+    const bundle = makeValidBundle();
+    bundle.executiveBrief.push({
+      id: "brief-2",
+      itemId: "item-1",
+      text: "Another angle.",
+    });
+
+    const result = normalizePulseBundle(bundle);
+    expect(result.errors.some((error) => error.includes("Duplicate executiveBrief itemId"))).toBe(true);
+  });
+
+  it("rejects categories that do not belong to the section taxonomy", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].category = "Rates";
+
+    const result = normalizePulseBundle(bundle);
+    expect(result.errors.some((error) => error.includes("category (Rates) is not valid for section (Technology)"))).toBe(true);
+  });
+
+  it("rejects explicit tier_1 for a source not in approved sources", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].source = "OpenAI";
+    bundle.items[0].sourceTier = "tier_1";
+
+    const result = normalizePulseBundle(bundle);
+    expect(
+      result.errors.some((error) => error.includes("source (OpenAI) is not approved for explicit tier tier_1"))
+    ).toBe(true);
+  });
+
+  it("rejects source quality values above tier cap", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].sourceTier = "tier_3";
+    bundle.items[0].scoreJustification.sourceQuality = 8;
+
+    const result = normalizePulseBundle(bundle);
+    expect(result.errors.some((error) => error.includes("sourceQuality (8) exceeds cap for sourceTier (tier_3)"))).toBe(
+      true
+    );
+  });
+
+  it("rejects noise items with P1 priority without override", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].signalVsNoise = "noise";
+
+    const result = normalizePulseBundle(bundle);
+    expect(
+      result.errors.some((error) => error.includes("marked as noise cannot be P1 without editorialOverride"))
+    ).toBe(true);
+  });
 });
