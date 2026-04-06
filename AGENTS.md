@@ -26,6 +26,8 @@ Quant Pulse
 ## Rules
 
 - Treat `docs/quantlab-upstream-contract.es.md` as the product-boundary contract for QuantPulse vs QuantLab.
+- Quant Pulse is the upstream signal layer for QuantLab; it must not absorb QuantLab research, execution, or validation responsibilities.
+- Treat the current files, docs, schema, and runtime as present-state authority; treat the roadmap as target state only until changes are explicitly implemented.
 - Do not invent categories outside the taxonomy in `docs/category-taxonomy.es.md`.
 - Do not output JSON that breaks the canonical format in `docs/canonical-json-format.es.md` and `config/news.schema.json`.
 - Do not edit `public/data/pulse.json` manually if the same change belongs in `content/pulse.source.json`.
@@ -47,3 +49,7 @@ Quant Pulse
 1. **Fase 1:** `content/pulse.source.json` + build pipeline + GitHub Pages + `public/data/pulse.json` + Custom GPT Knowledge (listado en `docs/architecture-phases.es.md`). No backend, no GPT Actions, no OpenAI en el frontend.
 2. **Fase 2:** Backend mínimo + OpenAPI + GPT Actions para datos vivos.
 3. **Fase 3 (opcional):** chat u otras integraciones con API key solo en servidor.
+
+## Boundary phrase
+
+`Quant Pulse proposes the hypothesis; QuantLab requires the proof.`
