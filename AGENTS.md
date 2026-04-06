@@ -6,6 +6,7 @@ Quant Pulse
 
 ## Source of truth
 
+- docs/quantlab-upstream-contract.es.md
 - docs/architecture-phases.es.md (fases: Pages + Knowledge → backend + Actions)
 - docs/roadmap.es.md
 - docs/feed-workflow.es.md
@@ -24,6 +25,7 @@ Quant Pulse
 
 ## Rules
 
+- Treat `docs/quantlab-upstream-contract.es.md` as the product-boundary contract for QuantPulse vs QuantLab.
 - Do not invent categories outside the taxonomy in `docs/category-taxonomy.es.md`.
 - Do not output JSON that breaks the canonical format in `docs/canonical-json-format.es.md` and `config/news.schema.json`.
 - Do not edit `public/data/pulse.json` manually if the same change belongs in `content/pulse.source.json`.

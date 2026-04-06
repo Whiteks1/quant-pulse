@@ -1,6 +1,6 @@
 # Quant Pulse — Signal Radar
 
-SPA para explorar señales editoriales (tech, crypto, macro) con datos de ejemplo. Stack: React, TypeScript, Vite, Tailwind, shadcn/ui.
+SPA para explorar señales editoriales orientadas a research y riesgo para QuantLab. El scope principal es crypto, market structure y tecnología o macro solo cuando afectan infraestructura, seguridad o condiciones de mercado. Stack: React, TypeScript, Vite, Tailwind, shadcn/ui.
 
 ## Desarrollo
 
@@ -39,7 +39,7 @@ El workflow de Pages comprueba además que el feed publicado esté sincronizado 
 
 ## Documentación editorial
 
-Ver [`AGENTS.md`](AGENTS.md), [`docs/architecture-phases.es.md`](docs/architecture-phases.es.md), [`docs/roadmap.es.md`](docs/roadmap.es.md), [`docs/feed-workflow.es.md`](docs/feed-workflow.es.md) y el resto de [`docs/`](docs/).
+Ver [`AGENTS.md`](AGENTS.md), [`docs/quantlab-upstream-contract.es.md`](docs/quantlab-upstream-contract.es.md), [`docs/architecture-phases.es.md`](docs/architecture-phases.es.md), [`docs/roadmap.es.md`](docs/roadmap.es.md), [`docs/feed-workflow.es.md`](docs/feed-workflow.es.md) y el resto de [`docs/`](docs/).
 
 ## Workflow del repositorio
 
