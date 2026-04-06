@@ -102,6 +102,10 @@ Toda señal que aspire a cruzar de Quant Pulse hacia QuantLab debe poder expresa
 - `risk_filter_hint`
 - `product_priority_hint`
 
+La especificación operativa de ese handoff se desarrolla en:
+
+- `docs/quantlab-signal-intent-format.es.md`
+
 ## Regla de contrato actual vs roadmap
 
 El contrato actual del repositorio viene definido por los archivos, docs, schema y runtime que existen hoy.

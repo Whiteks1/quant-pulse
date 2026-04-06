@@ -7,6 +7,7 @@ Quant Pulse
 ## Source of truth
 
 - docs/quantlab-upstream-contract.es.md
+- docs/quantlab-signal-intent-format.es.md
 - docs/architecture-phases.es.md (fases: Pages + Knowledge → backend + Actions)
 - docs/roadmap.es.md
 - docs/feed-workflow.es.md
