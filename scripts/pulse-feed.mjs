@@ -1,5 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
+import Ajv2020 from "ajv/dist/2020.js";
+import addFormats from "ajv-formats";
 
 export const rootDir = process.cwd();
 export const sourcePath = path.join(rootDir, "content", "pulse.source.json");
@@ -9,6 +11,13 @@ export const archiveOutputDir = path.join(rootDir, "public", "data", "archive");
 export const archiveCurrentOutputPath = path.join(archiveOutputDir, "current.json");
 export const archiveIndexOutputPath = path.join(archiveOutputDir, "index.json");
 export const archiveEditionOutputDir = path.join(archiveOutputDir, "editions");
+export const newsItemSchemaPath = path.join(rootDir, "config", "news.schema.json");
+
+const watchDatePattern = /^\d{4}-\d{2}-\d{2}$/;
+const isoDateTimePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z$/;
+const allowedSections = new Set(["Technology", "Crypto & Markets", "Macro"]);
+const allowedWatchTypes = new Set(["earnings", "regulation", "event", "market"]);
+const itemSchemaValidator = createItemSchemaValidator();
 
 function assert(condition, message, errors) {
   if (!condition) errors.push(message);
@@ -21,6 +30,14 @@ function isHttpUrl(value) {
   } catch {
     return false;
   }
+}
+
+function isIsoDateTime(value) {
+  if (typeof value !== "string" || !isoDateTimePattern.test(value)) {
+    return false;
+  }
+
+  return !Number.isNaN(Date.parse(value));
 }
 
 function scoreBand(score) {
@@ -37,15 +54,32 @@ function serializeJson(value) {
   return `${JSON.stringify(value, null, 2)}\n`;
 }
 
+function createItemSchemaValidator() {
+  const schema = readJson(newsItemSchemaPath);
+  const ajv = new Ajv2020({
+    allErrors: true,
+    strict: false,
+  });
+  addFormats(ajv);
+  return ajv.compile(schema);
+}
+
+function formatSchemaError(error) {
+  const pathLabel = error.instancePath || "/";
+  return `${pathLabel} ${error.message}`.trim();
+}
+
 export function normalizePulseBundle(bundle) {
   const errors = [];
 
   assert(typeof bundle.version === "number", "pulse.version must be a number", errors);
   assert(typeof bundle.updatedAt === "string", "pulse.updatedAt must be a string", errors);
+  assert(isIsoDateTime(bundle.updatedAt), "pulse.updatedAt must be a valid ISO date-time in UTC", errors);
   assert(Array.isArray(bundle.items), "pulse.items must be an array", errors);
   assert(Array.isArray(bundle.executiveBrief), "pulse.executiveBrief must be an array", errors);
   assert(Array.isArray(bundle.watchItems), "pulse.watchItems must be an array", errors);
 
+  const briefIds = new Set();
   const briefItemIds = new Set();
   const itemIds = new Set();
   const dedupeKeys = new Set();
@@ -53,12 +87,25 @@ export function normalizePulseBundle(bundle) {
 
   for (const brief of bundle.executiveBrief ?? []) {
     assert(typeof brief.id === "string" && brief.id.length > 0, "Each executiveBrief item needs id", errors);
+    if (typeof brief.id === "string") {
+      assert(!briefIds.has(brief.id), `Duplicate executiveBrief id: ${brief.id}`, errors);
+      briefIds.add(brief.id);
+    }
     assert(typeof brief.itemId === "string" && brief.itemId.length > 0, "Each executiveBrief item needs itemId", errors);
     assert(typeof brief.text === "string" && brief.text.length > 0, "Each executiveBrief item needs text", errors);
     if (typeof brief.itemId === "string") briefItemIds.add(brief.itemId);
   }
 
-  for (const item of bundle.items ?? []) {
+  for (const [index, item] of (bundle.items ?? []).entries()) {
+    const validItemSchema = itemSchemaValidator(item);
+    if (!validItemSchema) {
+      const itemName =
+        typeof item?.id === "string" && item.id.length > 0 ? item.id : `items[${index}]`;
+      for (const schemaError of itemSchemaValidator.errors ?? []) {
+        errors.push(`Item ${itemName} schema: ${formatSchemaError(schemaError)}`);
+      }
+    }
+
     assert(typeof item.id === "string" && item.id.length > 0, "Each item needs id", errors);
     if (typeof item.id === "string") {
       assert(!itemIds.has(item.id), `Duplicate item id: ${item.id}`, errors);
@@ -104,6 +151,12 @@ export function normalizePulseBundle(bundle) {
     }
   }
 
+  for (const brief of bundle.executiveBrief ?? []) {
+    if (typeof brief.itemId === "string") {
+      assert(itemIds.has(brief.itemId), `Executive brief itemId not found in items: ${brief.itemId}`, errors);
+    }
+  }
+
   for (const item of bundle.items ?? []) {
     if (item.priority === "P1") {
       assert(briefItemIds.has(item.id), `P1 item ${item.id} must appear in executiveBrief`, errors);
@@ -116,8 +169,18 @@ export function normalizePulseBundle(bundle) {
       assert(!watchItemIds.has(watchItem.id), `Duplicate watch item id: ${watchItem.id}`, errors);
       watchItemIds.add(watchItem.id);
     }
+    assert(typeof watchItem.title === "string" && watchItem.title.length > 0, `Watch item ${watchItem.id} must include title`, errors);
+    assert(typeof watchItem.date === "string" && watchDatePattern.test(watchItem.date), `Watch item ${watchItem.id} must include date in YYYY-MM-DD`, errors);
+    assert(
+      typeof watchItem.type === "string" && allowedWatchTypes.has(watchItem.type),
+      `Watch item ${watchItem.id} must include a valid type`,
+      errors
+    );
     assert(typeof watchItem.section === "string" && watchItem.section.length > 0, `Watch item ${watchItem.id} must include section`, errors);
+    assert(allowedSections.has(watchItem.section), `Watch item ${watchItem.id} must include a valid section`, errors);
+    assert(typeof watchItem.category === "string" && watchItem.category.length > 0, `Watch item ${watchItem.id} must include category`, errors);
     assert(typeof watchItem.source === "string" && watchItem.source.length > 0, `Watch item ${watchItem.id} must include source`, errors);
+    assert(typeof watchItem.description === "string" && watchItem.description.length > 0, `Watch item ${watchItem.id} must include description`, errors);
     assert(typeof watchItem.whyWatch === "string" && watchItem.whyWatch.length > 0, `Watch item ${watchItem.id} must include whyWatch`, errors);
     assert(isHttpUrl(watchItem.url), `Watch item ${watchItem.id} must include a real HTTP URL`, errors);
   }

@@ -34,6 +34,14 @@ El workflow de Pages comprueba además que el feed publicado esté sincronizado 
 
 Ver [`AGENTS.md`](AGENTS.md), [`docs/architecture-phases.es.md`](docs/architecture-phases.es.md), [`docs/roadmap.es.md`](docs/roadmap.es.md), [`docs/feed-workflow.es.md`](docs/feed-workflow.es.md) y el resto de [`docs/`](docs/).
 
+## Workflow del repositorio
+
+Regla obligatoria para trabajo asistido por Cursor/Codex:
+
+`issue -> branch -> code -> validate -> commit -> push -> PR -> merge -> close issue`
+
+No se deben dejar cambios sustantivos directamente sobre `main`. Si un cambio empezó en `main` por error, debe moverse a una rama antes de continuar.
+
 ## Scripts
 
 | Script        | Descripción        |
