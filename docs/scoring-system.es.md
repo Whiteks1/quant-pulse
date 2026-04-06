@@ -96,6 +96,17 @@ Total máximo: 100
 
 - rumor sin base verificable
 
+## Regla operativa de enforcement
+
+En el runtime actual, `sourceQuality` no puede exceder el máximo esperable para `sourceTier`:
+
+- `primary` → hasta 15
+- `tier_1` → hasta 12
+- `tier_2` → hasta 8
+- `tier_3` → hasta 3
+
+Si editorialmente se necesita romper esa regla, debe quedar documentado con `editorialOverride`.
+
 ## 5. Validación cruzada (0–10)
 
 - confirmado por varias fuentes de calidad → 10

@@ -28,6 +28,8 @@ La intención del producto está muy clara en la documentación del repo:
 - frontend estático en React + Vite + Tailwind + shadcn/ui
 - despliegue en GitHub Pages
 - carga del feed desde `public/data/pulse.json`
+- archivo navegable con ruta dedicada y filtros por edición/facetas
+- manifiesto de archivo estático en `public/data/archive/`
 - estructura visual para:
   - Hero
   - Executive Brief
@@ -57,7 +59,6 @@ La intención del producto está muy clara en la documentación del repo:
 - deduplicación automática
 - scoring automático
 - generación automática de `pulse.json`
-- archivo navegable real
 - búsqueda real
 - backend/API
 - GPT Actions útiles sobre datos vivos
@@ -268,12 +269,12 @@ Quant Pulse ya funciona como radar, no solo como frontend de resúmenes.
 - documentar el flujo editorial manual de Fase 1B
 - publicar y mantener snapshots estáticos de edición en `content/archive/editions/`
 - decidir idioma final del producto
-- conectar el archivo a un histórico real de ediciones estáticas
+- seguir poblando el archivo con histórico real de ediciones estáticas
 
 ## Prioridad media
 
-- preparar histórico real de ediciones sobre el manifiesto estático
 - consolidar scripts de generación/validación del feed
+- alinear documentación y contrato cuando el runtime endurezca reglas editoriales
 
 ## Prioridad baja
 
@@ -296,7 +297,7 @@ Es este:
 
 1. crear validación automática de `pulse.json`
 2. documentar el flujo manual de publicación del feed
-3. sustituir placeholders y convertir la demo en una Fase 1 sólida
+3. consolidar snapshots reales de edición en el archivo estático
 4. solo después empezar el backend mínimo
 
 ## 9. Resumen ejecutivo

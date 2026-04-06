@@ -6,6 +6,8 @@ Documento operativo para humanos, Cursor y Codex. Resume la estrategia acordada:
 
 - **GitHub Pages** como frontend estático.
 - **Datos en el repo**: la fuente editorial vive en `content/pulse.source.json` y el feed publicado se genera en `public/data/pulse.json` (se copia tal cual a `dist/` en el build).
+- **Archivo estático publicado**: `public/data/archive/current.json` y `public/data/archive/index.json` exponen la edición actual y el manifiesto de ediciones.
+- **Snapshots de edición**: las ediciones congeladas de Fase 1 viven en `content/archive/editions/` y se publican con `npm run snapshot:edition` + `npm run build:feed`.
 - **Pipeline editorial**: una tarea o script genera/actualiza `public/data/pulse.json` a partir de la fuente editorial, validación y criterio editorial. El GPT no publica.
 - **Custom GPT con Knowledge** (sin backend ni Actions todavía). Subir al GPT:
   - `AGENTS.md`
@@ -18,7 +20,7 @@ Documento operativo para humanos, Cursor y Codex. Resume la estrategia acordada:
   - `docs/voice-summary-style.es.md`
   - `config/approved-sources.yaml`
 
-**Objetivo:** el pipeline produce el feed desde una fuente reproducible, la web lo lee desde Pages y el GPT aplica las reglas editoriales de Quant Pulse sobre ese contenido.
+**Objetivo:** el pipeline produce el feed y el archivo estático desde una fuente reproducible, la web los lee desde Pages y el GPT aplica las reglas editoriales de Quant Pulse sobre ese contenido.
 
 **No en esta fase:** backend propio, endpoints dinámicos, chat embebido en la web, llamadas a OpenAI desde el navegador, Custom GPT Actions sin servidor.
 

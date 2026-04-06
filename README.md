@@ -28,6 +28,13 @@ La arquitectura operativa de Fase 1 es:
 
 La app carga [`public/data/pulse.json`](public/data/pulse.json) en runtime (`fetch` con `BASE_URL`). Ese archivo es el artefacto publicado de Fase 1. La edición manual debe hacerse sobre [`content/pulse.source.json`](content/pulse.source.json), y después regenerar el feed con `npm run build:feed`. El feed publicado incluye trazabilidad editorial mínima (`sourceTier`, `linkType`, `scoreJustification`) y puede validarse con `npm run validate:feed`.
 
+Además, Fase 1 ya publica archivo estático en:
+
+- [`public/data/archive/current.json`](public/data/archive/current.json)
+- [`public/data/archive/index.json`](public/data/archive/index.json)
+
+Los snapshots congelados de edición se guardan en [`content/archive/editions/`](content/archive/editions/) y se publican con `npm run snapshot:edition` seguido de `npm run build:feed`.
+
 El workflow de Pages comprueba además que el feed publicado esté sincronizado con la fuente editorial (`npm run check:feed`) antes del build.
 
 ## Documentación editorial
@@ -50,7 +57,8 @@ No se deben dejar cambios sustantivos directamente sobre `main`. Si un cambio em
 | `npm run build` | Build producción |
 | `npm run build:feed` | Genera `public/data/pulse.json` desde `content/pulse.source.json` |
 | `npm run check:feed` | Falla si el feed publicado no coincide con la fuente editorial |
+| `npm run snapshot:edition` | Congela la edición actual en `content/archive/editions/` |
 | `npm run lint`  | ESLint           |
 | `npm test`      | Vitest           |
-| `npm run validate:feed` | Valida `content/pulse.source.json` con las reglas editoriales del feed |
+| `npm run validate:feed` | Valida `content/pulse.source.json` contra contrato, integridad editorial y reglas del feed |
 | `npm run test:e2e` | Playwright    |

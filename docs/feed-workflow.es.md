@@ -31,6 +31,15 @@ Ese archivo no debe editarse a mano salvo reparación puntual.
 6. ejecutar `npm run build`
 7. commit y push
 
+## Checklist editorial mínima
+
+Antes de publicar una edición:
+
+- `executiveBrief` debe seleccionar historias, no repetir `itemId`
+- cada `watchItem` debe respetar la taxonomía `section` / `category`
+- `sourceTier` debe ser coherente con la fuente aprobada cuando exista una coincidencia explícita
+- `signalVsNoise`, `priority` y `relevanceScore` no deben contradecirse sin `editorialOverride`
+
 ## Congelar una edición
 
 Si una edición debe quedar archivada como snapshot estático de Fase 1:
@@ -69,5 +78,6 @@ Solo hay:
 
 - fuente editorial
 - script de build
+- manifiesto de archivo estático
 - feed publicado estático
 - frontend en GitHub Pages
