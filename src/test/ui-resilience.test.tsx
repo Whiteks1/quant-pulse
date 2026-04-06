@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 import { ExecutiveBrief } from "@/components/ExecutiveBrief";
@@ -48,7 +48,7 @@ describe("UI resilience", () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it("hides a broken image in NewsCard while keeping the story visible", () => {
+  it("hides a broken image in NewsCard while keeping the story visible", async () => {
     render(
       <MemoryRouter>
         <NewsCard
@@ -64,7 +64,24 @@ describe("UI resilience", () => {
     const image = screen.getByAltText("Broken image");
     fireEvent.error(image);
 
-    expect(screen.queryByAltText("Broken image")).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByAltText("Broken image")).not.toBeInTheDocument();
+    });
     expect(screen.getByText("OpenAI ships a new model")).toBeInTheDocument();
+  });
+
+  it("surfaces score, source tier, and editorial rationale in NewsCard", () => {
+    render(
+      <MemoryRouter>
+        <NewsCard item={baseNewsItem} />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText("P1")).toBeInTheDocument();
+    expect(screen.getByText("signal")).toBeInTheDocument();
+    expect(screen.getAllByText("Primary source")).toHaveLength(2);
+    expect(screen.getByText("80")).toBeInTheDocument();
+    expect(screen.getByText("Balanced impact")).toBeInTheDocument();
+    expect(screen.getByText("Valid rationale.")).toBeInTheDocument();
   });
 });
