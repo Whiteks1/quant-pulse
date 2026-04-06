@@ -8,6 +8,7 @@ import { FeedStatusBar } from "@/components/FeedStatusBar";
 import { FilterBar } from "@/components/FilterBar";
 import { Hero } from "@/components/Hero";
 import { NewsSection } from "@/components/NewsSection";
+import { PulseDashboard } from "@/components/PulseDashboard";
 import { SignalVsNoise } from "@/components/SignalVsNoise";
 import { SiteFooter } from "@/components/SiteFooter";
 import { WhatToWatch } from "@/components/WhatToWatch";
@@ -117,6 +118,8 @@ const Index = () => {
         totalItems={stats.totalItems}
         signalCount={stats.signalCount}
       />
+
+      <PulseDashboard items={items} updatedAt={updatedAt} />
 
       <div ref={pulseRef}>
         <ExecutiveBrief points={executiveBrief} />
