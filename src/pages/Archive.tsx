@@ -1,13 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ArrowLeft, Archive, Calendar, Globe2, RotateCcw } from "lucide-react";
+import { ArchiveIntelligence } from "@/components/ArchiveIntelligence";
 import { Button } from "@/components/ui/button";
+import { fetchArchiveEdition } from "@/data/loadArchiveData";
+import type { PulseBundle } from "@/data/loadPulseData";
 import { EmptyFeedState } from "@/components/EmptyFeedState";
 import { FeedStatusBar } from "@/components/FeedStatusBar";
 import { FilterBar } from "@/components/FilterBar";
 import { NewsCard } from "@/components/NewsCard";
 import { SiteFooter } from "@/components/SiteFooter";
 import { useArchiveEdition } from "@/hooks/useArchiveEdition";
+import { buildArchiveEditionComparison, getComparisonEdition } from "@/lib/archive-intelligence";
 import { buildArchivePreviewData, groupArchiveItemsByDate } from "@/lib/archive-preview";
 import { buildArchiveRouteSearchParams, parseArchiveRouteState } from "@/lib/archive-route";
 import { getFeedStats } from "@/lib/feed-status";
@@ -21,6 +25,7 @@ const ArchivePage = () => {
   const [searchQuery, setSearchQuery] = useState(initialState.query);
   const [activeDate, setActiveDate] = useState(initialState.date);
   const [activeSource, setActiveSource] = useState(initialState.source);
+  const [comparisonBundle, setComparisonBundle] = useState<PulseBundle | null>(null);
   const { index, selectedEdition, bundle, loadState, loadError } = useArchiveEdition(activeEdition);
 
   useEffect(() => {
@@ -90,6 +95,33 @@ const ArchivePage = () => {
   const items = useMemo(() => bundle?.items ?? [], [bundle]);
   const updatedAt = bundle?.updatedAt ?? "";
   const version = bundle?.version ?? 0;
+  const comparisonEdition = useMemo(
+    () => (index && selectedEdition ? getComparisonEdition(index.editions, selectedEdition.slug) : null),
+    [index, selectedEdition]
+  );
+
+  useEffect(() => {
+    if (!comparisonEdition) {
+      setComparisonBundle(null);
+      return;
+    }
+
+    let cancelled = false;
+
+    fetchArchiveEdition(comparisonEdition.path)
+      .then((nextBundle) => {
+        if (cancelled) return;
+        setComparisonBundle(nextBundle);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setComparisonBundle(null);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [comparisonEdition]);
 
   const baseFilteredItems = useMemo(() => {
     return items.filter((item) => {
@@ -121,6 +153,16 @@ const ArchivePage = () => {
   );
   const groupedItems = useMemo(() => groupArchiveItemsByDate(filteredItems), [filteredItems]);
   const stats = useMemo(() => getFeedStats(filteredItems), [filteredItems]);
+  const archiveComparison = useMemo(() => {
+    if (!selectedEdition || !comparisonEdition || !comparisonBundle) return null;
+
+    return buildArchiveEditionComparison(
+      selectedEdition,
+      comparisonEdition,
+      bundle?.items ?? [],
+      comparisonBundle.items
+    );
+  }, [bundle?.items, comparisonBundle, comparisonEdition, selectedEdition]);
 
   const handleResetAll = () => {
     setActiveSection("All");
@@ -234,6 +276,8 @@ const ArchivePage = () => {
           ) : null}
         </div>
       </section>
+
+      <ArchiveIntelligence comparison={archiveComparison} />
 
       <FilterBar
         activeSection={activeSection}
