@@ -20,6 +20,7 @@ Quant Pulse
 - docs/voice-summary-style.es.md
 - config/approved-sources.yaml
 - config/news.schema.json
+- config/research-intent.schema.json
 - content/pulse.source.json (fuente editorial de Fase 1)
 - public/data/pulse.json (feed estático servido en Pages; debe salir del pipeline)
 - npm run validate:feed (comprobación mínima de consistencia editorial y de contrato)
