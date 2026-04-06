@@ -140,6 +140,10 @@ Número entre 0 y 100.
 
 Desglose editorial del score por bloques y una explicación corta del porqué.
 
+Regla operativa:
+
+- `sourceQuality` no debe exceder el máximo permitido por `sourceTier`
+
 ### tags
 
 Lista de etiquetas auxiliares (recomendado entre 2 y 6).
@@ -153,14 +157,30 @@ Clave estable para deduplicación.
 Para la web estática, los ítems canónicos se agrupan en `public/data/pulse.json` junto con:
 
 - `executiveBrief`: objetos con `id`, `itemId` y `text`
-- `watchItems`: eventos con trazabilidad mínima (`section`, `source`, `url`, `whyWatch`)
+- `watchItems`: eventos con `id`, `title`, `date`, `section`, `category`, `type`, `source`, `url`, `description`, `whyWatch`
 - metadatos `version` / `updatedAt`
 
 Cada elemento de `items` debe cumplir los campos obligatorios de este documento, con `featured`, `imageUrl`, `imageAlt`, `imageSource` y `editorialOverride` como campos opcionales.
 
+Reglas operativas del bundle:
+
+- `executiveBrief.id` debe ser único
+- `executiveBrief.itemId` debe existir en `items`
+- `executiveBrief.itemId` no debe repetirse dentro del brief
+- `watchItems.date` usa formato `YYYY-MM-DD`
+- `watchItems.section` y `watchItems.category` deben respetar la taxonomía de `category-taxonomy.es.md`
+- `updatedAt` debe ser un `date-time` ISO 8601 UTC válido
+
 ## Validación en repo
 
-El esquema JSON en `config/news.schema.json` puede usarse para validar cada ítem de `items` (p. ej. en pipelines o con herramientas de agentes).
+El esquema JSON en `config/news.schema.json` valida cada ítem de `items`.
+
+Además, el pipeline impone validaciones de integridad editorial sobre el bundle completo, por ejemplo:
+
+- referencias del `executiveBrief`
+- coherencia `section` / `category`
+- límites de `sourceQuality` por `sourceTier`
+- incompatibilidades fuertes entre `signalVsNoise`, `priority` y `relevanceScore` sin `editorialOverride`
 
 ## Reglas de estilo del contenido
 
