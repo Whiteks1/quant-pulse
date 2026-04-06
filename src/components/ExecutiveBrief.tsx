@@ -2,6 +2,8 @@ import type { ExecutiveBriefItem } from "@/data/mockNews";
 import { Zap } from "lucide-react";
 
 export function ExecutiveBrief({ points }: { points: ExecutiveBriefItem[] }) {
+  if (points.length === 0) return null;
+
   return (
     <section className="container py-12 md:py-16">
       <div className="flex items-center gap-2 mb-6">

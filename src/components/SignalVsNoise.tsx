@@ -6,6 +6,8 @@ export function SignalVsNoise({ items }: { items: NewsItem[] }) {
   const signals = items.filter((n) => n.signalVsNoise === "signal");
   const noise = items.filter((n) => n.signalVsNoise === "noise");
 
+  if (signals.length === 0 && noise.length === 0) return null;
+
   return (
     <section className="container py-12 md:py-16">
       <div className="flex items-center gap-2 mb-6">
@@ -21,18 +23,24 @@ export function SignalVsNoise({ items }: { items: NewsItem[] }) {
             <span className="text-xs text-muted-foreground font-mono">Real impact</span>
           </div>
           <div className="space-y-3">
-            {signals.slice(0, 5).map((item) => (
-              <div key={item.id} className="flex items-start gap-3 p-3 rounded-md bg-surface-raised">
-                <div className="h-1.5 w-1.5 rounded-full bg-accent mt-2 shrink-0" />
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <CategoryBadge category={item.category} />
+            {signals.length > 0 ? (
+              signals.slice(0, 5).map((item) => (
+                <div key={item.id} className="flex items-start gap-3 p-3 rounded-md bg-surface-raised">
+                  <div className="h-1.5 w-1.5 rounded-full bg-accent mt-2 shrink-0" />
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <CategoryBadge category={item.category} />
+                    </div>
+                    <p className="text-sm font-medium text-foreground leading-snug">{item.title}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{item.impact}</p>
                   </div>
-                  <p className="text-sm font-medium text-foreground leading-snug">{item.title}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{item.impact}</p>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="rounded-md bg-surface-raised px-4 py-3 text-sm text-muted-foreground">
+                No signal stories in the current selection.
+              </p>
+            )}
           </div>
         </div>
 
@@ -44,18 +52,24 @@ export function SignalVsNoise({ items }: { items: NewsItem[] }) {
             <span className="text-xs text-muted-foreground font-mono">Hype / inflated</span>
           </div>
           <div className="space-y-3">
-            {noise.map((item) => (
-              <div key={item.id} className="flex items-start gap-3 p-3 rounded-md bg-surface-raised">
-                <div className="h-1.5 w-1.5 rounded-full bg-noise mt-2 shrink-0" />
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <CategoryBadge category={item.category} />
+            {noise.length > 0 ? (
+              noise.map((item) => (
+                <div key={item.id} className="flex items-start gap-3 p-3 rounded-md bg-surface-raised">
+                  <div className="h-1.5 w-1.5 rounded-full bg-noise mt-2 shrink-0" />
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <CategoryBadge category={item.category} />
+                    </div>
+                    <p className="text-sm font-medium text-foreground leading-snug line-through decoration-noise/30">{item.title}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{item.impact}</p>
                   </div>
-                  <p className="text-sm font-medium text-foreground leading-snug line-through decoration-noise/30">{item.title}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{item.impact}</p>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="rounded-md bg-surface-raised px-4 py-3 text-sm text-muted-foreground">
+                No noise stories in the current selection.
+              </p>
+            )}
           </div>
         </div>
       </div>
