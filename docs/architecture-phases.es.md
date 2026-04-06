@@ -1,6 +1,6 @@
 # Quant Pulse — Arquitectura por fases
 
-Documento operativo para humanos, Cursor y Codex. Resume la estrategia acordada: primero feed estático generado por pipeline y consumido por la web; después API y Actions.
+Documento operativo para humanos, Cursor y Codex. Resume la estrategia acordada: primero feed estático generado por pipeline y consumido por la web; después API y Actions. Quant Pulse opera como capa upstream de señales para QuantLab, no como motor de ejecución.
 
 ## Fase 1 (ahora)
 
@@ -20,7 +20,7 @@ Documento operativo para humanos, Cursor y Codex. Resume la estrategia acordada:
   - `docs/voice-summary-style.es.md`
   - `config/approved-sources.yaml`
 
-**Objetivo:** el pipeline produce el feed y el archivo estático desde una fuente reproducible, la web los lee desde Pages y el GPT aplica las reglas editoriales de Quant Pulse sobre ese contenido.
+**Objetivo:** el pipeline produce el feed y el archivo estático desde una fuente reproducible, la web los lee desde Pages y el GPT aplica las reglas editoriales de Quant Pulse sobre ese contenido para emitir intenciones de research priorizadas consumibles por QuantLab.
 
 **No en esta fase:** backend propio, endpoints dinámicos, chat embebido en la web, llamadas a OpenAI desde el navegador, Custom GPT Actions sin servidor.
 

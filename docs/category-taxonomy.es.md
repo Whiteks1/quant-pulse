@@ -12,7 +12,7 @@ Quant Pulse organiza la información en tres niveles:
 
 ### 1. Technology
 
-Cobertura de tecnología e industria digital.
+Cobertura de tecnología solo cuando afecte infraestructura, seguridad o market structure relevante para Quant Pulse y QuantLab.
 
 Categorías permitidas:
 
@@ -47,7 +47,7 @@ Categorías permitidas:
 
 ### 3. Macro
 
-Cobertura macro con impacto en tech o crypto.
+Cobertura macro solo cuando tenga impacto material en crypto o en las condiciones de tecnología relevantes para el sistema.
 
 Categorías permitidas:
 

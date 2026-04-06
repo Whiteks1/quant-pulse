@@ -4,13 +4,13 @@
 
 Quant Pulse no pretende ser un simple agregador de noticias.
 
-El repositorio apunta a construir un sistema editorial de inteligencia de señales para:
+El repositorio apunta a construir una capa upstream de inteligencia de señales para QuantLab. Su output solo importa cuando puede traducirse en research, validación, filtros de riesgo o prioridades de producto. El scope primario es:
 
-- detectar noticias relevantes antes que el ruido
-- clasificarlas con criterios editoriales consistentes
-- resumirlas con contexto útil y tono sobrio
-- publicarlas en una web pública y consultable
-- preparar el salto posterior a un backend y a un GPT con Actions
+- Crypto & Markets
+- estructura de mercado Web3
+- riesgo de execution venues y broker rails
+- Technology solo cuando afecte infra, seguridad o market structure
+- Macro solo cuando afecte materialmente a crypto o tecnología
 
 La intención del producto está muy clara en la documentación del repo:
 
@@ -302,7 +302,7 @@ Es este:
 
 ## 9. Resumen ejecutivo
 
-Quant Pulse pretende convertirse en un sistema editorial de inteligencia de señales para tech, crypto y macro.
+Quant Pulse pretende convertirse en una capa upstream de señales para QuantLab, no en un motor de picks ni en un controlador de ejecución.
 
 El repositorio ya tiene:
 
