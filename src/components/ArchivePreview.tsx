@@ -10,6 +10,8 @@ interface ArchivePreviewProps {
 }
 
 export function ArchivePreview({ items }: ArchivePreviewProps) {
+  if (items.length === 0) return null;
+
   const preview = buildArchivePreviewData(items);
 
   return (

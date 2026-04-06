@@ -5,6 +5,8 @@ import { Star } from "lucide-react";
 export function FeaturedStories({ items }: { items: NewsItem[] }) {
   const featured = items.filter((n) => n.featured);
 
+  if (featured.length === 0) return null;
+
   return (
     <section className="container py-12 md:py-16">
       <div className="flex items-center gap-2 mb-6">

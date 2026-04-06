@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { NewsItem } from "@/data/mockNews";
 import { relevanceTierFromScore } from "@/lib/relevance";
 import { CategoryBadge } from "./CategoryBadge";
@@ -22,7 +23,9 @@ function resolveImageUrl(imageUrl?: string): string | null {
 export function NewsCard({ item, variant = "default" }: NewsCardProps) {
   const isFeatured = variant === "featured";
   const relevance = relevanceTierFromScore(item.relevanceScore);
-  const imageUrl = resolveImageUrl(item.imageUrl);
+  const resolvedImageUrl = resolveImageUrl(item.imageUrl);
+  const [imageAvailable, setImageAvailable] = useState(Boolean(resolvedImageUrl));
+  const imageUrl = imageAvailable ? resolvedImageUrl : null;
 
   return (
     <article
@@ -48,6 +51,7 @@ export function NewsCard({ item, variant = "default" }: NewsCardProps) {
               alt={item.imageAlt || item.title}
               className="h-full w-full object-cover saturate-[0.9]"
               loading="lazy"
+              onError={() => setImageAvailable(false)}
             />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/25 via-transparent to-transparent" />
           </div>
