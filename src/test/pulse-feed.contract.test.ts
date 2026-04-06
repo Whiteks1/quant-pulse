@@ -129,6 +129,33 @@ describe("normalizePulseBundle contract checks", () => {
     ).toBe(true);
   });
 
+  it("rejects generic source classes as explicit tier identities", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].source = "company newsrooms";
+    bundle.items[0].sourceTier = "tier_1";
+
+    const result = normalizePulseBundle(bundle);
+    expect(
+      result.errors.some((error) =>
+        error.includes("source (company newsrooms) is not approved for explicit tier tier_1")
+      )
+    ).toBe(true);
+  });
+
+  it("rejects explicit tier_2 for a source not in approved sources", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].source = "OpenAI";
+    bundle.items[0].sourceTier = "tier_2";
+    bundle.items[0].scoreJustification.sourceQuality = 8;
+    bundle.items[0].scoreJustification.recency = 20;
+    bundle.items[0].scoreJustification.marketImpact = 17;
+
+    const result = normalizePulseBundle(bundle);
+    expect(
+      result.errors.some((error) => error.includes("source (OpenAI) is not approved for explicit tier tier_2"))
+    ).toBe(true);
+  });
+
   it("rejects source quality values above tier cap", () => {
     const bundle = makeValidBundle();
     bundle.items[0].sourceTier = "tier_3";

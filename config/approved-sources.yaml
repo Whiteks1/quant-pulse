@@ -4,7 +4,7 @@ updated_at: 2026-04-04
 tiers:
   tier_1:
     description: "Fuentes prioritarias. Alta fiabilidad. Preferencia editorial."
-    sources:
+    explicit_sources:
       - Bloomberg
       - Reuters
       - Financial Times
@@ -13,12 +13,13 @@ tiers:
       - Federal Reserve
       - European Commission
       - ESMA
+    source_classes:
       - company newsrooms
       - official blogs and filings
 
   tier_2:
     description: "Fuentes sólidas, útiles para ampliar cobertura."
-    sources:
+    explicit_sources:
       - TechCrunch
       - The Verge
       - Ars Technica
@@ -28,13 +29,17 @@ tiers:
 
   tier_3:
     description: "Fuentes de apoyo. Requieren validación adicional."
-    sources:
+    explicit_sources:
       - Cointelegraph
+      - CryptoSlate
+    source_classes:
       - specialized blogs
       - analyst notes
       - ecosystem newsletters
 
 rules:
+  explicit_source_match_only: true
+  generic_source_classes_are_not_source_identities: true
   use_primary_sources_first: true
   require_extra_validation_for_tier_3: true
   reject_unverified_rumors: true
