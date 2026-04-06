@@ -17,7 +17,27 @@ const watchDatePattern = /^\d{4}-\d{2}-\d{2}$/;
 const isoDateTimePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z$/;
 const allowedSections = new Set(["Technology", "Crypto & Markets", "Macro"]);
 const allowedWatchTypes = new Set(["earnings", "regulation", "event", "market"]);
+const allowedCategoriesBySection = new Map([
+  [
+    "Technology",
+    new Set(["AI", "Software", "Cybersecurity", "Big Tech", "Startups", "Cloud", "Chips", "Developer Tools", "Infrastructure"]),
+  ],
+  [
+    "Crypto & Markets",
+    new Set(["BTC", "ETH", "Altcoins", "ETFs", "Regulation", "Exchanges", "DeFi", "Stablecoins", "Security", "Flows", "Market Structure", "Custody"]),
+  ],
+  ["Macro", new Set(["Monetary Policy", "Inflation", "Rates", "Liquidity", "Global Markets", "Risk Sentiment"])],
+]);
+const sourceQualityCapsByTier = new Map([
+  ["primary", 15],
+  ["tier_1", 12],
+  ["tier_2", 8],
+  ["tier_3", 3],
+  ["unlisted", 15],
+]);
+const approvedSourcesPath = path.join(rootDir, "config", "approved-sources.yaml");
 const itemSchemaValidator = createItemSchemaValidator();
+const approvedSourcesByTier = loadApprovedSourcesByTier();
 
 function assert(condition, message, errors) {
   if (!condition) errors.push(message);
@@ -44,6 +64,60 @@ function scoreBand(score) {
   if (score >= 70) return "P1";
   if (score >= 40) return "P2";
   return "P3";
+}
+
+function normalizeSourceName(value) {
+  return typeof value === "string" ? value.trim().toLowerCase() : "";
+}
+
+function loadApprovedSourcesByTier() {
+  const emptyResult = new Map([
+    ["tier_1", new Set()],
+    ["tier_2", new Set()],
+    ["tier_3", new Set()],
+  ]);
+
+  if (!fs.existsSync(approvedSourcesPath)) {
+    return emptyResult;
+  }
+
+  const lines = fs.readFileSync(approvedSourcesPath, "utf8").split(/\r?\n/);
+  let activeTier = null;
+  let inSourcesBlock = false;
+  const result = new Map([
+    ["tier_1", new Set()],
+    ["tier_2", new Set()],
+    ["tier_3", new Set()],
+  ]);
+
+  for (const line of lines) {
+    const tierMatch = line.match(/^  (tier_[123]):\s*$/);
+    if (tierMatch) {
+      activeTier = tierMatch[1];
+      inSourcesBlock = false;
+      continue;
+    }
+
+    if (!activeTier) continue;
+
+    if (line.match(/^    sources:\s*$/)) {
+      inSourcesBlock = true;
+      continue;
+    }
+
+    if (inSourcesBlock) {
+      const sourceMatch = line.match(/^      -\s+(.+?)\s*$/);
+      if (sourceMatch) {
+        result.get(activeTier).add(normalizeSourceName(sourceMatch[1]));
+        continue;
+      }
+      if (line.match(/^    [a-zA-Z]/)) {
+        inSourcesBlock = false;
+      }
+    }
+  }
+
+  return result;
 }
 
 function readJson(filePath) {
@@ -93,7 +167,14 @@ export function normalizePulseBundle(bundle) {
     }
     assert(typeof brief.itemId === "string" && brief.itemId.length > 0, "Each executiveBrief item needs itemId", errors);
     assert(typeof brief.text === "string" && brief.text.length > 0, "Each executiveBrief item needs text", errors);
-    if (typeof brief.itemId === "string") briefItemIds.add(brief.itemId);
+    if (typeof brief.itemId === "string") {
+      assert(
+        !briefItemIds.has(brief.itemId),
+        `Duplicate executiveBrief itemId: ${brief.itemId}`,
+        errors
+      );
+      briefItemIds.add(brief.itemId);
+    }
   }
 
   for (const [index, item] of (bundle.items ?? []).entries()) {
@@ -123,8 +204,24 @@ export function normalizePulseBundle(bundle) {
     assert(isHttpUrl(item.url), `Item ${item.id} must have a real HTTP URL`, errors);
     assert(!item.url.includes("example.com"), `Item ${item.id} cannot use example.com`, errors);
     assert(item.scoreJustification && typeof item.scoreJustification === "object", `Item ${item.id} must include scoreJustification`, errors);
+    assert(
+      typeof item.section === "string" &&
+        typeof item.category === "string" &&
+        allowedCategoriesBySection.get(item.section)?.has(item.category),
+      `Item ${item.id} category (${item.category}) is not valid for section (${item.section})`,
+      errors
+    );
 
     if (item.scoreJustification && typeof item.scoreJustification === "object") {
+      const sourceQualityCap = sourceQualityCapsByTier.get(item.sourceTier);
+      if (typeof sourceQualityCap === "number") {
+        assert(
+          item.scoreJustification.sourceQuality <= sourceQualityCap,
+          `Item ${item.id} sourceQuality (${item.scoreJustification.sourceQuality}) exceeds cap for sourceTier (${item.sourceTier})`,
+          errors
+        );
+      }
+
       const score =
         item.scoreJustification.recency +
         item.scoreJustification.marketImpact +
@@ -148,6 +245,48 @@ export function normalizePulseBundle(bundle) {
         `Item ${item.id} priority (${item.priority}) must match score band (${scoreBand(item.relevanceScore)}) or declare editorialOverride`,
         errors
       );
+    }
+
+    if ((!item.editorialOverride || item.editorialOverride.field !== "signalVsNoise") && item.signalVsNoise === "noise") {
+      assert(item.priority !== "P1", `Item ${item.id} marked as noise cannot be P1 without editorialOverride`, errors);
+      assert(
+        item.relevanceScore < 70,
+        `Item ${item.id} marked as noise cannot have relevanceScore >= 70 without editorialOverride`,
+        errors
+      );
+    }
+
+    if (typeof item.source === "string" && typeof item.sourceTier === "string") {
+      const normalizedSource = normalizeSourceName(item.source);
+      const sourceInTier1 = approvedSourcesByTier.get("tier_1")?.has(normalizedSource) ?? false;
+      const sourceInTier2 = approvedSourcesByTier.get("tier_2")?.has(normalizedSource) ?? false;
+      const sourceInTier3 = approvedSourcesByTier.get("tier_3")?.has(normalizedSource) ?? false;
+
+      if (sourceInTier1) {
+        assert(
+          item.sourceTier === "tier_1" || item.sourceTier === "primary",
+          `Item ${item.id} source (${item.source}) is approved as tier_1 but is marked as ${item.sourceTier}`,
+          errors
+        );
+      } else if (sourceInTier2) {
+        assert(
+          item.sourceTier === "tier_2",
+          `Item ${item.id} source (${item.source}) is approved as tier_2 but is marked as ${item.sourceTier}`,
+          errors
+        );
+      } else if (sourceInTier3) {
+        assert(
+          item.sourceTier === "tier_3",
+          `Item ${item.id} source (${item.source}) is approved as tier_3 but is marked as ${item.sourceTier}`,
+          errors
+        );
+      } else if (item.sourceTier === "tier_1") {
+        assert(
+          false,
+          `Item ${item.id} source (${item.source}) is not approved for explicit tier tier_1`,
+          errors
+        );
+      }
     }
   }
 
@@ -179,6 +318,13 @@ export function normalizePulseBundle(bundle) {
     assert(typeof watchItem.section === "string" && watchItem.section.length > 0, `Watch item ${watchItem.id} must include section`, errors);
     assert(allowedSections.has(watchItem.section), `Watch item ${watchItem.id} must include a valid section`, errors);
     assert(typeof watchItem.category === "string" && watchItem.category.length > 0, `Watch item ${watchItem.id} must include category`, errors);
+    assert(
+      typeof watchItem.section === "string" &&
+        typeof watchItem.category === "string" &&
+        allowedCategoriesBySection.get(watchItem.section)?.has(watchItem.category),
+      `Watch item ${watchItem.id} category (${watchItem.category}) is not valid for section (${watchItem.section})`,
+      errors
+    );
     assert(typeof watchItem.source === "string" && watchItem.source.length > 0, `Watch item ${watchItem.id} must include source`, errors);
     assert(typeof watchItem.description === "string" && watchItem.description.length > 0, `Watch item ${watchItem.id} must include description`, errors);
     assert(typeof watchItem.whyWatch === "string" && watchItem.whyWatch.length > 0, `Watch item ${watchItem.id} must include whyWatch`, errors);
