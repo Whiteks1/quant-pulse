@@ -1,56 +1,62 @@
-# Quant Pulse — Formato de signal intent para QuantLab
+# Quant Pulse — Formato canónico de signal intents para QuantLab Research
 
-## Objetivo
+## Propósito
 
-Definir el artefacto downstream que Quant Pulse debería emitir cuando una historia deja de ser solo contexto y pasa a ser útil para QuantLab.
+Este documento define el formato canónico de los `research intents` que cruzan la frontera entre Quant Pulse y QuantLab Research.
 
-Este documento no cambia el contrato actual del feed público de Fase 1.
+Quant Pulse sigue produciendo su feed editorial humano en `public/data/pulse.json`, pero solo los items que cruzan el umbral de señal se convierten en intents para QuantLab.
 
-Su función es:
+## Flujo exacto
 
-- convertir el contrato upstream en un artefacto operativo
-- estandarizar el handoff hacia QuantLab
-- evitar que Quant Pulse emita señales ambiguas o demasiado editoriales
+```mermaid
+flowchart LR
+  A["Fuentes"] --> B["content/pulse.source.json"]
+  B --> C["build:feed"]
+  C --> D["public/data/pulse.json"]
+  D --> E["Síntesis editorial"]
+  E --> F["Research intents canónicos"]
+  F --> G["QuantLab Research intake"]
+  G --> H{"Routing"}
+  H -->|research_hypothesis| I["run / forward_eval / paper"]
+  H -->|risk_filter| J["risk controls / venue gating"]
+  H -->|product_priority| K["instrumentation / backlog"]
+```
 
-## Naturaleza del artefacto
+Reglas del flujo:
 
-Un **signal intent** es una traducción disciplinada de una historia o conjunto de señales hacia una posible acción de research, validación, riesgo o producto en QuantLab.
+1. `content/pulse.source.json` es la fuente editorial operativa de Fase 1.
+2. `public/data/pulse.json` es el feed publicado para lectura humana.
+3. La síntesis editorial convierte una historia o una combinación de historias en un intent solo si aporta valor downstream.
+4. Los items que no cruzan el umbral de señal se quedan como contexto en el feed editorial.
+5. QuantLab Research no consume la narrativa cruda como entrada de trading; consume el intent estructurado.
 
-No es:
+## Regla de frontera
 
-- una orden de trading
-- una recomendación de ejecución
-- una prueba cuantitativa concluida
+QuantPulse emite contexto, prioridad y estructura.
+QuantLab Research decide si ese intent merece:
 
-## Cuándo debe existir
-
-Un signal intent solo debe emitirse cuando una historia pueda traducirse de forma útil en al menos una de estas salidas:
-
-- hipótesis de research comprobable
+- hipótesis de research
 - filtro de riesgo
-- prioridad de producto o instrumentación
+- prioridad de producto
 
-Si no se cumple esa condición, la historia debe permanecer como **context only**.
+Si no merece una de esas tres salidas, no cruza la frontera.
 
-## Relación con el feed de Fase 1
+## Schema canónico
 
-En el estado actual del repo:
+El schema machine-readable vive en:
 
-- `content/pulse.source.json` es la fuente editorial
-- `public/data/pulse.json` es el feed publicado
+- `config/research-intent.schema.json`
 
-El signal intent es un artefacto downstream adicional.
+Ese schema valida el payload de handoff que Quant Pulse prepara para QuantLab.
 
-Por ahora:
+## Estructura del intent
 
-- no forma parte obligatoria de `public/data/pulse.json`
-- no forma parte obligatoria de `config/news.schema.json`
-- no debe asumirse como implementado en runtime hasta que una slice posterior lo introduzca explícitamente
+El payload canónico debe incluir siempre:
 
-## Campos canónicos
-
-Todo signal intent debe poder expresarse con estos campos:
-
+- `schema_version`
+- `intent_id`
+- `edition_id`
+- `created_at`
 - `signal_summary`
 - `priority`
 - `affected_universe`
@@ -61,159 +67,48 @@ Todo signal intent debe poder expresarse con estos campos:
 - `invalidation_condition`
 - `risk_filter_hint`
 - `product_priority_hint`
+- `route`
 
-## Interpretación de campos
+Campos opcionales:
 
-### `signal_summary`
+- `source_ref`
+- `notes`
 
-Resumen corto del cambio relevante que QuantLab debe considerar.
+## Semántica de los campos
 
-### `priority`
+- `schema_version`: versión estable del contrato.
+- `intent_id`: identificador único del intent.
+- `edition_id`: edición o snapshot de origen.
+- `created_at`: marca temporal UTC de generación.
+- `source_ref`: trazabilidad opcional a historias, URLs o anchors internos.
+- `signal_summary`: resumen corto de la señal.
+- `priority`: `P1`, `P2` o `P3`.
+- `affected_universe`: activos, venues, sectores, rails o sistemas afectados.
+- `bias`: sesgo tentativo a validar.
+- `horizon`: ventana temporal relevante.
+- `hypothesis_type`: familia cuantitativa o de producto que QuantLab debería considerar.
+- `validation_goal`: evidencia que confirmaría el intent.
+- `invalidation_condition`: condición observable que lo descartaría.
+- `risk_filter_hint`: implicación para filtros, exclusiones o límites.
+- `product_priority_hint`: implicación para instrumentación, cobertura o backlog.
+- `route`: destino downstream del intent.
 
-Nivel de urgencia del handoff.
+## Routing downstream
 
-Valores esperados:
+El campo `route` solo puede tomar estos valores:
 
-- `P1`
-- `P2`
-- `P3`
-
-### `affected_universe`
-
-Lista de activos, venues, rails, estrategias, sectores o sistemas afectados.
-
-### `bias`
-
-Sesgo tentativo a validar.
-
-No es una instrucción de trading.
-
-Ejemplos:
-
-- `bullish`
-- `bearish`
-- `risk-off`
-- `neutral`
-- `operational-risk`
-
-### `horizon`
-
-Ventana temporal esperada para la validación o monitorización.
-
-Ejemplos:
-
-- `intraday`
-- `days`
-- `weeks`
-- `structural`
-
-### `hypothesis_type`
-
-Tipo de hipótesis o salida downstream.
-
-Valores sugeridos:
-
-- `trend`
-- `mean_reversion`
-- `event_driven`
+- `research_hypothesis`
 - `risk_filter`
-- `rotation`
 - `product_priority`
 
-### `validation_goal`
+QuantLab Research usa ese valor para enrutar el intent, pero la decisión final sigue siendo de QuantLab Research.
 
-Qué evidencia debe buscar QuantLab para aceptar o descartar la hipótesis.
+## Regla de seguridad semántica
 
-### `invalidation_condition`
+No mezclar:
 
-Qué condición observable invalida el intent.
+- el feed humano
+- el intent canónico
+- la validación cuantitativa
 
-### `risk_filter_hint`
-
-Posible implicación para límites, exclusiones, reducciones de exposición o gating operativo.
-
-### `product_priority_hint`
-
-Posible implicación para cobertura, instrumentación, alerting o tooling.
-
-## Reglas de traducción desde el feed
-
-La traducción desde una historia del feed a un signal intent debe seguir estas reglas:
-
-1. partir de hechos y no de hype
-2. respetar `signalVsNoise`
-3. respetar `priority`
-4. preservar la taxonomía relevante (`section`, `category`, `tags`)
-5. producir un intent solo si existe una utilidad clara para QuantLab
-
-Regla operativa:
-
-- una historia `noise` no debería convertirse en signal intent salvo caso excepcional y muy justificado
-- una historia `P3` normalmente permanece en contexto, salvo que exponga un riesgo operativo o una prioridad de producto clara
-
-## Estructura conceptual mínima
-
-Ejemplo canónico:
-
-```json
-{
-  "signal_summary": "Deterioro operativo en un exchange centralizado relevante con posible impacto en liquidez y confianza.",
-  "priority": "P1",
-  "affected_universe": ["BTC", "ETH", "centralized exchanges", "crypto liquidity"],
-  "bias": "risk-off",
-  "horizon": "days",
-  "hypothesis_type": "risk_filter",
-  "validation_goal": "Comprobar si el deterioro operativo se traduce en ampliación de spreads, caída de profundidad y desplazamiento de flujos a otros venues.",
-  "invalidation_condition": "La incidencia queda acotada, la operativa se normaliza rápido y no aparecen señales de contagio en liquidez o flujos.",
-  "risk_filter_hint": "Reducir confianza en venues afectados y elevar vigilancia sobre exposición operativa y dependencias de ejecución.",
-  "product_priority_hint": "Priorizar instrumentación sobre salud de venues, latencia operativa y calidad de ejecución."
-}
-```
-
-## Mapeo orientativo desde historias
-
-### Historia de flows o momentum confirmado
-
-Salida probable:
-
-- `hypothesis_type: trend`
-
-### Historia de sobreextensión, rumor o reversión post-evento
-
-Salida probable:
-
-- `hypothesis_type: mean_reversion`
-
-### Historia de hack, venue stress o deterioro de liquidez
-
-Salida probable:
-
-- `hypothesis_type: risk_filter`
-
-### Historia que expone un gap de visibilidad, cobertura o tooling
-
-Salida probable:
-
-- `hypothesis_type: product_priority`
-
-## Regla de autoridad
-
-Cuando haya conflicto:
-
-1. `AGENTS.md`
-2. `docs/quantlab-upstream-contract.es.md`
-3. este documento
-4. contrato actual del feed y documentación editorial restante
-
-## Estado de implementación
-
-Este documento define el siguiente artefacto lógico del sistema.
-
-No implica todavía:
-
-- cambio de `news.schema.json`
-- cambio de `pulse.json`
-- cambio del pipeline runtime
-- integración automática con QuantLab
-
-Eso debe llegar solo mediante slices explícitas posteriores.
+Cada capa tiene una responsabilidad distinta. Si se cruza esa frontera, el sistema pierde trazabilidad.
