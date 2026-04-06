@@ -83,7 +83,7 @@ function loadApprovedSourcesByTier() {
 
   const lines = fs.readFileSync(approvedSourcesPath, "utf8").split(/\r?\n/);
   let activeTier = null;
-  let inSourcesBlock = false;
+  let inExplicitSourcesBlock = false;
   const result = new Map([
     ["tier_1", new Set()],
     ["tier_2", new Set()],
@@ -94,25 +94,25 @@ function loadApprovedSourcesByTier() {
     const tierMatch = line.match(/^  (tier_[123]):\s*$/);
     if (tierMatch) {
       activeTier = tierMatch[1];
-      inSourcesBlock = false;
+      inExplicitSourcesBlock = false;
       continue;
     }
 
     if (!activeTier) continue;
 
-    if (line.match(/^    sources:\s*$/)) {
-      inSourcesBlock = true;
+    if (line.match(/^    explicit_sources:\s*$/)) {
+      inExplicitSourcesBlock = true;
       continue;
     }
 
-    if (inSourcesBlock) {
+    if (inExplicitSourcesBlock) {
       const sourceMatch = line.match(/^      -\s+(.+?)\s*$/);
       if (sourceMatch) {
         result.get(activeTier).add(normalizeSourceName(sourceMatch[1]));
         continue;
       }
       if (line.match(/^    [a-zA-Z]/)) {
-        inSourcesBlock = false;
+        inExplicitSourcesBlock = false;
       }
     }
   }
@@ -284,6 +284,18 @@ export function normalizePulseBundle(bundle) {
         assert(
           false,
           `Item ${item.id} source (${item.source}) is not approved for explicit tier tier_1`,
+          errors
+        );
+      } else if (item.sourceTier === "tier_2") {
+        assert(
+          false,
+          `Item ${item.id} source (${item.source}) is not approved for explicit tier tier_2`,
+          errors
+        );
+      } else if (item.sourceTier === "tier_3") {
+        assert(
+          false,
+          `Item ${item.id} source (${item.source}) is not approved for explicit tier tier_3`,
           errors
         );
       }
