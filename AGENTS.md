@@ -33,6 +33,13 @@ Quant Pulse
 - Ask for a plan before large refactors.
 - Prefer small, verifiable changes.
 
+## Git workflow rules
+
+- Always use the full repository workflow for any non-trivial change: `issue -> branch -> code -> validate -> commit -> push -> PR -> merge -> close issue`.
+- Never leave substantive local changes directly on `main`.
+- Never skip issue, branch, commit, push, and PR for repository work.
+- If work starts on `main` by mistake, stop and move it to a branch before continuing.
+
 ## Phased delivery (summary)
 
 1. **Fase 1:** `content/pulse.source.json` + build pipeline + GitHub Pages + `public/data/pulse.json` + Custom GPT Knowledge (listado en `docs/architecture-phases.es.md`). No backend, no GPT Actions, no OpenAI en el frontend.
