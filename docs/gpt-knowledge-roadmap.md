@@ -18,6 +18,8 @@ Current canonical language: Spanish
 Current canonical files:
 
 - `AGENTS.md`
+- `docs/quantlab-upstream-contract.es.md`
+- `docs/quantlab-signal-intent-format.es.md`
 - `docs/architecture-phases.es.md`
 - `docs/canonical-json-format.es.md`
 - `docs/category-taxonomy.es.md`
@@ -30,10 +32,32 @@ Current canonical files:
 - `docs/voice-summary-style.es.md`
 - `config/news.schema.json`
 - `config/approved-sources.yaml`
-- `content/pulse.source.json`
 - `public/data/pulse.json`
 
+Optional operational reference:
+
+- `content/pulse.source.json`
+
 These files define the current operational GPT Knowledge pack.
+
+Preferred current upload order:
+
+1. `AGENTS.md`
+2. `docs/quantlab-upstream-contract.es.md`
+3. `docs/quantlab-signal-intent-format.es.md`
+4. `docs/editorial-manual.es.md`
+5. `docs/scoring-system.es.md`
+6. `docs/priority-rules.es.md`
+7. `docs/category-taxonomy.es.md`
+8. `docs/signal-vs-noise.es.md`
+9. `docs/canonical-json-format.es.md`
+10. `docs/voice-summary-style.es.md`
+11. `docs/feed-workflow.es.md`
+12. `config/approved-sources.yaml`
+13. `config/news.schema.json`
+14. `docs/architecture-phases.es.md`
+15. `docs/roadmap.es.md`
+16. `public/data/pulse.json`
 
 ## 2. Target Knowledge architecture
 
