@@ -1,4 +1,5 @@
 import type { PulseBundle } from "./loadPulseData";
+import { validateArchiveIndex, validatePulseBundle } from "./runtimeFeedValidation";
 
 export interface ArchiveEditionSummary {
   slug: string;
@@ -35,21 +36,9 @@ async function fetchJson<T>(relativePath: string): Promise<T> {
 }
 
 export async function fetchArchiveIndex(): Promise<ArchiveIndex> {
-  const data = await fetchJson<ArchiveIndex>("data/archive/index.json");
-
-  if (!Array.isArray(data.editions) || typeof data.currentEditionSlug !== "string") {
-    throw new Error("Invalid archive index shape");
-  }
-
-  return data;
+  return validateArchiveIndex(await fetchJson<ArchiveIndex>("data/archive/index.json"), "archive index");
 }
 
 export async function fetchArchiveEdition(relativePath: string): Promise<PulseBundle> {
-  const data = await fetchJson<PulseBundle>(relativePath);
-
-  if (!Array.isArray(data.items) || !Array.isArray(data.executiveBrief) || !Array.isArray(data.watchItems)) {
-    throw new Error("Invalid archive edition shape");
-  }
-
-  return data;
+  return validatePulseBundle(await fetchJson<PulseBundle>(relativePath), `archive edition (${relativePath})`);
 }
