@@ -47,6 +47,7 @@ Quant Pulse
 
 - Use `.agents/workflow-policy.md` as the reusable workflow checklist and `.agents/templates/slice-completion-report.md` as the standard close-out template for completed slices.
 - Use `.agents/repo-hygiene.md` for the canonical remote URL and the expected protection posture for `main`.
+- Use `.agents/scripts/start-slice.ps1 -IssueNumber <n> -Slug <short-name>` when you need a fresh branch and isolated worktree from `origin/main`.
 - Use the full repository workflow for non-trivial work: `issue -> branch -> code -> validate -> commit -> push -> PR -> merge -> close issue`.
 - Start each slice from `origin/main`, not from a dirty feature branch.
 - If the current worktree is dirty, prefer an isolated `git worktree` for the new slice instead of mixing changes.
