@@ -45,6 +45,7 @@ Regla obligatoria para trabajo asistido por Cursor/Codex:
 No se deben dejar cambios sustantivos directamente sobre `main`. Si un cambio empezó en `main` por error, debe moverse a una rama antes de continuar. Las reglas operativas de branching, worktrees, staging y validación previa viven en [`AGENTS.md`](AGENTS.md).
 
 Los PRs contra `main` ejecutan validación automática en GitHub Actions antes del merge.
+La guía operativa para remoto canónico y protección esperada de `main` vive en [`.agents/repo-hygiene.md`](.agents/repo-hygiene.md).
 
 ## Scripts
 
