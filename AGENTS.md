@@ -42,6 +42,18 @@ Quant Pulse
 - Ask for a plan before large refactors.
 - Prefer small, verifiable changes.
 
+## Git workflow rules
+
+- Use the full repository workflow for non-trivial work: `issue -> branch -> code -> validate -> commit -> push -> PR -> merge -> close issue`.
+- Start each slice from `origin/main`, not from a dirty feature branch.
+- If the current worktree is dirty, prefer an isolated `git worktree` for the new slice instead of mixing changes.
+- Keep each commit limited to one logical slice.
+- Before staging, inspect `git status` and `git diff` so only intended files enter the commit.
+- Never stage unrelated local work or runtime/data changes that belong to another slice.
+- Keep branch, docs, workflow, and runtime scope separated; do not mix them in one commit unless the contract owner is the same.
+- Run `git diff --check` before staging or opening a PR.
+- For implementation slices, run the repository checks that own the touched contract before opening the PR.
+
 ## Phased delivery (summary)
 
 1. **Fase 1:** `content/pulse.source.json` + build pipeline + GitHub Pages + `public/data/pulse.json` + Custom GPT Knowledge (listado en `docs/architecture-phases.es.md`). No backend, no GPT Actions, no OpenAI en el frontend.

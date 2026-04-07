@@ -1,0 +1,53 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-validation-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Detect feed-related changes
+        id: changes
+        run: |
+          CHANGED_FILES="$(git diff --name-only ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }})"
+          if echo "$CHANGED_FILES" | grep -E '^(content/|public/data/|scripts/|config/news\.schema\.json|config/approved-sources\.yaml|docs/canonical-json-format\.es\.md|docs/feed-workflow\.es\.md)'; then
+            echo "run_feed_check=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_feed_check=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check diff formatting
+        run: git diff --check ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}
+
+      - name: Check published feed sync
+        if: steps.changes.outputs.run_feed_check == 'true'
+        run: npm run check:feed
+
+      - run: npm run validate:feed
+      - run: npm test
+
+      - name: Build
+        env:
+          VITE_BASE_PATH: /quant-pulse/
+          VITE_OG_IMAGE_URL: https://${{ github.repository_owner }}.github.io/quant-pulse/placeholder.svg
+        run: npm run build
