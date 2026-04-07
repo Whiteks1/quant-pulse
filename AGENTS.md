@@ -18,6 +18,7 @@ Quant Pulse
 - docs/canonical-json-format.es.md
 - docs/signal-vs-noise.es.md
 - docs/voice-summary-style.es.md
+- docs/brand-guidelines.md
 - config/approved-sources.yaml
 - config/news.schema.json
 - config/research-intent.schema.json

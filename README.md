@@ -36,6 +36,8 @@ El workflow de Pages comprueba además que el feed publicado esté sincronizado 
 
 Ver [`AGENTS.md`](AGENTS.md), [`docs/quantlab-upstream-contract.es.md`](docs/quantlab-upstream-contract.es.md), [`docs/architecture-phases.es.md`](docs/architecture-phases.es.md), [`docs/roadmap.es.md`](docs/roadmap.es.md), [`docs/feed-workflow.es.md`](docs/feed-workflow.es.md) y el resto de [`docs/`](docs/).
 
+La guía de marca pública vive en [`docs/brand-guidelines.md`](docs/brand-guidelines.md).
+
 ## Workflow del repositorio
 
 Regla obligatoria para trabajo asistido por Cursor/Codex:
