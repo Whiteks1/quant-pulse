@@ -15,9 +15,31 @@ function Fail([string]$Message) {
     throw $Message
 }
 
-function Run-Git([string[]]$Args) {
-    $output = & git @Args 2>&1
-    if ($LASTEXITCODE -ne 0) {
+function Run-Git {
+    param(
+        [Parameter(ValueFromRemainingArguments = $true)]
+        [string[]]$Args
+    )
+
+    $previousErrorActionPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+
+    try {
+        $output = & git @Args 2>&1 | ForEach-Object {
+            if ($_ -is [System.Management.Automation.ErrorRecord]) {
+                $_.ToString()
+            }
+            else {
+                "$_"
+            }
+        }
+        $exitCode = $LASTEXITCODE
+    }
+    finally {
+        $ErrorActionPreference = $previousErrorActionPreference
+    }
+
+    if ($exitCode -ne 0) {
         Fail (($output | Out-String).Trim())
     }
     return $output
@@ -27,7 +49,7 @@ if ($Slug -notmatch '^[a-z0-9-]+$') {
     Fail "Slug must use lowercase letters, digits, and hyphens only."
 }
 
-$repoRoot = (Run-Git @("rev-parse", "--show-toplevel") | Select-Object -First 1).Trim()
+$repoRoot = (Run-Git "rev-parse" "--show-toplevel" | Select-Object -First 1).Trim()
 if (-not $repoRoot) {
     Fail "Could not resolve the repository root."
 }
@@ -41,8 +63,8 @@ if (-not $WorktreeName) {
 
 $worktreePath = Join-Path $parentDir $WorktreeName
 
-$localBranch = (Run-Git @("branch", "--list", $branchName) | Out-String).Trim()
-$remoteBranch = (Run-Git @("branch", "-r", "--list", "origin/$branchName") | Out-String).Trim()
+$localBranch = (Run-Git "branch" "--list" $branchName | Out-String).Trim()
+$remoteBranch = (Run-Git "branch" "-r" "--list" "origin/$branchName" | Out-String).Trim()
 
 if ($localBranch -or $remoteBranch) {
     Fail "Branch $branchName already exists."
@@ -52,8 +74,8 @@ if (Test-Path -LiteralPath $worktreePath) {
     Fail "Worktree path already exists: $worktreePath"
 }
 
-Run-Git @("fetch", "origin")
-Run-Git @("worktree", "add", "-b", $branchName, $worktreePath, "origin/main") | Out-Null
+Run-Git "fetch" "origin" | Out-Null
+Run-Git "worktree" "add" "-b" $branchName $worktreePath "origin/main" | Out-Null
 
 Write-Host "Slice bootstrap complete." -ForegroundColor Green
 Write-Host "Issue: #$IssueNumber"
