@@ -4,6 +4,8 @@ const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:8080";
 const webServerCommand =
   process.env.PLAYWRIGHT_WEB_SERVER_COMMAND ?? "npm run dev -- --host 127.0.0.1 --port 8080";
 const webServerUrl = process.env.PLAYWRIGHT_WEB_SERVER_URL ?? baseURL;
+const reuseExistingServer =
+  process.env.PLAYWRIGHT_REUSE_EXISTING_SERVER === "false" ? false : !process.env.CI;
 
 export default defineConfig({
   testDir: "./e2e",
@@ -19,7 +21,7 @@ export default defineConfig({
   webServer: {
     command: webServerCommand,
     url: webServerUrl,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer,
     timeout: 120_000,
   },
 });

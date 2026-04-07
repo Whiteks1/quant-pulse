@@ -404,6 +404,15 @@ function buildEditionIndexItem({
   };
 }
 
+function formatArchiveEditionLabel(slug) {
+  const match = slug.match(/^(\d{4}-\d{2}-\d{2})_v(\d+)$/);
+  if (!match) {
+    return slug;
+  }
+
+  return `${match[1]} · v${match[2]}`;
+}
+
 export function buildArchiveArtifacts(currentBundle) {
   const errors = [];
   const archiveEditionFiles = [];
@@ -437,7 +446,7 @@ export function buildArchiveArtifacts(currentBundle) {
     archiveIndexItems.push(
       buildEditionIndexItem({
         slug: entry.slug,
-        label: entry.slug,
+        label: formatArchiveEditionLabel(entry.slug),
         bundle,
         relativePath: path.join("data", "archive", "editions", `${entry.slug}.json`),
       })
