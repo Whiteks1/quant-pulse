@@ -33,9 +33,13 @@ test.describe("archive", () => {
   test("shows archive comparison intelligence when a published historical edition exists", async ({ page }) => {
     await page.goto("archive");
 
+    await expect(page.getByText("Archive continuity")).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Follow the published sequence/i })).toBeVisible();
+    await expect(page.getByText("Edition 2 of 2")).toBeVisible();
+    await expect(page.getByRole("button", { name: /Older snapshot/i })).toBeVisible();
+    await expect(page.getByText("Baseline 2026-04-05 · v2")).toBeVisible();
     await expect(page.getByText("Archive Intelligence")).toBeVisible();
     await expect(page.getByRole("heading", { name: /What changed versus/i })).toBeVisible();
-    await expect(page.getByRole("button", { name: /2026-04-05 · v2/i })).toBeVisible();
     await expect(page.getByText("Stories tracked")).toBeVisible();
     await expect(page.getByText("Change highlights")).toBeVisible();
     await expect(
@@ -84,5 +88,24 @@ test.describe("archive", () => {
         .filter({ hasText: "Priority raised to P2" })
         .getByRole("heading", { name: /Ethereum completes Pectra upgrade/i })
     ).toBeVisible();
+  });
+
+  test("navigates the archive continuity sequence with older and newer snapshot controls", async ({ page }) => {
+    await page.goto("archive");
+
+    await page.getByRole("button", { name: /Older snapshot/i }).click();
+
+    await expect(page).toHaveURL(/edition=2026-04-05_v2/);
+    await expect(page.getByText("Loading archive…")).not.toBeVisible();
+    await expect(page.getByText("Selected edition: 2026-04-05 · v2")).toBeVisible();
+    await expect(page.getByText("Edition 1 of 2")).toBeVisible();
+    await expect(page.getByRole("button", { name: /Newer snapshot/i })).toBeVisible();
+
+    await page.getByRole("button", { name: /Newer snapshot/i }).click();
+
+    await expect(page).toHaveURL(/\/archive(?:\?|$)/);
+    await expect(page.getByText("Loading archive…")).not.toBeVisible();
+    await expect(page.getByText("Edition 2 of 2")).toBeVisible();
+    await expect(page.getByText("Selected edition: Current edition")).toBeVisible();
   });
 });
