@@ -17,6 +17,7 @@ This PR does not:
 ## Validation
 
 Validated with:
+- `git diff --check`
 - ``
 - ``
 

@@ -42,7 +42,10 @@ Regla obligatoria para trabajo asistido por Cursor/Codex:
 
 `issue -> branch -> code -> validate -> commit -> push -> PR -> merge -> close issue`
 
-No se deben dejar cambios sustantivos directamente sobre `main`. Si un cambio empezó en `main` por error, debe moverse a una rama antes de continuar.
+No se deben dejar cambios sustantivos directamente sobre `main`. Si un cambio empezó en `main` por error, debe moverse a una rama antes de continuar. Las reglas operativas de branching, worktrees, staging y validación previa viven en [`AGENTS.md`](AGENTS.md).
+
+Los PRs contra `main` ejecutan validación automática en GitHub Actions antes del merge.
+
 ## Scripts
 
 | Script        | Descripción        |
