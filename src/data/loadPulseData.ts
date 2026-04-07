@@ -1,4 +1,5 @@
 import type { ExecutiveBriefItem, NewsItem, WatchItem } from "./mockNews";
+import { validatePulseBundle } from "./runtimeFeedValidation";
 
 export interface PulseBundle {
   version: number;
@@ -18,9 +19,6 @@ export async function fetchPulseData(): Promise<PulseBundle> {
   if (!res.ok) {
     throw new Error(`Failed to load pulse data: ${res.status} ${res.statusText}`);
   }
-  const data = (await res.json()) as PulseBundle;
-  if (!Array.isArray(data.items) || !Array.isArray(data.executiveBrief) || !Array.isArray(data.watchItems)) {
-    throw new Error("Invalid pulse.json shape");
-  }
-  return data;
+
+  return validatePulseBundle(await res.json(), "pulse.json");
 }
