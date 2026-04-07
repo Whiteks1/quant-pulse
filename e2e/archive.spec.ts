@@ -108,4 +108,48 @@ test.describe("archive", () => {
     await expect(page.getByText("Edition 2 of 2")).toBeVisible();
     await expect(page.getByText("Selected edition: Current edition")).toBeVisible();
   });
+
+  test("reset all clears archive filters while preserving the selected edition", async ({ page }) => {
+    await page.goto(
+      "archive?edition=2026-04-05_v2&section=Crypto+%26+Markets&category=ETFs&q=bitcoin&source=Bloomberg"
+    );
+
+    await expect(page).toHaveURL(/edition=2026-04-05_v2/);
+    await expect(page).toHaveURL(/section=Crypto\+%26\+Markets/);
+    await expect(page).toHaveURL(/category=ETFs/);
+    await expect(page).toHaveURL(/q=bitcoin/);
+    await expect(page).toHaveURL(/source=Bloomberg/);
+    await expect(
+      page.getByRole("heading", { name: /Bitcoin ETFs see renewed inflows after three weeks of outflows/i })
+    ).toBeVisible();
+
+    await page.getByRole("button", { name: /Reset all filters/i }).click();
+
+    await expect(page).toHaveURL(/edition=2026-04-05_v2/);
+    await expect(page).not.toHaveURL(/section=/);
+    await expect(page).not.toHaveURL(/category=/);
+    await expect(page).not.toHaveURL(/q=/);
+    await expect(page).not.toHaveURL(/source=/);
+    await expect(page.getByPlaceholder("Search signals...")).toHaveValue("");
+    await expect(page.getByText("Selected edition: 2026-04-05 · v2")).toBeVisible();
+  });
+
+  test("clear archive facets preserves section and query while removing date and source", async ({ page }) => {
+    await page.goto("archive?section=Technology&q=openai&source=OpenAI&date=2026-04-04");
+
+    await expect(page).toHaveURL(/section=Technology/);
+    await expect(page).toHaveURL(/q=openai/);
+    await expect(page).toHaveURL(/source=OpenAI/);
+    await expect(page).toHaveURL(/date=2026-04-04/);
+
+    await page.getByRole("button", { name: /Clear archive facets/i }).click();
+
+    await expect(page).toHaveURL(/section=Technology/);
+    await expect(page).toHaveURL(/q=openai/);
+    await expect(page).not.toHaveURL(/source=/);
+    await expect(page).not.toHaveURL(/date=/);
+    await expect(
+      page.getByRole("heading", { name: /OpenAI launches GPT-5 with real-time reasoning capabilities/i })
+    ).toBeVisible();
+  });
 });

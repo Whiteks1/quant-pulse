@@ -38,6 +38,9 @@ export function FilterBar({
         </div>
         <button
           onClick={() => setShowCategories(!showCategories)}
+          type="button"
+          aria-label="Toggle category filters"
+          aria-expanded={showCategories}
           className={cn(
             "rounded-lg border border-border px-3 py-2.5 transition-colors",
             showCategories ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground"
