@@ -1,0 +1,2 @@
+content/**/*.json text eol=lf
+public/data/**/*.json text eol=lf
