@@ -37,6 +37,52 @@ test.describe("archive", () => {
     await expect(page.getByRole("heading", { name: /What changed versus/i })).toBeVisible();
     await expect(page.getByRole("button", { name: /2026-04-05 · v2/i })).toBeVisible();
     await expect(page.getByText("Stories tracked")).toBeVisible();
+    await expect(page.getByText("Change highlights")).toBeVisible();
+    await expect(
+      page.getByText("No story-level deltas detected between these published editions yet.")
+    ).toBeVisible();
     await expect(page.getByText("Section mix")).toBeVisible();
+  });
+
+  test("surfaces story-level change highlights when archive editions diverge", async ({ page }) => {
+    await page.route("**/data/archive/editions/2026-04-05_v2.json", async (route) => {
+      const response = await route.fetch();
+      const payload = (await response.json()) as PulseBundle;
+      const removedItemId = "2026-04-04_btc-etf-inflows_bloomberg";
+      const modifiedItems = payload.items
+        .filter((item) => item.id !== removedItemId)
+        .map((item) =>
+          item.id === "2026-04-04_ethereum-pectra_ef"
+            ? { ...item, priority: "P3" as const }
+            : item
+        );
+
+      await route.fulfill({
+        response,
+        json: {
+          ...payload,
+          items: modifiedItems,
+          executiveBrief: payload.executiveBrief.filter((entry) => entry.itemId !== removedItemId),
+        },
+      });
+    });
+
+    await page.goto("archive");
+
+    await expect(page.getByText("Change highlights")).toBeVisible();
+    await expect(page.getByText("New P1 story")).toBeVisible();
+    await expect(
+      page
+        .getByRole("article")
+        .filter({ hasText: "New P1 story" })
+        .getByRole("heading", { name: /Bitcoin ETFs see renewed inflows/i })
+    ).toBeVisible();
+    await expect(page.getByText("Priority raised to P2")).toBeVisible();
+    await expect(
+      page
+        .getByRole("article")
+        .filter({ hasText: "Priority raised to P2" })
+        .getByRole("heading", { name: /Ethereum completes Pectra upgrade/i })
+    ).toBeVisible();
   });
 });
