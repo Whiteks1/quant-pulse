@@ -122,19 +122,17 @@ Si editorialmente se necesita romper esa regla, debe quedar documentado con `edi
 - ETFs
 - regulación crypto
 - seguridad
-- OpenAI
-- NVIDIA
-- Microsoft
-- Google
-- Apple
-- Amazon
-- Meta
+- execution venues
+- broker rails
+- market structure
+- custody
 - infra de IA
-- big tech earnings
+- chips
+- cloud
 
 ### 5 puntos
 
-- tema relacionado, pero periférico
+- tema relacionado, pero periférico o dependiente de impacto indirecto
 
 ### 0 puntos
 

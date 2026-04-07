@@ -27,9 +27,12 @@ Quant Pulse
 
 ## Rules
 
-- Treat `docs/quantlab-upstream-contract.es.md` as the product-boundary contract for QuantPulse vs QuantLab.
-- Quant Pulse is the upstream signal layer for QuantLab; it must not absorb QuantLab research, execution, or validation responsibilities.
-- Treat the current files, docs, schema, and runtime as present-state authority; treat the roadmap as target state only until changes are explicitly implemented.
+- Treat `docs/quantlab-upstream-contract.es.md` as the product-boundary contract for Quant Pulse vs QuantLab.
+- Treat the current repository files, docs, schema, and runtime as present-state authority. Use the roadmap as target state, not as proof of implemented behavior.
+- Quant Pulse is the upstream signal layer for QuantLab. It is not a trading engine, not a backtesting system, not an execution controller, and not a general news aggregator.
+- Keep the primary scope constrained to Crypto & Markets, Web3 market structure, execution-venue and broker-rail risk, Technology only when it affects infrastructure, security, or market structure, and Macro only when it materially affects crypto or technology conditions.
+- Quant Pulse outputs should improve at least one of: research intent generation, signal prioritization, risk awareness, or product priorities for QuantLab.
+- If a signal cannot be translated into a research hypothesis, risk filter, or product/instrumentation priority, keep it as context only and do not let it drive downstream QuantLab behavior.
 - Do not invent categories outside the taxonomy in `docs/category-taxonomy.es.md`.
 - Do not output JSON that breaks the canonical format in `docs/canonical-json-format.es.md` and `config/news.schema.json`.
 - Do not edit `public/data/pulse.json` manually if the same change belongs in `content/pulse.source.json`.
@@ -38,13 +41,6 @@ Quant Pulse
 - Treat signal vs noise as a first-class classification.
 - Ask for a plan before large refactors.
 - Prefer small, verifiable changes.
-
-## Git workflow rules
-
-- Always use the full repository workflow for any non-trivial change: `issue -> branch -> code -> validate -> commit -> push -> PR -> merge -> close issue`.
-- Never leave substantive local changes directly on `main`.
-- Never skip issue, branch, commit, push, and PR for repository work.
-- If work starts on `main` by mistake, stop and move it to a branch before continuing.
 
 ## Phased delivery (summary)
 

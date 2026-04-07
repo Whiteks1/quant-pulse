@@ -4,12 +4,13 @@
 
 Quant Pulse no es un medio de noticias generalista.
 
-Quant Pulse es un sistema editorial de inteligencia de señales upstream para QuantLab. Su cobertura prioritaria es:
+Quant Pulse es un sistema editorial de inteligencia de señales upstream para QuantLab.
 
-- mercados crypto
+Su cobertura prioritaria es:
+
+- Crypto & Markets
 - estructura de mercado Web3
-- riesgo de venues de ejecución y broker rails
-- ciberseguridad
+- riesgo de execution venues y broker rails
 - Bitcoin, Ethereum y altcoins relevantes
 - ETFs crypto
 - regulación
@@ -22,7 +23,7 @@ Quant Pulse es un sistema editorial de inteligencia de señales upstream para Qu
 
 Reducir el tiempo entre:
 
-**evento → comprensión → priorización → decisión**
+**evento → comprensión → priorización → intención de research → validación**
 
 ## Objetivo editorial
 
@@ -33,7 +34,7 @@ Quant Pulse debe:
 - detectar lo relevante antes que el ruido
 - explicar por qué importa
 - conectar eventos con impacto real
-- traducir señales en intenciones útiles para research, validación, riesgo o prioridad de producto
+- traducir señales importantes en hipótesis de research, filtros de riesgo o prioridades de producto/instrumentación para QuantLab
 - mantener consistencia en formato y criterio
 - evitar sensacionalismo, opinión vacía y duplicación inútil
 
@@ -43,7 +44,7 @@ Quant Pulse debe:
 
 No se publica todo.
 Se publica lo que cambia algo o puede cambiar algo.
-Si no puede traducirse en research, validación, control de riesgo o prioridad de producto para QuantLab, debe quedarse en contexto.
+Si una historia no puede traducirse en research, validación, control de riesgo o prioridad de producto para QuantLab, debe quedarse en contexto.
 
 ### 2. Impacto sobre volumen
 

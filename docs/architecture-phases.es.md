@@ -1,13 +1,11 @@
 # Quant Pulse — Arquitectura por fases
 
-Documento operativo para humanos, Cursor y Codex. Resume la estrategia acordada: primero feed estático generado por pipeline y consumido por la web; después API y Actions. Quant Pulse opera como capa upstream de señales para QuantLab, no como motor de ejecución.
+Documento operativo para humanos, Cursor y Codex. Resume la estrategia acordada: primero feed estático generado por pipeline y consumido por la web; después API y Actions. Quant Pulse actúa como capa upstream de señales para QuantLab y no debe absorber lógica de trading, backtesting o ejecución.
 
 ## Fase 1 (ahora)
 
 - **GitHub Pages** como frontend estático.
 - **Datos en el repo**: la fuente editorial vive en `content/pulse.source.json` y el feed publicado se genera en `public/data/pulse.json` (se copia tal cual a `dist/` en el build).
-- **Archivo estático publicado**: `public/data/archive/current.json` y `public/data/archive/index.json` exponen la edición actual y el manifiesto de ediciones.
-- **Snapshots de edición**: las ediciones congeladas de Fase 1 viven en `content/archive/editions/` y se publican con `npm run snapshot:edition` + `npm run build:feed`.
 - **Pipeline editorial**: una tarea o script genera/actualiza `public/data/pulse.json` a partir de la fuente editorial, validación y criterio editorial. El GPT no publica.
 - **Custom GPT con Knowledge** (sin backend ni Actions todavía). Subir al GPT:
   - `AGENTS.md`
@@ -20,9 +18,11 @@ Documento operativo para humanos, Cursor y Codex. Resume la estrategia acordada:
   - `docs/voice-summary-style.es.md`
   - `config/approved-sources.yaml`
 
-**Objetivo:** el pipeline produce el feed y el archivo estático desde una fuente reproducible, la web los lee desde Pages y el GPT aplica las reglas editoriales de Quant Pulse sobre ese contenido para emitir intenciones de research priorizadas consumibles por QuantLab.
+**Objetivo:** el pipeline produce el feed desde una fuente reproducible, la web lo lee desde Pages y el GPT aplica las reglas editoriales de Quant Pulse sobre ese contenido para priorizar señales y generar handoffs disciplinados hacia QuantLab cuando proceda.
 
 **No en esta fase:** backend propio, endpoints dinámicos, chat embebido en la web, llamadas a OpenAI desde el navegador, Custom GPT Actions sin servidor.
+
+**Regla de interpretación:** si una señal no puede traducirse de forma plausible a research, riesgo o prioridad de producto para QuantLab, debe permanecer como contexto y no como handoff downstream.
 
 ## Fase 2 (después)
 
