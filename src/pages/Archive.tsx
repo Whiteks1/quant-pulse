@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ArrowLeft, Archive, Calendar, Globe2, RotateCcw } from "lucide-react";
+import { ArchiveContinuity } from "@/components/ArchiveContinuity";
 import { ArchiveIntelligence } from "@/components/ArchiveIntelligence";
 import { Button } from "@/components/ui/button";
 import { fetchArchiveEdition } from "@/data/loadArchiveData";
@@ -11,6 +12,7 @@ import { FilterBar } from "@/components/FilterBar";
 import { NewsCard } from "@/components/NewsCard";
 import { SiteFooter } from "@/components/SiteFooter";
 import { useArchiveEdition } from "@/hooks/useArchiveEdition";
+import { buildArchiveContinuity } from "@/lib/archive-continuity";
 import { buildArchiveEditionComparison, getComparisonEdition } from "@/lib/archive-intelligence";
 import { buildArchivePreviewData, groupArchiveItemsByDate } from "@/lib/archive-preview";
 import { buildArchiveRouteSearchParams, parseArchiveRouteState } from "@/lib/archive-route";
@@ -19,7 +21,7 @@ import { getFeedStats } from "@/lib/feed-status";
 const ArchivePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialState = useMemo(() => parseArchiveRouteState(searchParams), [searchParams]);
-  const [activeEdition, setActiveEdition] = useState(initialState.edition);
+  const activeEdition = initialState.edition;
   const [activeSection, setActiveSection] = useState(initialState.section);
   const [activeCategory, setActiveCategory] = useState(initialState.category);
   const [searchQuery, setSearchQuery] = useState(initialState.query);
@@ -29,9 +31,6 @@ const ArchivePage = () => {
   const { index, selectedEdition, bundle, loadState, loadError } = useArchiveEdition(activeEdition);
 
   useEffect(() => {
-    if (activeEdition !== initialState.edition) {
-      setActiveEdition(initialState.edition);
-    }
     if (activeSection !== initialState.section) {
       setActiveSection(initialState.section);
     }
@@ -48,12 +47,10 @@ const ArchivePage = () => {
       setActiveSource(initialState.source);
     }
   }, [
-    activeEdition,
     activeCategory,
     activeDate,
     activeSection,
     activeSource,
-    initialState.edition,
     initialState.category,
     initialState.date,
     initialState.query,
@@ -87,10 +84,35 @@ const ArchivePage = () => {
   ]);
 
   useEffect(() => {
-    if (selectedEdition && activeEdition !== selectedEdition.slug) {
-      setActiveEdition(selectedEdition.slug);
+    if (!selectedEdition || !index) return;
+
+    const editionExistsInIndex = index.editions.some((edition) => edition.slug === activeEdition);
+    if (!editionExistsInIndex) {
+      const nextParams = buildArchiveRouteSearchParams({
+        edition: selectedEdition.slug,
+        section: activeSection,
+        category: activeCategory,
+        query: searchQuery,
+        date: activeDate,
+        source: activeSource,
+      });
+
+      if (nextParams.toString() !== searchParams.toString()) {
+        setSearchParams(nextParams, { replace: true });
+      }
     }
-  }, [activeEdition, selectedEdition]);
+  }, [
+    activeCategory,
+    activeDate,
+    activeEdition,
+    activeSection,
+    activeSource,
+    index,
+    searchParams,
+    searchQuery,
+    selectedEdition,
+    setSearchParams,
+  ]);
 
   const items = useMemo(() => bundle?.items ?? [], [bundle]);
   const updatedAt = bundle?.updatedAt ?? "";
@@ -163,6 +185,10 @@ const ArchivePage = () => {
       comparisonBundle.items
     );
   }, [bundle?.items, comparisonBundle, comparisonEdition, selectedEdition]);
+  const archiveContinuity = useMemo(
+    () => buildArchiveContinuity(index?.editions ?? [], selectedEdition?.slug ?? null, comparisonEdition?.slug ?? null),
+    [comparisonEdition?.slug, index?.editions, selectedEdition?.slug]
+  );
 
   const handleResetAll = () => {
     setActiveSection("All");
@@ -175,6 +201,19 @@ const ArchivePage = () => {
   const handleResetArchiveFacets = () => {
     setActiveDate("");
     setActiveSource("");
+  };
+
+  const handleEditionSelect = (edition: string) => {
+    const nextParams = buildArchiveRouteSearchParams({
+      edition,
+      section: activeSection,
+      category: activeCategory,
+      query: searchQuery,
+      date: activeDate,
+      source: activeSource,
+    });
+
+    setSearchParams(nextParams, { replace: true });
   };
 
   const extraFilters = [
@@ -260,7 +299,7 @@ const ArchivePage = () => {
                 variant={activeEdition === edition.slug ? "default" : "outline"}
                 size="sm"
                 className="gap-2"
-                onClick={() => setActiveEdition(edition.slug)}
+                onClick={() => handleEditionSelect(edition.slug)}
               >
                 {edition.label}
                 <span className="text-[11px] font-mono opacity-80">v{edition.version}</span>
@@ -276,6 +315,8 @@ const ArchivePage = () => {
           ) : null}
         </div>
       </section>
+
+      <ArchiveContinuity continuity={archiveContinuity} onSelectEdition={handleEditionSelect} />
 
       <ArchiveIntelligence comparison={archiveComparison} />
 
