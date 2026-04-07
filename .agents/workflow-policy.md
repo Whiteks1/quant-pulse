@@ -20,3 +20,4 @@
     - summary
     - residual limitations
     - next logical slice
+12. After a slice is merged, prefer `.agents/scripts/cleanup-slice.ps1 -WorktreePath <path>` to remove the local worktree only when it is clean and already merged into `origin/main`.
