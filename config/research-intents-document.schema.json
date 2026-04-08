@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://whiteks1.github.io/quant-pulse/schemas/research-intents-document.schema.json",
+  "title": "Quant Pulse Research Intents Document",
+  "description": "Published wrapper document for the research intents artifact emitted by Quant Pulse.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "generatedAt",
+    "editionId",
+    "sourceVersion",
+    "sourceUpdatedAt",
+    "intentCount",
+    "intents"
+  ],
+  "properties": {
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp when the published intents document was generated."
+    },
+    "editionId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Quant Pulse edition identifier that produced the document."
+    },
+    "sourceVersion": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Version of the source pulse bundle used to generate the document."
+    },
+    "sourceUpdatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp of the source pulse bundle."
+    },
+    "intentCount": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of emitted intents in the document."
+    },
+    "intents": {
+      "type": "array",
+      "description": "Stable ordered list of emitted research intents.",
+      "items": {
+        "$ref": "https://whiteks1.github.io/quant-pulse/schemas/research-intent.schema.json"
+      }
+    }
+  }
+}

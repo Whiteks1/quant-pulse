@@ -16,6 +16,7 @@ describe("research intents artifact", () => {
     expect(firstBuild.document.generatedAt).toBe(bundle.updatedAt);
     expect(firstBuild.document.sourceVersion).toBe(bundle.version);
     expect(firstBuild.document.editionId).toBe("2026-04-05_v2");
+    expect(firstBuild.document.sourceUpdatedAt).toBe(bundle.updatedAt);
   });
 
   it("emits one stable intent per eligible feed item", () => {
@@ -31,6 +32,7 @@ describe("research intents artifact", () => {
 
     const intentIds = artifact.document.intents.map((intent) => intent.intent_id);
     expect(new Set(intentIds).size).toBe(intentIds.length);
+    expect(artifact.document.intentCount).toBe(artifact.document.intents.length);
   });
 
   it("keeps the wrapper stable when no items are eligible", () => {
@@ -51,5 +53,24 @@ describe("research intents artifact", () => {
     expect(artifact.document.editionId).toBe("2026-04-05_v2");
     expect(artifact.document.intentCount).toBe(0);
     expect(artifact.document.intents).toEqual([]);
+  });
+
+  it("rejects document-level wrapper corruption", () => {
+    const { bundle } = normalizePulseBundle(readSourceBundle());
+    const artifact = buildResearchIntentsArtifact(bundle);
+    const corruptedBundle = {
+      ...bundle,
+      updatedAt: "not-a-date",
+    };
+
+    const corruptedArtifact = buildResearchIntentsArtifact(corruptedBundle);
+
+    expect(artifact.errors).toEqual([]);
+    expect(corruptedArtifact.errors).toContain(
+      "Research intents document schema: /generatedAt must match format \"date-time\""
+    );
+    expect(corruptedArtifact.errors).toContain(
+      "Research intents document schema: /sourceUpdatedAt must match format \"date-time\""
+    );
   });
 });
