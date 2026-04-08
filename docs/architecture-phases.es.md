@@ -27,8 +27,9 @@ Documento operativo para humanos, Cursor y Codex. Resume la estrategia acordada:
 ## Fase 2 (después)
 
 - **Backend mínimo** (worker, serverless, etc.) que sirva JSON con contrato estable.
-- Endpoints orientativos: `latest-news`, `top-signals`, `storyline`, `watchlist`, `search-archive`.
-- **Custom GPT Actions** con esquema OpenAPI apuntando a ese backend.
+- La frontera mínima de Fase 2 se define en [`docs/live-feed-api-contract.es.md`](live-feed-api-contract.es.md).
+- Primer objetivo: mover `pulse` y `archive` a una API viva sin cambiar todavía la semántica canónica de `PulseBundle` y `ArchiveIndex`.
+- **Custom GPT Actions** solo después de que esa API mínima exista y sea estable.
 
 ## Fase 3 (opcional, más tarde)
 
