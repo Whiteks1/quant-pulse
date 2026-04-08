@@ -1,0 +1,225 @@
+{
+  "generatedAt": "2026-04-05T00:10:00Z",
+  "editionId": "2026-04-05_v2",
+  "sourceVersion": 2,
+  "sourceUpdatedAt": "2026-04-05T00:10:00Z",
+  "intentCount": 9,
+  "intents": [
+    {
+      "schema_version": "1.0",
+      "intent_id": "ri:btc-etf-inflows:research_hypothesis",
+      "edition_id": "2026-04-05_v2",
+      "created_at": "2026-04-05T00:10:00Z",
+      "source_ref": [
+        "2026-04-04_btc-etf-inflows_bloomberg"
+      ],
+      "signal_summary": "Bitcoin ETF flows reversed sharply, improving the near-term institutional demand narrative for BTC.",
+      "priority": "P1",
+      "affected_universe": [
+        "ETFs",
+        "BTC",
+        "flows"
+      ],
+      "bias": "bullish",
+      "horizon": "days to weeks",
+      "hypothesis_type": "event_driven",
+      "validation_goal": "Confirm whether Bitcoin ETFs see renewed inflows after three weeks of outflows produces follow-through beyond the headline in the affected universe.",
+      "invalidation_condition": "Invalidate if Bitcoin ETFs see renewed inflows after three weeks of outflows fails to produce confirming evidence, sustained flows, or structural follow-through after the initial event.",
+      "risk_filter_hint": "No direct risk gate from the headline alone; require follow-up evidence before changing downstream constraints.",
+      "product_priority_hint": "Escalate only if repeated evidence suggests the theme should influence QuantLab coverage or tooling priorities.",
+      "route": "research_hypothesis"
+    },
+    {
+      "schema_version": "1.0",
+      "intent_id": "ri:openai-gpt5-launch:product_priority",
+      "edition_id": "2026-04-05_v2",
+      "created_at": "2026-04-05T00:10:00Z",
+      "source_ref": [
+        "2026-04-04_openai-gpt5_openai"
+      ],
+      "signal_summary": "OpenAI's GPT-5 launch raises the competitive bar across enterprise AI and model infrastructure.",
+      "priority": "P1",
+      "affected_universe": [
+        "AI",
+        "OpenAI",
+        "LLM"
+      ],
+      "bias": "bullish",
+      "horizon": "days to weeks",
+      "hypothesis_type": "product_priority",
+      "validation_goal": "Confirm whether OpenAI launches GPT-5 with real-time reasoning capabilities changes what QuantLab should instrument, monitor, or prioritize in coverage.",
+      "invalidation_condition": "Invalidate if follow-up evidence shows OpenAI launches GPT-5 with real-time reasoning capabilities does not change capabilities, adoption, or competitive positioning.",
+      "risk_filter_hint": "No direct risk gate from the headline alone; require follow-up evidence before changing downstream constraints.",
+      "product_priority_hint": "Candidate instrumentation or coverage priority if the signal persists beyond the initial announcement.",
+      "route": "product_priority"
+    },
+    {
+      "schema_version": "1.0",
+      "intent_id": "ri:eu-ai-act-passage:risk_filter",
+      "edition_id": "2026-04-05_v2",
+      "created_at": "2026-04-05T00:10:00Z",
+      "source_ref": [
+        "2026-04-04_eu-ai-act_ec"
+      ],
+      "signal_summary": "Europe advanced a real AI compliance framework, increasing operational pressure on model vendors.",
+      "priority": "P1",
+      "affected_universe": [
+        "AI",
+        "Regulation",
+        "EU"
+      ],
+      "bias": "regime-risk",
+      "horizon": "days to weeks",
+      "hypothesis_type": "risk_filter",
+      "validation_goal": "Confirm whether EU passes comprehensive AI regulation framework creates a durable policy, regime, or operational constraint that should gate downstream research.",
+      "invalidation_condition": "Invalidate if follow-up evidence shows EU passes comprehensive AI regulation framework does not change operating conditions, constraints, or risk posture.",
+      "risk_filter_hint": "Treat as a candidate gate for exposure, venue, or regime filters until the risk is clarified.",
+      "product_priority_hint": "Escalate only if the risk requires new monitoring, venue coverage, or operational instrumentation.",
+      "route": "risk_filter"
+    },
+    {
+      "schema_version": "1.0",
+      "intent_id": "ri:ethereum-pectra-upgrade:research_hypothesis",
+      "edition_id": "2026-04-05_v2",
+      "created_at": "2026-04-05T00:10:00Z",
+      "source_ref": [
+        "2026-04-04_ethereum-pectra_ef"
+      ],
+      "signal_summary": "Protocol upgrades that materially affect cost and throughput can shift competitiveness across L1s and influence where activity accrues.",
+      "priority": "P2",
+      "affected_universe": [
+        "ETH",
+        "upgrade",
+        "DeFi"
+      ],
+      "bias": "bullish",
+      "horizon": "weeks to months",
+      "hypothesis_type": "event_driven",
+      "validation_goal": "Confirm whether Ethereum completes Pectra upgrade, gas fees drop 40% produces follow-through beyond the headline in the affected universe.",
+      "invalidation_condition": "Invalidate if Ethereum completes Pectra upgrade, gas fees drop 40% fails to produce confirming evidence, sustained flows, or structural follow-through after the initial event.",
+      "risk_filter_hint": "No direct risk gate from the headline alone; require follow-up evidence before changing downstream constraints.",
+      "product_priority_hint": "Escalate only if repeated evidence suggests the theme should influence QuantLab coverage or tooling priorities.",
+      "route": "research_hypothesis"
+    },
+    {
+      "schema_version": "1.0",
+      "intent_id": "ri:apple-darwinai-acquisition:product_priority",
+      "edition_id": "2026-04-05_v2",
+      "created_at": "2026-04-05T00:10:00Z",
+      "source_ref": [
+        "2026-04-04_apple-darwinai_ft"
+      ],
+      "signal_summary": "This has strategic importance for privacy, device-level differentiation and the competitive shape of consumer AI platforms.",
+      "priority": "P2",
+      "affected_universe": [
+        "Big Tech",
+        "Apple",
+        "M&A"
+      ],
+      "bias": "bullish",
+      "horizon": "weeks to months",
+      "hypothesis_type": "product_priority",
+      "validation_goal": "Confirm whether Apple acquires edge AI startup for $2B changes what QuantLab should instrument, monitor, or prioritize in coverage.",
+      "invalidation_condition": "Invalidate if follow-up evidence shows Apple acquires edge AI startup for $2B does not change capabilities, adoption, or competitive positioning.",
+      "risk_filter_hint": "No direct risk gate from the headline alone; require follow-up evidence before changing downstream constraints.",
+      "product_priority_hint": "Candidate instrumentation or coverage priority if the signal persists beyond the initial announcement.",
+      "route": "product_priority"
+    },
+    {
+      "schema_version": "1.0",
+      "intent_id": "ri:crowdstrike-energy-apt:risk_filter",
+      "edition_id": "2026-04-05_v2",
+      "created_at": "2026-04-05T00:10:00Z",
+      "source_ref": [
+        "2026-04-03_crowdstrike-energy_crowdstrike"
+      ],
+      "signal_summary": "CrowdStrike's infrastructure threat disclosure reinforces the cybersecurity spending and resilience narrative.",
+      "priority": "P1",
+      "affected_universe": [
+        "Cybersecurity",
+        "APT",
+        "infrastructure"
+      ],
+      "bias": "regime-risk",
+      "horizon": "days to weeks",
+      "hypothesis_type": "risk_filter",
+      "validation_goal": "Confirm whether CrowdStrike details a state-sponsored cyber campaign targeting the energy sector creates a durable policy, regime, or operational constraint that should gate downstream research.",
+      "invalidation_condition": "Invalidate if follow-up evidence shows CrowdStrike details a state-sponsored cyber campaign targeting the energy sector does not change operating conditions, constraints, or risk posture.",
+      "risk_filter_hint": "Treat as a candidate gate for exposure, venue, or regime filters until the risk is clarified.",
+      "product_priority_hint": "Escalate only if the risk requires new monitoring, venue coverage, or operational instrumentation.",
+      "route": "risk_filter"
+    },
+    {
+      "schema_version": "1.0",
+      "intent_id": "ri:nvidia-datacenter-earnings:product_priority",
+      "edition_id": "2026-04-05_v2",
+      "created_at": "2026-04-05T00:10:00Z",
+      "source_ref": [
+        "2026-04-03_nvidia-datacenter_nvidia"
+      ],
+      "signal_summary": "NVIDIA's datacenter results remain one of the clearest direct reads on durable AI infrastructure demand.",
+      "priority": "P1",
+      "affected_universe": [
+        "Big Tech",
+        "NVIDIA",
+        "earnings"
+      ],
+      "bias": "bullish",
+      "horizon": "days to weeks",
+      "hypothesis_type": "product_priority",
+      "validation_goal": "Confirm whether NVIDIA reports record datacenter revenue driven by AI demand changes what QuantLab should instrument, monitor, or prioritize in coverage.",
+      "invalidation_condition": "Invalidate if follow-up evidence shows NVIDIA reports record datacenter revenue driven by AI demand does not change capabilities, adoption, or competitive positioning.",
+      "risk_filter_hint": "No direct risk gate from the headline alone; require follow-up evidence before changing downstream constraints.",
+      "product_priority_hint": "Candidate instrumentation or coverage priority if the signal persists beyond the initial announcement.",
+      "route": "product_priority"
+    },
+    {
+      "schema_version": "1.0",
+      "intent_id": "ri:cloudflare-zero-trust-ai:product_priority",
+      "edition_id": "2026-04-05_v2",
+      "created_at": "2026-04-05T00:10:00Z",
+      "source_ref": [
+        "2026-04-04_cloudflare-zero-trust_cloudflare"
+      ],
+      "signal_summary": "This matters as a product and competitive signal, but it is not yet on the level of a market-moving security event or infrastructure break.",
+      "priority": "P2",
+      "affected_universe": [
+        "Cybersecurity",
+        "Cloudflare",
+        "Zero Trust"
+      ],
+      "bias": "bullish",
+      "horizon": "weeks to months",
+      "hypothesis_type": "product_priority",
+      "validation_goal": "Confirm whether Cloudflare launches AI-powered zero-trust network access changes what QuantLab should instrument, monitor, or prioritize in coverage.",
+      "invalidation_condition": "Invalidate if follow-up evidence shows Cloudflare launches AI-powered zero-trust network access does not change capabilities, adoption, or competitive positioning.",
+      "risk_filter_hint": "No direct risk gate from the headline alone; require follow-up evidence before changing downstream constraints.",
+      "product_priority_hint": "Candidate instrumentation or coverage priority if the signal persists beyond the initial announcement.",
+      "route": "product_priority"
+    },
+    {
+      "schema_version": "1.0",
+      "intent_id": "ri:fed-easing-path-guidance:risk_filter",
+      "edition_id": "2026-04-05_v2",
+      "created_at": "2026-04-05T00:10:00Z",
+      "source_ref": [
+        "2026-04-04_fed-guidance_federalreserve"
+      ],
+      "signal_summary": "Higher-for-longer rate assumptions matter directly for liquidity, valuation multiples, and risk appetite across both tech and crypto.",
+      "priority": "P2",
+      "affected_universe": [
+        "Rates",
+        "FOMC",
+        "liquidity"
+      ],
+      "bias": "regime-risk",
+      "horizon": "weeks to months",
+      "hypothesis_type": "risk_filter",
+      "validation_goal": "Confirm whether Fed officials signal a slower easing path as inflation lingers creates a durable policy, regime, or operational constraint that should gate downstream research.",
+      "invalidation_condition": "Invalidate if follow-up evidence shows Fed officials signal a slower easing path as inflation lingers does not change operating conditions, constraints, or risk posture.",
+      "risk_filter_hint": "Treat as a candidate gate for exposure, venue, or regime filters until the risk is clarified.",
+      "product_priority_hint": "Escalate only if the risk requires new monitoring, venue coverage, or operational instrumentation.",
+      "route": "risk_filter"
+    }
+  ]
+}

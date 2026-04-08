@@ -10,14 +10,16 @@ import {
   readSourceBundle,
   serializePulseBundle,
 } from "./pulse-feed.mjs";
+import { buildResearchIntentsArtifact, intentsOutputPath } from "./research-intents.mjs";
 
 const checkMode = process.argv.includes("--check");
 const { bundle, errors } = normalizePulseBundle(readSourceBundle());
 const archiveArtifacts = buildArchiveArtifacts(bundle);
+const intentsArtifact = buildResearchIntentsArtifact(bundle);
 
-if (errors.length > 0 || archiveArtifacts.errors.length > 0) {
+if (errors.length > 0 || archiveArtifacts.errors.length > 0 || intentsArtifact.errors.length > 0) {
   console.error("Feed build failed:\n");
-  for (const error of [...errors, ...archiveArtifacts.errors]) {
+  for (const error of [...errors, ...archiveArtifacts.errors, ...intentsArtifact.errors]) {
     console.error(`- ${error}`);
   }
   process.exit(1);
@@ -32,6 +34,7 @@ if (checkMode) {
     { outputPath, content: serialized },
     { outputPath: archiveCurrentOutputPath, content: archiveArtifacts.currentContent },
     { outputPath: archiveIndexOutputPath, content: archiveArtifacts.indexContent },
+    { outputPath: intentsOutputPath, content: intentsArtifact.content },
   ];
 
   for (const file of expectedSingleFiles) {
@@ -82,6 +85,7 @@ fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 fs.writeFileSync(outputPath, serialized, "utf8");
 fs.mkdirSync(path.dirname(archiveCurrentOutputPath), { recursive: true });
 fs.mkdirSync(archiveEditionOutputDir, { recursive: true });
+fs.writeFileSync(intentsOutputPath, intentsArtifact.content, "utf8");
 fs.writeFileSync(archiveCurrentOutputPath, archiveArtifacts.currentContent, "utf8");
 fs.writeFileSync(archiveIndexOutputPath, archiveArtifacts.indexContent, "utf8");
 
