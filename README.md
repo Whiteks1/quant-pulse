@@ -34,7 +34,7 @@ El workflow de Pages comprueba además que el feed publicado esté sincronizado 
 
 ## Documentación editorial
 
-Ver [`AGENTS.md`](AGENTS.md), [`docs/quantlab-upstream-contract.es.md`](docs/quantlab-upstream-contract.es.md), [`docs/architecture-phases.es.md`](docs/architecture-phases.es.md), [`docs/roadmap.es.md`](docs/roadmap.es.md), [`docs/feed-workflow.es.md`](docs/feed-workflow.es.md) y el resto de [`docs/`](docs/).
+Ver [`AGENTS.md`](AGENTS.md), [`docs/quantlab-upstream-contract.es.md`](docs/quantlab-upstream-contract.es.md), [`docs/architecture-phases.es.md`](docs/architecture-phases.es.md), [`docs/live-feed-api-contract.es.md`](docs/live-feed-api-contract.es.md), [`docs/roadmap.es.md`](docs/roadmap.es.md), [`docs/feed-workflow.es.md`](docs/feed-workflow.es.md) y el resto de [`docs/`](docs/).
 
 La guía de marca pública vive en [`docs/brand-guidelines.md`](docs/brand-guidelines.md).
 

@@ -9,6 +9,7 @@ Quant Pulse
 - docs/quantlab-upstream-contract.es.md
 - docs/quantlab-signal-intent-format.es.md
 - docs/architecture-phases.es.md (fases: Pages + Knowledge → backend + Actions)
+- docs/live-feed-api-contract.es.md
 - docs/roadmap.es.md
 - docs/feed-workflow.es.md
 - docs/editorial-manual.es.md
@@ -62,7 +63,7 @@ Quant Pulse
 ## Phased delivery (summary)
 
 1. **Fase 1:** `content/pulse.source.json` + build pipeline + GitHub Pages + `public/data/pulse.json` + Custom GPT Knowledge (listado en `docs/architecture-phases.es.md`). No backend, no GPT Actions, no OpenAI en el frontend.
-2. **Fase 2:** Backend mínimo + OpenAPI + GPT Actions para datos vivos.
+2. **Fase 2:** backend mínimo y feed vivo según `docs/live-feed-api-contract.es.md`; Actions solo después de que esa frontera exista y sea estable.
 3. **Fase 3 (opcional):** chat u otras integraciones con API key solo en servidor.
 
 ## Boundary phrase
