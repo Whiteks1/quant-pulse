@@ -6,6 +6,11 @@ import { rootDir } from "./pulse-feed.mjs";
 
 export const intentsOutputPath = path.join(rootDir, "public", "data", "intents.json");
 const researchIntentSchemaPath = path.join(rootDir, "config", "research-intent.schema.json");
+const researchIntentsDocumentSchemaPath = path.join(
+  rootDir,
+  "config",
+  "research-intents-document.schema.json"
+);
 
 const riskCategorySet = new Set([
   "Regulation",
@@ -66,16 +71,18 @@ const negativeSignalMatchers = [
   /\brisk\b/i,
 ];
 
-const validateResearchIntent = createResearchIntentValidator();
+const validateResearchIntentsDocument = createResearchIntentsDocumentValidator();
 
-function createResearchIntentValidator() {
-  const schema = JSON.parse(fs.readFileSync(researchIntentSchemaPath, "utf8"));
+function createResearchIntentsDocumentValidator() {
+  const intentSchema = JSON.parse(fs.readFileSync(researchIntentSchemaPath, "utf8"));
+  const documentSchema = JSON.parse(fs.readFileSync(researchIntentsDocumentSchemaPath, "utf8"));
   const ajv = new Ajv2020({
     allErrors: true,
     strict: false,
   });
   addFormats(ajv);
-  return ajv.compile(schema);
+  ajv.addSchema(intentSchema);
+  return ajv.compile(documentSchema);
 }
 
 function serializeJson(value) {
@@ -261,22 +268,6 @@ export function buildResearchIntentsArtifact(bundle) {
     .filter(isIntentEligible)
     .map((item) => buildIntent(item, bundle, executiveBriefByItemId));
 
-  const seenIntentIds = new Set();
-  for (const intent of intents) {
-    if (seenIntentIds.has(intent.intent_id)) {
-      errors.push(`Duplicate intent_id: ${intent.intent_id}`);
-      continue;
-    }
-    seenIntentIds.add(intent.intent_id);
-
-    const valid = validateResearchIntent(intent);
-    if (!valid) {
-      for (const schemaError of validateResearchIntent.errors ?? []) {
-        errors.push(`Intent ${intent.intent_id} schema: ${formatSchemaError(schemaError)}`);
-      }
-    }
-  }
-
   const document = {
     generatedAt: bundle.updatedAt,
     editionId: buildEditionId(bundle),
@@ -285,6 +276,28 @@ export function buildResearchIntentsArtifact(bundle) {
     intentCount: intents.length,
     intents,
   };
+
+  const seenIntentIds = new Set();
+  for (const intent of intents) {
+    if (seenIntentIds.has(intent.intent_id)) {
+      errors.push(`Duplicate intent_id: ${intent.intent_id}`);
+      continue;
+    }
+    seenIntentIds.add(intent.intent_id);
+  }
+
+  if (document.intentCount !== document.intents.length) {
+    errors.push(
+      `intentCount (${document.intentCount}) must match intents.length (${document.intents.length})`
+    );
+  }
+
+  const validDocument = validateResearchIntentsDocument(document);
+  if (!validDocument) {
+    for (const schemaError of validateResearchIntentsDocument.errors ?? []) {
+      errors.push(`Research intents document schema: ${formatSchemaError(schemaError)}`);
+    }
+  }
 
   return {
     errors,
