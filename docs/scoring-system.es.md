@@ -30,6 +30,15 @@ Total máximo: 100
 - entre 24 y 72 horas → 5
 - más de 72 horas → 0
 
+## Regla operativa de recencia
+
+En el runtime actual, la recencia solo puede validarse de forma reproducible cuando el ítem declara `scoredAt`.
+
+- `publishedAt` describe cuándo se publicó la historia
+- `scoredAt` describe cuándo quedó fijado el bloque de recencia
+- si `scoredAt` no existe, el repo conserva compatibilidad con contenido histórico y no recalcula recencia automáticamente
+- si `scoredAt` existe, `scoreJustification.recency` debe coincidir con la ventana `publishedAt -> scoredAt` salvo `editorialOverride` sobre `scoreJustification.recency`
+
 ## 2. Impacto de mercado (0–25)
 
 ### 25 puntos
@@ -158,3 +167,5 @@ Si editorialmente se necesita romper esa regla, debe quedar documentado con `edi
 - score 0–39 → candidato a P3
 
 La prioridad final puede ajustarse por criterio editorial, pero cualquier override debe quedar documentado.
+
+En particular, los desvíos manuales de recencia sobre un ítem con `scoredAt` deben justificarse con `editorialOverride`.

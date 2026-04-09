@@ -1,4 +1,5 @@
 import type {
+  EditorialOverride,
   ExecutiveBriefItem,
   NewsItem,
   QuantPulseLinkType,
@@ -17,6 +18,14 @@ const allowedSourceTiers = new Set<QuantPulseSourceTier>(["primary", "tier_1", "
 const allowedLinkTypes = new Set<QuantPulseLinkType>(["article", "source-section", "source-home"]);
 const allowedSignalKinds = new Set<NewsItem["signalVsNoise"]>(["signal", "noise"]);
 const allowedWatchTypes = new Set<WatchItem["type"]>(["earnings", "regulation", "event", "market"]);
+const allowedOverrideFields = new Set<EditorialOverride["field"]>([
+  "priority",
+  "relevanceScore",
+  "signalVsNoise",
+  "section",
+  "category",
+  "scoreJustification.recency",
+]);
 const isoDateTimePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z$/;
 const watchDatePattern = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -129,6 +138,15 @@ function validateScoreJustification(value: unknown, context: string, path: strin
   };
 }
 
+function validateEditorialOverride(value: unknown, context: string, path: string): EditorialOverride {
+  const record = assertRecord(value, context, path);
+
+  return {
+    field: assertEnum(record.field, allowedOverrideFields, context, `${path}.field`),
+    reason: assertString(record.reason, context, `${path}.reason`),
+  };
+}
+
 function validateNewsItem(value: unknown, context: string, path: string): NewsItem {
   const record = assertRecord(value, context, path);
 
@@ -140,6 +158,7 @@ function validateNewsItem(value: unknown, context: string, path: string): NewsIt
     url: assertHttpUrl(record.url, context, `${path}.url`),
     linkType: assertEnum(record.linkType, allowedLinkTypes, context, `${path}.linkType`),
     publishedAt: assertIsoDateTime(record.publishedAt, context, `${path}.publishedAt`),
+    scoredAt: record.scoredAt === undefined ? undefined : assertIsoDateTime(record.scoredAt, context, `${path}.scoredAt`),
     category: assertString(record.category, context, `${path}.category`),
     section: assertEnum(record.section, allowedSections, context, `${path}.section`),
     summary: assertString(record.summary, context, `${path}.summary`),
@@ -151,7 +170,10 @@ function validateNewsItem(value: unknown, context: string, path: string): NewsIt
     relevanceScore: assertFiniteNumber(record.relevanceScore, context, `${path}.relevanceScore`),
     scoreJustification: validateScoreJustification(record.scoreJustification, context, `${path}.scoreJustification`),
     dedupeKey: assertString(record.dedupeKey, context, `${path}.dedupeKey`),
-    editorialOverride: record.editorialOverride as NewsItem["editorialOverride"],
+    editorialOverride:
+      record.editorialOverride === undefined
+        ? undefined
+        : validateEditorialOverride(record.editorialOverride, context, `${path}.editorialOverride`),
     imageUrl: record.imageUrl as NewsItem["imageUrl"],
     imageAlt: record.imageAlt as NewsItem["imageAlt"],
     imageSource: record.imageSource as NewsItem["imageSource"],

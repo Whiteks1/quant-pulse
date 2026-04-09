@@ -36,6 +36,7 @@ Definir el contrato canónico de una noticia procesada por Quant Pulse.
   "url": "https://www.bloomberg.com/crypto",
   "linkType": "source-section",
   "publishedAt": "2026-04-04T09:12:00Z",
+  "scoredAt": "2026-04-04T18:00:00Z",
   "section": "Crypto & Markets",
   "category": "ETFs",
   "summary": "Los ETF al contado de Bitcoin han vuelto a registrar entradas netas tras varias sesiones más débiles.",
@@ -93,6 +94,16 @@ Tipo de enlace:
 
 Fecha ISO 8601 en UTC.
 
+### scoredAt
+
+Fecha ISO 8601 en UTC del momento en que quedó fijado el bloque de recencia.
+
+Regla operativa:
+
+- es opcional mientras convive contenido histórico anterior a este contrato
+- si existe, no puede ser anterior a `publishedAt`
+- si existe, `scoreJustification.recency` pasa a ser validable de forma determinista contra la ventana `publishedAt -> scoredAt`
+
 ### section
 
 Valores permitidos:
@@ -143,6 +154,7 @@ Desglose editorial del score por bloques y una explicación corta del porqué.
 Regla operativa:
 
 - `sourceQuality` no debe exceder el máximo permitido por `sourceTier`
+- si existe `scoredAt`, `recency` debe coincidir con la ventana temporal documentada en `docs/scoring-system.es.md` salvo `editorialOverride`
 
 ### tags
 
@@ -160,7 +172,7 @@ Para la web estática, los ítems canónicos se agrupan en `public/data/pulse.js
 - `watchItems`: eventos con `id`, `title`, `date`, `section`, `category`, `type`, `source`, `url`, `description`, `whyWatch`
 - metadatos `version` / `updatedAt`
 
-Cada elemento de `items` debe cumplir los campos obligatorios de este documento, con `featured`, `imageUrl`, `imageAlt`, `imageSource` y `editorialOverride` como campos opcionales.
+Cada elemento de `items` debe cumplir los campos obligatorios de este documento, con `scoredAt`, `featured`, `imageUrl`, `imageAlt`, `imageSource` y `editorialOverride` como campos opcionales.
 
 Reglas operativas del bundle:
 
@@ -180,6 +192,7 @@ Además, el pipeline impone validaciones de integridad editorial sobre el bundle
 - referencias del `executiveBrief`
 - coherencia `section` / `category`
 - límites de `sourceQuality` por `sourceTier`
+- coherencia de `recency` cuando un item declara `scoredAt`
 - incompatibilidades fuertes entre `signalVsNoise`, `priority` y `relevanceScore` sin `editorialOverride`
 
 ## Reglas de estilo del contenido

@@ -176,4 +176,43 @@ describe("normalizePulseBundle contract checks", () => {
       result.errors.some((error) => error.includes("marked as noise cannot be P1 without editorialOverride"))
     ).toBe(true);
   });
+
+  it("allows historical items without scoredAt to keep manual recency", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].scoreJustification.recency = 15;
+
+    const result = normalizePulseBundle(bundle);
+    expect(result.errors.some((error) => error.includes("must match scoredAt/publishedAt window"))).toBe(false);
+  });
+
+  it("enforces recency deterministically when scoredAt exists", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].scoredAt = "2026-04-06T12:00:00Z";
+    bundle.items[0].scoreJustification.recency = 10;
+
+    const result = normalizePulseBundle(bundle);
+    expect(result.errors.some((error) => error.includes("must match scoredAt/publishedAt window (5)"))).toBe(true);
+  });
+
+  it("allows a recency mismatch when editorial override is declared", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].scoredAt = "2026-04-06T12:00:00Z";
+    bundle.items[0].scoreJustification.recency = 10;
+    bundle.items[0].editorialOverride = {
+      field: "scoreJustification.recency",
+      reason: "Editorially preserving urgency after overnight validation lag.",
+    };
+
+    const result = normalizePulseBundle(bundle);
+    expect(result.errors.some((error) => error.includes("must match scoredAt/publishedAt window"))).toBe(false);
+  });
+
+  it("rejects scoredAt earlier than publishedAt", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].scoredAt = "2026-04-04T23:00:00Z";
+    bundle.items[0].publishedAt = "2026-04-05T00:00:00Z";
+
+    const result = normalizePulseBundle(bundle);
+    expect(result.errors.some((error) => error.includes("scoredAt must be the same as or later than publishedAt"))).toBe(true);
+  });
 });
