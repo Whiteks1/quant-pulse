@@ -7,6 +7,7 @@ function jsonResponse(res, statusCode, payload) {
   res.writeHead(statusCode, {
     "Content-Type": "application/json; charset=utf-8",
     "Cache-Control": "no-store",
+    "Access-Control-Allow-Origin": "*",
   });
   res.end(`${JSON.stringify(payload, null, 2)}\n`);
 }
@@ -17,6 +18,7 @@ export function createLiveFeedServer() {
       res.writeHead(405, {
         Allow: "GET",
         "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Origin": "*",
       });
       res.end(
         `${JSON.stringify({ error: { code: "method_not_allowed", message: "Only GET is supported." } }, null, 2)}\n`
