@@ -15,9 +15,12 @@
 11. Let closing keywords close the issue when appropriate.
 12. Do not continue on a branch that already contains merged-equivalent commits plus unrelated WIP.
 13. If the repo docs or present-state contract reveal a smaller, safer, or more relevant slice than the one initially assumed, prefer that slice and explain the pivot.
-14. After merge, clean up the slice completely:
-    - delete the remote slice branch
-    - delete the local slice branch or remove the slice worktree
+14. After merge, clean up the slice pragmatically:
+    - delete the local slice branch when it no longer has pending work
+    - delete the remote slice branch when it does not need to be preserved
+    - do not delete branches with unmerged work
+    - do not delete another person's branch without explicit user confirmation or explicit team policy
+    - remove the local slice worktree when it is clean and no longer needed
     - fast-forward local `main` from `origin/main`
     - verify the workspace is clean
 15. After merge, report:
