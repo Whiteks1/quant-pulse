@@ -16,7 +16,11 @@ El archivo publicado que consume la web es:
 
 - `public/data/pulse.json`
 
-Ese archivo no debe editarse a mano salvo reparación puntual.
+El artefacto downstream publicado para QuantLab es:
+
+- `public/data/intents.json`
+
+Esos archivos publicados no deben editarse a mano salvo reparación puntual.
 
 ## Flujo de publicación
 
@@ -25,6 +29,7 @@ Ese archivo no debe editarse a mano salvo reparación puntual.
 3. ejecutar `npm run build:feed`
 4. revisar cambios en:
    - `public/data/pulse.json`
+   - `public/data/intents.json`
    - `public/data/archive/current.json`
    - `public/data/archive/index.json`
 5. ejecutar `npm test`
@@ -54,6 +59,8 @@ Si una edición debe quedar archivada como snapshot estático de Fase 1:
 
 Si `content/pulse.source.json` y `public/data/pulse.json` divergen, el repo está en estado inválido.
 
+Si `public/data/intents.json` no refleja la misma edición fuente y el mismo bundle editorial normalizado, el repo también está en estado inválido.
+
 El comando:
 
 - `npm run check:feed`
@@ -64,6 +71,15 @@ Además, el manifiesto de archivo estático en `public/data/archive/` debe queda
 
 - la edición actual
 - los snapshots congelados en `content/archive/editions/`
+
+Y el artefacto:
+
+- `public/data/intents.json`
+
+debe quedar sincronizado con:
+
+- la edición actual de `content/pulse.source.json`
+- el bundle normalizado que produce `public/data/pulse.json`
 
 ## Alcance de esta fase
 
@@ -80,4 +96,5 @@ Solo hay:
 - script de build
 - manifiesto de archivo estático
 - feed publicado estático
+- artefacto estático de intents para handoff downstream
 - frontend en GitHub Pages
