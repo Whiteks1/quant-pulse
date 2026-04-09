@@ -1,4 +1,5 @@
 import type { PulseBundle } from "./loadPulseData";
+import { editionSlugFromPath, fetchArtifactWithStaticFallback } from "./liveFeedAdapter";
 import { validateArchiveIndex, validatePulseBundle } from "./runtimeFeedValidation";
 
 export interface ArchiveEditionSummary {
@@ -19,26 +20,22 @@ export interface ArchiveIndex {
   editions: ArchiveEditionSummary[];
 }
 
-function archiveUrl(relativePath: string): string {
-  const base = import.meta.env.BASE_URL;
-  const normalizedBase = base.endsWith("/") ? base : `${base}/`;
-  const normalizedPath = relativePath.startsWith("/") ? relativePath.slice(1) : relativePath;
-  return `${normalizedBase}${normalizedPath}`;
-}
-
-async function fetchJson<T>(relativePath: string): Promise<T> {
-  const response = await fetch(archiveUrl(relativePath), { cache: "no-store" });
-  if (!response.ok) {
-    throw new Error(`Failed to load ${relativePath}: ${response.status} ${response.statusText}`);
-  }
-
-  return (await response.json()) as T;
-}
-
 export async function fetchArchiveIndex(): Promise<ArchiveIndex> {
-  return validateArchiveIndex(await fetchJson<ArchiveIndex>("data/archive/index.json"), "archive index");
+  return fetchArtifactWithStaticFallback({
+    livePath: "/v1/archive/index",
+    staticPath: "data/archive/index.json",
+    liveLabel: "live archive index endpoint",
+    staticLabel: "archive index",
+    validate: validateArchiveIndex,
+  });
 }
 
 export async function fetchArchiveEdition(relativePath: string): Promise<PulseBundle> {
-  return validatePulseBundle(await fetchJson<PulseBundle>(relativePath), `archive edition (${relativePath})`);
+  return fetchArtifactWithStaticFallback({
+    livePath: `/v1/archive/editions/${encodeURIComponent(editionSlugFromPath(relativePath))}`,
+    staticPath: relativePath,
+    liveLabel: `live archive edition (${relativePath})`,
+    staticLabel: `archive edition (${relativePath})`,
+    validate: validatePulseBundle,
+  });
 }

@@ -1,4 +1,5 @@
 import type { ExecutiveBriefItem, NewsItem, WatchItem } from "./mockNews";
+import { fetchArtifactWithStaticFallback } from "./liveFeedAdapter";
 import { validatePulseBundle } from "./runtimeFeedValidation";
 
 export interface PulseBundle {
@@ -9,16 +10,12 @@ export interface PulseBundle {
   watchItems: WatchItem[];
 }
 
-function pulseUrl(): string {
-  const base = import.meta.env.BASE_URL;
-  return `${base}data/pulse.json`;
-}
-
 export async function fetchPulseData(): Promise<PulseBundle> {
-  const res = await fetch(pulseUrl(), { cache: "no-store" });
-  if (!res.ok) {
-    throw new Error(`Failed to load pulse data: ${res.status} ${res.statusText}`);
-  }
-
-  return validatePulseBundle(await res.json(), "pulse.json");
+  return fetchArtifactWithStaticFallback({
+    livePath: "/v1/pulse/current",
+    staticPath: "data/pulse.json",
+    liveLabel: "live pulse endpoint",
+    staticLabel: "pulse.json",
+    validate: validatePulseBundle,
+  });
 }
