@@ -38,6 +38,10 @@ Ver [`AGENTS.md`](AGENTS.md), [`docs/quantlab-upstream-contract.es.md`](docs/qua
 
 La guía de marca pública vive en [`docs/brand-guidelines.md`](docs/brand-guidelines.md).
 
+## Licencia
+
+Este repositorio se distribuye bajo [`Apache-2.0`](LICENSE).
+
 ## Workflow del repositorio
 
 Regla obligatoria para trabajo asistido por Cursor/Codex:
