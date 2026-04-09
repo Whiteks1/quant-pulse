@@ -11,6 +11,7 @@
     "check:feed": "node scripts/build-feed.mjs --check",
     "lint": "eslint .",
     "preview": "vite preview",
+    "serve:api": "node scripts/live-feed-server.mjs",
     "snapshot:edition": "node scripts/snapshot-edition.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
