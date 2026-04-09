@@ -4,11 +4,11 @@
 
 Definir el slice mínimo de contrato necesario para pasar de un feed estático publicado en `public/data/` a una frontera backend viva, sin ampliar Quant Pulse hacia ejecución, lógica downstream de QuantLab ni automatización prematura de ingestión.
 
-Este documento define **target state de Fase 2**, no comportamiento ya implementado. La autoridad presente sigue siendo el runtime actual de Fase 1 y sus artefactos publicados.
+Este documento definió el **target state mínimo de Fase 2** y hoy también describe el baseline ya implementado en `main`. La autoridad presente sigue siendo el runtime actual del repo y sus artefactos publicados.
 
 ## Principio rector
 
-La API de Fase 2 debe sustituir la dependencia directa del frontend sobre JSON editado/publicado en el repo, pero **sin cambiar todavía la forma canónica de los bundles** que la app ya consume.
+La API de Fase 2 debe sustituir la dependencia directa del frontend sobre JSON editado/publicado en el repo, pero **sin cambiar la forma canónica de los bundles** que la app ya consume.
 
 La transición correcta es:
 
@@ -25,7 +25,7 @@ La transición correcta es:
 
 ## Endpoints mínimos
 
-La API mínima de Fase 2 debe empezar con **tres endpoints GET**:
+La API mínima de Fase 2 **empieza** con **tres endpoints GET**:
 
 ### 1. `GET /v1/pulse/current`
 
@@ -85,7 +85,7 @@ Aunque exista backend mínimo, este slice **no obliga** a retirar inmediatamente
 - `public/data/pulse.json`
 - `public/data/archive/`
 
-Durante la transición inicial:
+Durante la transición actual:
 
 - el backend puede seguir ensamblando datos desde la misma fuente editorial reproducible
 - los artefactos estáticos publicados pueden mantenerse como fallback operativo
@@ -163,6 +163,18 @@ Motivo:
 
 Todo eso puede llegar después, pero no es necesario para cruzar la frontera mínima de Fase 2 sin romper el contrato presente.
 
+## Estado actual del baseline
+
+En `main`, este baseline mínimo ya incluye:
+
+- servicio HTTP mínimo para los tres endpoints
+- ensamblaje y validación centralizados en backend
+- persistencia local del archive bajo `content/archive/editions/`
+- adaptador frontend con fallback estático explícito
+- smoke/E2E de modo API
+
+El siguiente trabajo sobre esta frontera ya no es "crear la API mínima", sino decidir si merece ampliarse y en qué dirección sin romper el boundary Quant Pulse -> QuantLab.
+
 ## Secuencia correcta de implementación
 
 1. definir este contrato mínimo
@@ -171,6 +183,7 @@ Todo eso puede llegar después, pero no es necesario para cruzar la frontera mí
 4. persistir archive fuera de edición manual directa de `public/data/`
 5. añadir adaptador frontend con fallback estático explícito
 6. validar con E2E/smoke tests en modo API
+7. solo después evaluar si hacen falta nuevos endpoints o capacidades vivas
 
 ## Regla final
 
