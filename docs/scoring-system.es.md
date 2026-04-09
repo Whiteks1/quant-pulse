@@ -116,7 +116,11 @@ En el runtime actual, `sourceQuality` se interpreta así:
 
 Para estos tiers explícitos, el valor ya es determinista y no solo un máximo.
 
-`unlisted` sigue en modo cap-only mientras no exista una clasificación canónica más fina para esas fuentes.
+`unlisted` ya no queda totalmente libre:
+
+- sin `editorialOverride`, `sourceQuality` debe quedarse en `0–3`
+- si editorialmente se quiere puntuar por encima de `3`, debe declararse `editorialOverride` sobre `scoreJustification.sourceQuality`
+- esto no convierte `unlisted` en un tier determinista; solo fija un baseline prudente para fuentes no clasificadas
 
 Si editorialmente se necesita romper esa regla en un tier explícito, debe quedar documentado con `editorialOverride` sobre `scoreJustification.sourceQuality`.
 
