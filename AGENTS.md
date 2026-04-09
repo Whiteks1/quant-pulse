@@ -53,7 +53,9 @@ Quant Pulse
 - Use `.agents/scripts/start-slice.ps1 -IssueNumber <n> -Slug <short-name>` when you need a fresh branch and isolated worktree from `origin/main`.
 - Use `.agents/scripts/cleanup-slice.ps1 -WorktreePath <path>` after merge when you want to remove a clean local slice worktree that is already merged into `origin/main`.
 - For non-trivial work with a real diff, do not ask whether to create the GitHub workflow steps one by one. Execute the full slice workflow by default unless the user explicitly asks not to.
+- Do not force the full issue and PR workflow for preflight, review-only, exploratory, or no-diff conclusions. In those cases, report the finding clearly and only open an issue when it adds real backlog value.
 - Use the full repository workflow for non-trivial work: `issue -> branch -> code -> validate -> commit -> push -> PR -> merge -> close issue`.
+- If a better next slice is discovered while following the docs and present-state repo contract, the agent may pivot to that smaller or more relevant slice and explain the decision.
 - Treat the workflow as incomplete until the slice branch is cleaned locally and remotely and `main` is synced back to `origin/main`.
 - Start each slice from `origin/main`, not from a dirty feature branch.
 - If the current worktree is dirty, prefer an isolated `git worktree` for the new slice instead of mixing changes.
