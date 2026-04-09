@@ -6,6 +6,10 @@ Este documento define el formato canónico de los `research intents` que cruzan 
 
 Quant Pulse sigue produciendo su feed editorial humano en `public/data/pulse.json`, pero solo los items que cruzan el umbral de señal se convierten en intents para QuantLab.
 
+En Fase 1, esos intents se publican como artefacto estático adicional en:
+
+- `public/data/intents.json`
+
 ## Flujo exacto
 
 ```mermaid
@@ -41,13 +45,39 @@ QuantLab Research decide si ese intent merece:
 
 Si no merece una de esas tres salidas, no cruza la frontera.
 
-## Schema canónico
+## Schemas canónicos
 
-El schema machine-readable vive en:
+El contrato machine-readable vive en:
 
 - `config/research-intent.schema.json`
+- `config/research-intents-document.schema.json`
 
-Ese schema valida el payload de handoff que Quant Pulse prepara para QuantLab.
+Responsabilidad de cada schema:
+
+- `config/research-intent.schema.json`: valida cada intent individual de handoff.
+- `config/research-intents-document.schema.json`: valida el documento contenedor publicado en `public/data/intents.json`.
+
+El artefacto publicado mantiene así dos niveles de contrato:
+
+- wrapper estable del documento
+- payload estable por intent
+
+## Documento publicado
+
+El documento publicado en `public/data/intents.json` debe incluir:
+
+- `generatedAt`
+- `editionId`
+- `sourceVersion`
+- `sourceUpdatedAt`
+- `intentCount`
+- `intents`
+
+Reglas mínimas del documento:
+
+- `intentCount` debe coincidir con `intents.length`
+- `intents` debe existir incluso cuando no haya intents elegibles
+- el documento debe seguir siendo determinista para una misma edición fuente
 
 ## Estructura del intent
 

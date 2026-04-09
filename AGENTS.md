@@ -23,9 +23,11 @@ Quant Pulse
 - config/approved-sources.yaml
 - config/news.schema.json
 - config/research-intent.schema.json
+- config/research-intents-document.schema.json
 - content/pulse.source.json (fuente editorial de Fase 1)
 - public/data/pulse.json (feed estático servido en Pages; debe salir del pipeline)
-- npm run validate:feed (comprobación mínima de consistencia editorial y de contrato)
+- public/data/intents.json (artefacto downstream estático publicado por el pipeline)
+- npm run validate:feed (comprobación mínima de consistencia editorial y de contrato para feed, archive e intents)
 
 ## Rules
 
