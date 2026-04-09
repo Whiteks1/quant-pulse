@@ -2,6 +2,10 @@ import { describe, expect, it } from "vitest";
 import { normalizePulseBundle, readSourceBundle } from "../../scripts/pulse-feed.mjs";
 import { buildResearchIntentsArtifact } from "../../scripts/research-intents.mjs";
 
+function expectedEditionId(bundle: { updatedAt: string; version: number }) {
+  return `${bundle.updatedAt.slice(0, 10)}_v${bundle.version}`;
+}
+
 describe("research intents artifact", () => {
   it("builds a deterministic wrapper for the current editorial feed", () => {
     const { bundle, errors } = normalizePulseBundle(readSourceBundle());
@@ -15,7 +19,7 @@ describe("research intents artifact", () => {
     expect(firstBuild.content).toBe(secondBuild.content);
     expect(firstBuild.document.generatedAt).toBe(bundle.updatedAt);
     expect(firstBuild.document.sourceVersion).toBe(bundle.version);
-    expect(firstBuild.document.editionId).toBe("2026-04-05_v2");
+    expect(firstBuild.document.editionId).toBe(expectedEditionId(bundle));
     expect(firstBuild.document.sourceUpdatedAt).toBe(bundle.updatedAt);
   });
 
@@ -50,7 +54,7 @@ describe("research intents artifact", () => {
     const artifact = buildResearchIntentsArtifact(emptyBundle);
 
     expect(artifact.errors).toEqual([]);
-    expect(artifact.document.editionId).toBe("2026-04-05_v2");
+    expect(artifact.document.editionId).toBe(expectedEditionId(emptyBundle));
     expect(artifact.document.intentCount).toBe(0);
     expect(artifact.document.intents).toEqual([]);
   });
