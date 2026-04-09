@@ -57,6 +57,7 @@ Quant Pulse
 - Use the full repository workflow for non-trivial work: `issue -> branch -> code -> validate -> commit -> push -> PR -> merge -> close issue`.
 - If a better next slice is discovered while following the docs and present-state repo contract, the agent may pivot to that smaller or more relevant slice and explain the decision.
 - Treat the workflow as incomplete until the slice branch is cleaned locally and remotely and `main` is synced back to `origin/main`.
+- Clean up merged slice branches pragmatically: delete the local branch when it no longer has pending work, delete the remote branch when it does not need to be preserved, and do not delete branches with unmerged work or branches owned by someone else without confirmation or explicit team policy.
 - Start each slice from `origin/main`, not from a dirty feature branch.
 - If the current worktree is dirty, prefer an isolated `git worktree` for the new slice instead of mixing changes.
 - Keep each commit limited to one logical slice.
