@@ -3,6 +3,7 @@ import path from "node:path";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 import { listPersistedArchiveEditions } from "./archive-store.mjs";
+import { expectedRecencyScore, hasEditorialOverride } from "./scoring-model.mjs";
 
 export const rootDir = process.cwd();
 export const sourcePath = path.join(rootDir, "content", "pulse.source.json");
@@ -205,6 +206,21 @@ export function normalizePulseBundle(bundle) {
     assert(isHttpUrl(item.url), `Item ${item.id} must have a real HTTP URL`, errors);
     assert(!item.url.includes("example.com"), `Item ${item.id} cannot use example.com`, errors);
     assert(item.scoreJustification && typeof item.scoreJustification === "object", `Item ${item.id} must include scoreJustification`, errors);
+    if (typeof item.scoredAt === "string") {
+      assert(
+        isIsoDateTime(item.scoredAt),
+        `Item ${item.id} scoredAt must be a valid ISO date-time in UTC`,
+        errors
+      );
+
+      if (isIsoDateTime(item.scoredAt) && isIsoDateTime(item.publishedAt)) {
+        assert(
+          Date.parse(item.scoredAt) >= Date.parse(item.publishedAt),
+          `Item ${item.id} scoredAt must be the same as or later than publishedAt`,
+          errors
+        );
+      }
+    }
     assert(
       typeof item.section === "string" &&
         typeof item.category === "string" &&
@@ -214,6 +230,15 @@ export function normalizePulseBundle(bundle) {
     );
 
     if (item.scoreJustification && typeof item.scoreJustification === "object") {
+      const expectedRecency = expectedRecencyScore(item);
+      if (expectedRecency !== null && !hasEditorialOverride(item, "scoreJustification.recency")) {
+        assert(
+          item.scoreJustification.recency === expectedRecency,
+          `Item ${item.id} recency (${item.scoreJustification.recency}) must match scoredAt/publishedAt window (${expectedRecency}) or declare editorialOverride`,
+          errors
+        );
+      }
+
       const sourceQualityCap = sourceQualityCapsByTier.get(item.sourceTier);
       if (typeof sourceQualityCap === "number") {
         assert(

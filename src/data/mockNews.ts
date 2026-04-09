@@ -14,7 +14,7 @@ export interface ScoreJustification {
 }
 
 export interface EditorialOverride {
-  field: "priority" | "relevanceScore" | "signalVsNoise" | "section" | "category";
+  field: "priority" | "relevanceScore" | "signalVsNoise" | "section" | "category" | "scoreJustification.recency";
   reason: string;
 }
 
@@ -27,6 +27,8 @@ export interface NewsItem {
   linkType: QuantPulseLinkType;
   /** ISO 8601 UTC (canónico) */
   publishedAt: string;
+  /** ISO 8601 UTC del momento en que se fijó el bloque de recencia; opcional mientras convive contenido histórico */
+  scoredAt?: string;
   category: string;
   section: QuantPulseSection;
   summary: string;

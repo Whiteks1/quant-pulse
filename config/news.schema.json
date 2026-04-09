@@ -46,6 +46,11 @@
       "format": "date-time",
       "description": "ISO 8601 en UTC"
     },
+    "scoredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Marca temporal ISO 8601 UTC del momento en que se fijó el bloque de recencia"
+    },
     "section": {
       "type": "string",
       "enum": ["Technology", "Crypto & Markets", "Macro"]
@@ -93,7 +98,7 @@
       "properties": {
         "field": {
           "type": "string",
-          "enum": ["priority", "relevanceScore", "signalVsNoise", "section", "category"]
+          "enum": ["priority", "relevanceScore", "signalVsNoise", "section", "category", "scoreJustification.recency"]
         },
         "reason": { "type": "string", "minLength": 1 }
       }
