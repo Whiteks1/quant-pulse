@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "updatedAt": "2026-04-05T00:10:00Z",
+  "version": 3,
+  "updatedAt": "2026-04-09T12:00:00Z",
   "items": [
     {
       "id": "2026-04-04_btc-etf-inflows_bloomberg",
@@ -417,6 +417,11 @@
       "id": "brief-5",
       "itemId": "2026-04-03_nvidia-datacenter_nvidia",
       "text": "NVIDIA's datacenter results remain one of the clearest direct reads on durable AI infrastructure demand."
+    },
+    {
+      "id": "brief-6",
+      "itemId": "2026-04-04_fed-guidance_federalreserve",
+      "text": "The immediate focus shifts from signal detection to validation: rates, ETF flows and post-upgrade activity now matter as confirmation or rejection of the current narrative."
     }
   ],
   "watchItems": [
@@ -433,18 +438,6 @@
       "whyWatch": "A hawkish or dovish surprise would reprice both tech multiples and crypto risk appetite."
     },
     {
-      "id": "w2",
-      "title": "Apple WWDC 2026",
-      "date": "2026-04-14",
-      "section": "Technology",
-      "category": "Big Tech",
-      "type": "event",
-      "source": "Apple",
-      "url": "https://www.apple.com/newsroom/",
-      "description": "Apple is expected to frame its next wave of device-level AI capabilities.",
-      "whyWatch": "This will test whether Apple's AI strategy is incremental branding or a real platform move."
-    },
-    {
       "id": "w3",
       "title": "SEC Crypto Roundtable",
       "date": "2026-04-11",
@@ -457,18 +450,6 @@
       "whyWatch": "Any change in regulatory tone could alter exchange, ETF and token-listing narratives."
     },
     {
-      "id": "w4",
-      "title": "Alphabet Q1 2026 Earnings",
-      "date": "2026-04-15",
-      "section": "Technology",
-      "category": "Big Tech",
-      "type": "earnings",
-      "source": "Alphabet Investor Relations",
-      "url": "https://abc.xyz/investor/",
-      "description": "The market will focus on AI monetization, cloud margins and capex commentary.",
-      "whyWatch": "This is a direct test of whether AI enthusiasm is converting into durable financial performance."
-    },
-    {
       "id": "w5",
       "title": "U.S. CPI Release",
       "date": "2026-04-10",
@@ -479,6 +460,30 @@
       "url": "https://www.bls.gov/",
       "description": "Inflation data will shape the market's rate-path assumptions for the next Fed meetings.",
       "whyWatch": "A hot print would reinforce higher-for-longer pressure across growth and speculative assets."
+    },
+    {
+      "id": "w6",
+      "title": "Bitcoin ETF flow follow-through",
+      "date": "2026-04-10",
+      "section": "Crypto & Markets",
+      "category": "ETFs",
+      "type": "market",
+      "source": "Bloomberg",
+      "url": "https://www.bloomberg.com/crypto",
+      "description": "The next ETF flow window will test whether the BTC inflow reversal was a one-off print or the start of a more durable demand improvement.",
+      "whyWatch": "If inflows continue, the institutional-demand narrative strengthens; if they reverse immediately, the signal loses force."
+    },
+    {
+      "id": "w7",
+      "title": "Ethereum post-Pectra activity check",
+      "date": "2026-04-12",
+      "section": "Crypto & Markets",
+      "category": "ETH",
+      "type": "market",
+      "source": "Ethereum Foundation",
+      "url": "https://blog.ethereum.org/",
+      "description": "The real validation of the upgrade is not the launch itself, but whether it improves activity, usage and competitiveness in the days that follow.",
+      "whyWatch": "If there is no follow-through in fees, activity or competitive narrative, the upgrade weakens as a downstream signal."
     }
   ]
 }
