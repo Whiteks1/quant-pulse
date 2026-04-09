@@ -45,6 +45,38 @@ function assert(condition, message, errors) {
   if (!condition) errors.push(message);
 }
 
+function formatOverrideHint(field) {
+  return `Fix: align the value or declare editorialOverride.field=${field}.`;
+}
+
+function formatDeterministicDriftMessage({
+  itemId,
+  metric,
+  actual,
+  expected,
+  basis,
+  overrideField,
+}) {
+  return `Item ${itemId} ${metric} drift: expected ${expected}, found ${actual} (${basis}). ${formatOverrideHint(overrideField)}`;
+}
+
+function formatBandMismatchMessage({
+  itemId,
+  actualPriority,
+  expectedPriority,
+  score,
+}) {
+  return `Item ${itemId} priority drift: expected ${expectedPriority}, found ${actualPriority} (score band from relevanceScore=${score}). ${formatOverrideHint("priority")}`;
+}
+
+function formatScoreTotalMismatchMessage({
+  itemId,
+  actualScore,
+  expectedScore,
+}) {
+  return `Item ${itemId} relevanceScore drift: expected ${expectedScore}, found ${actualScore} (sum of scoreJustification blocks). ${formatOverrideHint("relevanceScore")}`;
+}
+
 function isHttpUrl(value) {
   try {
     const url = new URL(value);
@@ -234,7 +266,14 @@ export function normalizePulseBundle(bundle) {
       if (expectedRecency !== null && !hasEditorialOverride(item, "scoreJustification.recency")) {
         assert(
           item.scoreJustification.recency === expectedRecency,
-          `Item ${item.id} recency (${item.scoreJustification.recency}) must match scoredAt/publishedAt window (${expectedRecency}) or declare editorialOverride`,
+          formatDeterministicDriftMessage({
+            itemId: item.id,
+            metric: "recency",
+            actual: item.scoreJustification.recency,
+            expected: expectedRecency,
+            basis: "scoredAt/publishedAt window",
+            overrideField: "scoreJustification.recency",
+          }),
           errors
         );
       }
@@ -252,7 +291,14 @@ export function normalizePulseBundle(bundle) {
       if (expectedSourceQuality !== null && !hasEditorialOverride(item, "scoreJustification.sourceQuality")) {
         assert(
           item.scoreJustification.sourceQuality === expectedSourceQuality,
-          `Item ${item.id} sourceQuality (${item.scoreJustification.sourceQuality}) must match the deterministic value for sourceTier (${item.sourceTier} -> ${expectedSourceQuality}) or declare editorialOverride`,
+          formatDeterministicDriftMessage({
+            itemId: item.id,
+            metric: "sourceQuality",
+            actual: item.scoreJustification.sourceQuality,
+            expected: expectedSourceQuality,
+            basis: `sourceTier ${item.sourceTier}`,
+            overrideField: "scoreJustification.sourceQuality",
+          }),
           errors
         );
       }
@@ -268,16 +314,26 @@ export function normalizePulseBundle(bundle) {
       if (!item.editorialOverride || item.editorialOverride.field !== "relevanceScore") {
         assert(
           score === item.relevanceScore,
-          `Item ${item.id} scoreJustification total (${score}) must match relevanceScore (${item.relevanceScore}) or declare editorialOverride`,
+          formatScoreTotalMismatchMessage({
+            itemId: item.id,
+            actualScore: item.relevanceScore,
+            expectedScore: score,
+          }),
           errors
         );
       }
     }
 
     if (!item.editorialOverride || item.editorialOverride.field !== "priority") {
+      const expectedPriority = scoreBand(item.relevanceScore);
       assert(
-        scoreBand(item.relevanceScore) === item.priority,
-        `Item ${item.id} priority (${item.priority}) must match score band (${scoreBand(item.relevanceScore)}) or declare editorialOverride`,
+        expectedPriority === item.priority,
+        formatBandMismatchMessage({
+          itemId: item.id,
+          actualPriority: item.priority,
+          expectedPriority,
+          score: item.relevanceScore,
+        }),
         errors
       );
     }

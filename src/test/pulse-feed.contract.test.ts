@@ -179,8 +179,11 @@ describe("normalizePulseBundle contract checks", () => {
     const result = normalizePulseBundle(bundle);
     expect(
       result.errors.some((error) =>
-        error.includes("sourceQuality (10) must match the deterministic value for sourceTier (tier_1 -> 12)")
+        error.includes("sourceQuality drift: expected 12, found 10 (sourceTier tier_1)")
       )
+    ).toBe(true);
+    expect(
+      result.errors.some((error) => error.includes("editorialOverride.field=scoreJustification.sourceQuality"))
     ).toBe(true);
   });
 
@@ -239,7 +242,12 @@ describe("normalizePulseBundle contract checks", () => {
     bundle.items[0].scoreJustification.recency = 10;
 
     const result = normalizePulseBundle(bundle);
-    expect(result.errors.some((error) => error.includes("must match scoredAt/publishedAt window (5)"))).toBe(true);
+    expect(
+      result.errors.some((error) => error.includes("recency drift: expected 5, found 10 (scoredAt/publishedAt window)"))
+    ).toBe(true);
+    expect(
+      result.errors.some((error) => error.includes("editorialOverride.field=scoreJustification.recency"))
+    ).toBe(true);
   });
 
   it("allows a recency mismatch when editorial override is declared", () => {
@@ -253,6 +261,32 @@ describe("normalizePulseBundle contract checks", () => {
 
     const result = normalizePulseBundle(bundle);
     expect(result.errors.some((error) => error.includes("must match scoredAt/publishedAt window"))).toBe(false);
+  });
+
+  it("reports score total drift with an actionable override hint", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].relevanceScore = 68;
+
+    const result = normalizePulseBundle(bundle);
+    expect(
+      result.errors.some((error) =>
+        error.includes("relevanceScore drift: expected 70, found 68 (sum of scoreJustification blocks)")
+      )
+    ).toBe(true);
+    expect(result.errors.some((error) => error.includes("editorialOverride.field=relevanceScore"))).toBe(true);
+  });
+
+  it("reports priority drift with the expected band", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].priority = "P2";
+
+    const result = normalizePulseBundle(bundle);
+    expect(
+      result.errors.some((error) =>
+        error.includes("priority drift: expected P1, found P2 (score band from relevanceScore=70)")
+      )
+    ).toBe(true);
+    expect(result.errors.some((error) => error.includes("editorialOverride.field=priority"))).toBe(true);
   });
 
   it("rejects scoredAt earlier than publishedAt", () => {
