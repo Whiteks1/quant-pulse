@@ -32,6 +32,7 @@ Esos archivos publicados no deben editarse a mano salvo reparación puntual.
    - `public/data/intents.json`
    - `public/data/archive/current.json`
    - `public/data/archive/index.json`
+   - `public/data/archive/deltas/`
 5. ejecutar `npm test`
 6. ejecutar `npm run build`
 7. commit y push
@@ -53,7 +54,8 @@ Si una edición debe quedar archivada como snapshot estático de Fase 1:
 2. ejecutar `npm run snapshot:edition`
 3. ejecutar `npm run build:feed`
 4. revisar `public/data/archive/editions/`
-5. commit y push
+5. revisar `public/data/archive/deltas/`
+6. commit y push
 
 ## Regla operativa
 
@@ -71,6 +73,7 @@ Además, el manifiesto de archivo estático en `public/data/archive/` debe queda
 
 - la edición actual
 - los snapshots congelados en `content/archive/editions/`
+- los artefactos delta publicados en `public/data/archive/deltas/`
 
 Y el artefacto:
 
@@ -95,6 +98,7 @@ Solo hay:
 - fuente editorial
 - script de build
 - manifiesto de archivo estático
+- artefactos delta de seguimiento entre snapshots reales
 - feed publicado estático
 - artefacto estático de intents para handoff downstream
 - frontend en GitHub Pages

@@ -1,0 +1,75 @@
+{
+  "generatedAt": "2026-04-09T12:00:00Z",
+  "edition": {
+    "slug": "2026-04-09_v3",
+    "label": "2026-04-09 · v3",
+    "updatedAt": "2026-04-09T12:00:00Z",
+    "version": 3,
+    "path": "data/archive/editions/2026-04-09_v3.json"
+  },
+  "baseline": {
+    "slug": "2026-04-05_v2",
+    "label": "2026-04-05 · v2",
+    "updatedAt": "2026-04-05T00:10:00Z",
+    "version": 2,
+    "path": "data/archive/editions/2026-04-05_v2.json"
+  },
+  "summary": {
+    "totals": {
+      "current": 13,
+      "previous": 13,
+      "delta": 0
+    },
+    "signals": {
+      "current": 9,
+      "previous": 9,
+      "delta": 0
+    },
+    "p1": {
+      "current": 5,
+      "previous": 5,
+      "delta": 0
+    },
+    "storyChanges": {
+      "added": 0,
+      "removed": 0,
+      "priorityRaised": 0,
+      "priorityLowered": 0
+    },
+    "executiveBriefChanges": {
+      "added": 1,
+      "removed": 0
+    },
+    "watchChanges": {
+      "added": 2,
+      "removed": 2
+    }
+  },
+  "hasMaterialChanges": true,
+  "highlights": [
+    {
+      "id": "brief-added:brief-6",
+      "kind": "brief-added",
+      "label": "New brief angle",
+      "title": "The immediate focus shifts from signal detection to validation: rates, ETF flows and post-upgrade activity now matter as confirmation or rejection of the current narrative.",
+      "detail": "Linked item: 2026-04-04_fed-guidance_federalreserve",
+      "meta": "Executive brief"
+    },
+    {
+      "id": "watch-added:w6",
+      "kind": "watch-added",
+      "label": "New watch item",
+      "title": "Bitcoin ETF flow follow-through",
+      "detail": "If inflows continue, the institutional-demand narrative strengthens; if they reverse immediately, the signal loses force.",
+      "meta": "Crypto & Markets • ETFs"
+    },
+    {
+      "id": "watch-removed:w4",
+      "kind": "watch-removed",
+      "label": "Watch item removed",
+      "title": "Alphabet Q1 2026 Earnings",
+      "detail": "This is a direct test of whether AI enthusiasm is converting into durable financial performance.",
+      "meta": "Technology • Big Tech"
+    }
+  ]
+}

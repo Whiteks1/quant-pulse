@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-04-09T12:00:00Z",
+  "deltas": [
+    {
+      "editionSlug": "2026-04-09_v3",
+      "baselineSlug": "2026-04-05_v2",
+      "updatedAt": "2026-04-09T12:00:00Z",
+      "path": "data/archive/deltas/2026-04-09_v3.json",
+      "hasMaterialChanges": true,
+      "highlightCount": 3,
+      "storyChanges": {
+        "added": 0,
+        "removed": 0,
+        "priorityRaised": 0,
+        "priorityLowered": 0
+      },
+      "executiveBriefChanges": {
+        "added": 1,
+        "removed": 0
+      },
+      "watchChanges": {
+        "added": 2,
+        "removed": 2
+      }
+    }
+  ]
+}

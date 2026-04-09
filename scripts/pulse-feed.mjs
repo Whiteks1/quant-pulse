@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
+import { buildArchiveDeltaArtifacts } from "./archive-deltas.mjs";
 import { listPersistedArchiveEditions } from "./archive-store.mjs";
 import { expectedRecencyScore, expectedSourceQualityScore, hasEditorialOverride } from "./scoring-model.mjs";
 
@@ -13,6 +14,8 @@ export const archiveOutputDir = path.join(rootDir, "public", "data", "archive");
 export const archiveCurrentOutputPath = path.join(archiveOutputDir, "current.json");
 export const archiveIndexOutputPath = path.join(archiveOutputDir, "index.json");
 export const archiveEditionOutputDir = path.join(archiveOutputDir, "editions");
+export const archiveDeltaOutputDir = path.join(archiveOutputDir, "deltas");
+export const archiveDeltaIndexOutputPath = path.join(archiveDeltaOutputDir, "index.json");
 export const newsItemSchemaPath = path.join(rootDir, "config", "news.schema.json");
 
 const watchDatePattern = /^\d{4}-\d{2}-\d{2}$/;
@@ -487,6 +490,7 @@ function formatArchiveEditionLabel(slug) {
 export function buildArchiveArtifacts(currentBundle) {
   const errors = [];
   const archiveEditionFiles = [];
+  const archiveDeltaFiles = [];
   const archiveIndexItems = [
     buildEditionIndexItem({
       slug: "current",
@@ -496,6 +500,7 @@ export function buildArchiveArtifacts(currentBundle) {
       isCurrent: true,
     }),
   ];
+  const persistedEditionEntries = [];
 
   for (const entry of listPersistedArchiveEditions()) {
     const { errors: entryErrors, bundle } = normalizePulseBundle(entry.bundle);
@@ -508,20 +513,36 @@ export function buildArchiveArtifacts(currentBundle) {
       continue;
     }
 
+    const editionIndexItem = buildEditionIndexItem({
+      slug: entry.slug,
+      label: formatArchiveEditionLabel(entry.slug),
+      bundle,
+      relativePath: path.join("data", "archive", "editions", `${entry.slug}.json`),
+    });
+
     archiveEditionFiles.push({
       slug: entry.slug,
       outputPath: path.join(archiveEditionOutputDir, `${entry.slug}.json`),
       content: serializePulseBundle(bundle),
     });
 
-    archiveIndexItems.push(
-      buildEditionIndexItem({
-        slug: entry.slug,
-        label: formatArchiveEditionLabel(entry.slug),
-        bundle,
-        relativePath: path.join("data", "archive", "editions", `${entry.slug}.json`),
-      })
-    );
+    archiveIndexItems.push(editionIndexItem);
+    persistedEditionEntries.push({
+      ...editionIndexItem,
+      bundle,
+    });
+  }
+
+  const archiveDeltaArtifacts = buildArchiveDeltaArtifacts(persistedEditionEntries, {
+    generatedAt: currentBundle.updatedAt,
+  });
+
+  for (const delta of archiveDeltaArtifacts.deltaArtifacts) {
+    archiveDeltaFiles.push({
+      slug: delta.editionSlug,
+      outputPath: path.join(archiveDeltaOutputDir, `${delta.editionSlug}.json`),
+      content: serializeJson(delta.artifact),
+    });
   }
 
   archiveIndexItems.sort((a, b) => {
@@ -544,6 +565,8 @@ export function buildArchiveArtifacts(currentBundle) {
       currentEditionSlug: "current",
       editions: archiveIndexItems,
     }),
+    deltaIndexContent: serializeJson(archiveDeltaArtifacts.deltaIndex),
     archiveEditionFiles,
+    archiveDeltaFiles,
   };
 }
