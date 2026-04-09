@@ -255,6 +255,65 @@ describe("normalizePulseBundle contract checks", () => {
     ).toBe(false);
   });
 
+  it("enforces thematicRelevance=10 for clearly core themes", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].section = "Technology";
+    bundle.items[0].category = "AI";
+    bundle.items[0].tags = ["OpenAI", "LLM"];
+    bundle.items[0].scoreJustification.thematicRelevance = 5;
+    bundle.items[0].scoreJustification.marketImpact = 25;
+    bundle.items[0].relevanceScore = 65;
+    bundle.items[0].priority = "P2";
+
+    const result = normalizePulseBundle(bundle);
+    expect(
+      result.errors.some((error) =>
+        error.includes("thematicRelevance drift: expected 10, found 5 (core taxonomy/theme match)")
+      )
+    ).toBe(true);
+    expect(
+      result.errors.some((error) => error.includes("editorialOverride.field=scoreJustification.thematicRelevance"))
+    ).toBe(true);
+  });
+
+  it("allows a thematicRelevance mismatch when editorial override is declared", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].section = "Technology";
+    bundle.items[0].category = "AI";
+    bundle.items[0].tags = ["OpenAI", "LLM"];
+    bundle.items[0].scoreJustification.thematicRelevance = 5;
+    bundle.items[0].scoreJustification.marketImpact = 25;
+    bundle.items[0].relevanceScore = 65;
+    bundle.items[0].priority = "P2";
+    bundle.items[0].editorialOverride = {
+      field: "scoreJustification.thematicRelevance",
+      reason: "Editorially discounting thematic centrality despite AI classification for this item.",
+    };
+
+    const result = normalizePulseBundle(bundle);
+    expect(
+      result.errors.some((error) =>
+        error.includes("thematicRelevance drift: expected 10, found 5 (core taxonomy/theme match)")
+      )
+    ).toBe(false);
+  });
+
+  it("keeps ambiguous thematicRelevance cases in editorial mode", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].section = "Crypto & Markets";
+    bundle.items[0].category = "DeFi";
+    bundle.items[0].tags = ["SOL", "memecoins"];
+    bundle.items[0].scoreJustification.thematicRelevance = 8;
+    bundle.items[0].scoreJustification.marketImpact = 18;
+    bundle.items[0].relevanceScore = 66;
+    bundle.items[0].priority = "P2";
+
+    const result = normalizePulseBundle(bundle);
+    expect(
+      result.errors.some((error) => error.includes("thematicRelevance drift"))
+    ).toBe(false);
+  });
+
   it("rejects noise items with P1 priority without override", () => {
     const bundle = makeValidBundle();
     bundle.items[0].signalVsNoise = "noise";

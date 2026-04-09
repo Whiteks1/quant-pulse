@@ -4,7 +4,12 @@ import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 import { buildArchiveDeltaArtifacts } from "./archive-deltas.mjs";
 import { listPersistedArchiveEditions } from "./archive-store.mjs";
-import { expectedRecencyScore, expectedSourceQualityScore, hasEditorialOverride } from "./scoring-model.mjs";
+import {
+  expectedRecencyScore,
+  expectedSourceQualityScore,
+  expectedThematicRelevanceScore,
+  hasEditorialOverride,
+} from "./scoring-model.mjs";
 
 export const rootDir = process.cwd();
 export const sourcePath = path.join(rootDir, "content", "pulse.source.json");
@@ -320,6 +325,25 @@ export function normalizePulseBundle(bundle) {
           formatUnlistedSourceQualityMessage({
             itemId: item.id,
             actual: item.scoreJustification.sourceQuality,
+          }),
+          errors
+        );
+      }
+
+      const expectedThematicRelevance = expectedThematicRelevanceScore(item);
+      if (
+        expectedThematicRelevance !== null &&
+        !hasEditorialOverride(item, "scoreJustification.thematicRelevance")
+      ) {
+        assert(
+          item.scoreJustification.thematicRelevance === expectedThematicRelevance,
+          formatDeterministicDriftMessage({
+            itemId: item.id,
+            metric: "thematicRelevance",
+            actual: item.scoreJustification.thematicRelevance,
+            expected: expectedThematicRelevance,
+            basis: "core taxonomy/theme match",
+            overrideField: "scoreJustification.thematicRelevance",
           }),
           errors
         );

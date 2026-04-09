@@ -157,6 +157,7 @@ Regla operativa:
 - para `primary`, `tier_1`, `tier_2` y `tier_3`, `sourceQuality` debe coincidir con el valor determinista esperado por tier salvo `editorialOverride`
 - `unlisted` sigue en modo cap-only mientras no exista una regla canónica más fina para esa clase
 - si existe `scoredAt`, `recency` debe coincidir con la ventana temporal documentada en `docs/scoring-system.es.md` salvo `editorialOverride`
+- `thematicRelevance` ya se valida de forma reproducible para temas inequívocamente core; los casos ambiguos siguen siendo editoriales salvo `editorialOverride`
 
 ### tags
 

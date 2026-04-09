@@ -155,6 +155,19 @@ Si editorialmente se necesita romper esa regla en un tier explícito, debe queda
 
 - fuera del foco estratégico de Quant Pulse
 
+## Regla operativa de enforcement
+
+En el runtime actual, `thematicRelevance` solo se valida de forma reproducible para los casos inequívocamente core.
+
+Hoy el repo exige `10` sin `editorialOverride` cuando el ítem cae de forma clara en alguno de estos marcos:
+
+- categorías core de `Technology`: `AI`, `Cybersecurity`, `Cloud`, `Chips`, `Infrastructure`
+- categorías core de `Crypto & Markets`: `BTC`, `ETH`, `ETFs`, `Regulation`, `Security`, `Market Structure`, `Custody`
+- categorías `Macro` del scope ya aprobado
+- o texto/etiquetas que expresan de forma directa esos mismos temas core
+
+Los casos ambiguos o intermedios siguen siendo editoriales por ahora. Este slice no automatiza todavía el `5` ni el `0` de forma completa.
+
 ## Reglas de ajuste
 
 ### Ajustes positivos

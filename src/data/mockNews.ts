@@ -21,7 +21,8 @@ export interface EditorialOverride {
     | "section"
     | "category"
     | "scoreJustification.recency"
-    | "scoreJustification.sourceQuality";
+    | "scoreJustification.sourceQuality"
+    | "scoreJustification.thematicRelevance";
   reason: string;
 }
 

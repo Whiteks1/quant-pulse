@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { expectedRecencyScore, expectedSourceQualityScore, hasEditorialOverride } from "../../scripts/scoring-model.mjs";
+import {
+  expectedRecencyScore,
+  expectedSourceQualityScore,
+  expectedThematicRelevanceScore,
+  hasEditorialOverride,
+} from "../../scripts/scoring-model.mjs";
 
 describe("scoring model primitives", () => {
   it("returns null when no scoredAt is present", () => {
@@ -51,6 +56,32 @@ describe("scoring model primitives", () => {
     expect(expectedSourceQualityScore({ sourceTier: "unlisted" })).toBeNull();
   });
 
+  it("maps thematicRelevance to 10 only for clearly core themes", () => {
+    expect(
+      expectedThematicRelevanceScore({
+        section: "Technology",
+        category: "AI",
+        tags: ["OpenAI", "LLM"],
+        title: "Frontier model launch",
+        summary: "AI platform competition intensifies.",
+        whyItMatters: "Directly relevant to infrastructure competition.",
+        impact: "Higher bar for AI vendors.",
+      })
+    ).toBe(10);
+
+    expect(
+      expectedThematicRelevanceScore({
+        section: "Crypto & Markets",
+        category: "DeFi",
+        tags: ["SOL", "memecoins"],
+        title: "Speculative activity rises",
+        summary: "TVL expands on speculative flows.",
+        whyItMatters: "Interesting but not cleanly central.",
+        impact: "Weak durable conclusion.",
+      })
+    ).toBeNull();
+  });
+
   it("matches explicit recency override fields only", () => {
     expect(
       hasEditorialOverride(
@@ -62,6 +93,12 @@ describe("scoring model primitives", () => {
       hasEditorialOverride(
         { editorialOverride: { field: "scoreJustification.sourceQuality", reason: "Manual discount." } },
         "scoreJustification.sourceQuality"
+      )
+    ).toBe(true);
+    expect(
+      hasEditorialOverride(
+        { editorialOverride: { field: "scoreJustification.thematicRelevance", reason: "Manual thematic adjustment." } },
+        "scoreJustification.thematicRelevance"
       )
     ).toBe(true);
     expect(
