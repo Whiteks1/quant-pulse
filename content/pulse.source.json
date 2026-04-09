@@ -182,6 +182,10 @@
         "thematicRelevance": 8,
         "rationale": "TVL expansion matters, but the underlying driver is speculative and does not yet justify a higher-priority interpretation."
       },
+      "editorialOverride": {
+        "field": "scoreJustification.sourceQuality",
+        "reason": "DeFiLlama remains unlisted, but its market data is directly relevant enough to retain a higher source-quality score for this specific TVL signal."
+      },
       "dedupeKey": "solana-tvl-memecoin",
       "featured": false
     },

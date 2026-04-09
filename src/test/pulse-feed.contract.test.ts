@@ -206,7 +206,7 @@ describe("normalizePulseBundle contract checks", () => {
     ).toBe(false);
   });
 
-  it("keeps unlisted sources in cap-only mode", () => {
+  it("rejects elevated unlisted sourceQuality without editorial override", () => {
     const bundle = makeValidBundle();
     bundle.items[0].sourceTier = "unlisted";
     bundle.items[0].source = "DeFiLlama";
@@ -214,7 +214,44 @@ describe("normalizePulseBundle contract checks", () => {
 
     const result = normalizePulseBundle(bundle);
     expect(
-      result.errors.some((error) => error.includes("must match the deterministic value for sourceTier"))
+      result.errors.some((error) =>
+        error.includes("unlisted sources default to 3 unless editorially justified, found 10")
+      )
+    ).toBe(true);
+    expect(
+      result.errors.some((error) => error.includes("editorialOverride.field=scoreJustification.sourceQuality"))
+    ).toBe(true);
+  });
+
+  it("allows elevated unlisted sourceQuality when editorial override is declared", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].sourceTier = "unlisted";
+    bundle.items[0].source = "DeFiLlama";
+    bundle.items[0].scoreJustification.sourceQuality = 10;
+    bundle.items[0].editorialOverride = {
+      field: "scoreJustification.sourceQuality",
+      reason: "Unlisted source retained because the dataset is uniquely relevant to this market signal.",
+    };
+
+    const result = normalizePulseBundle(bundle);
+    expect(
+      result.errors.some((error) =>
+        error.includes("unlisted sources default to 3 unless editorially justified")
+      )
+    ).toBe(false);
+  });
+
+  it("keeps baseline unlisted sourceQuality without requiring override", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].sourceTier = "unlisted";
+    bundle.items[0].source = "Decrypt";
+    bundle.items[0].scoreJustification.sourceQuality = 3;
+
+    const result = normalizePulseBundle(bundle);
+    expect(
+      result.errors.some((error) =>
+        error.includes("unlisted sources default to 3 unless editorially justified")
+      )
     ).toBe(false);
   });
 

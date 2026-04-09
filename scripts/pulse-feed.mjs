@@ -40,6 +40,7 @@ const sourceQualityCapsByTier = new Map([
   ["tier_3", 3],
   ["unlisted", 15],
 ]);
+const unlistedSourceQualityBaseline = 3;
 const approvedSourcesPath = path.join(rootDir, "config", "approved-sources.yaml");
 const itemSchemaValidator = createItemSchemaValidator();
 const approvedSourcesByTier = loadApprovedSourcesByTier();
@@ -78,6 +79,13 @@ function formatScoreTotalMismatchMessage({
   expectedScore,
 }) {
   return `Item ${itemId} relevanceScore drift: expected ${expectedScore}, found ${actualScore} (sum of scoreJustification blocks). ${formatOverrideHint("relevanceScore")}`;
+}
+
+function formatUnlistedSourceQualityMessage({
+  itemId,
+  actual,
+}) {
+  return `Item ${itemId} sourceQuality drift: unlisted sources default to ${unlistedSourceQualityBaseline} unless editorially justified, found ${actual}. ${formatOverrideHint("scoreJustification.sourceQuality")}`;
 }
 
 function isHttpUrl(value) {
@@ -301,6 +309,17 @@ export function normalizePulseBundle(bundle) {
             expected: expectedSourceQuality,
             basis: `sourceTier ${item.sourceTier}`,
             overrideField: "scoreJustification.sourceQuality",
+          }),
+          errors
+        );
+      }
+
+      if (item.sourceTier === "unlisted" && !hasEditorialOverride(item, "scoreJustification.sourceQuality")) {
+        assert(
+          item.scoreJustification.sourceQuality <= unlistedSourceQualityBaseline,
+          formatUnlistedSourceQualityMessage({
+            itemId: item.id,
+            actual: item.scoreJustification.sourceQuality,
           }),
           errors
         );
