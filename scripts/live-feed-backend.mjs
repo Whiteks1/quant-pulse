@@ -1,11 +1,9 @@
-import fs from "node:fs";
-import path from "node:path";
 import {
-  archiveSourceDir,
   buildArchiveArtifacts,
   normalizePulseBundle,
   readSourceBundle,
 } from "./pulse-feed.mjs";
+import { readPersistedArchiveEdition } from "./archive-store.mjs";
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -86,12 +84,12 @@ export function getLiveArchiveEdition(slug) {
     return loadCurrentPulseBundle();
   }
 
-  const editionPath = path.join(archiveSourceDir, `${slug}.json`);
-  if (!fs.existsSync(editionPath)) {
+  const edition = readPersistedArchiveEdition(slug);
+  if (!edition.found) {
     return errorResult(404, "edition_not_found", `Archive edition "${slug}" was not found.`);
   }
 
-  const normalized = normalizePulseBundle(readJson(editionPath));
+  const normalized = normalizePulseBundle(edition.bundle);
   if (normalized.errors.length > 0) {
     return errorResult(
       500,

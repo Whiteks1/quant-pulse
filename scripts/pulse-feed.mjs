@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
+import { listPersistedArchiveEditions } from "./archive-store.mjs";
 
 export const rootDir = process.cwd();
 export const sourcePath = path.join(rootDir, "content", "pulse.source.json");
@@ -366,26 +367,6 @@ function editionStats(bundle) {
   };
 }
 
-function readArchiveSourceEntries() {
-  if (!fs.existsSync(archiveSourceDir)) {
-    return [];
-  }
-
-  return fs
-    .readdirSync(archiveSourceDir, { withFileTypes: true })
-    .filter((entry) => entry.isFile() && entry.name.endsWith(".json"))
-    .map((entry) => {
-      const slug = entry.name.replace(/\.json$/, "");
-      const filePath = path.join(archiveSourceDir, entry.name);
-
-      return {
-        slug,
-        filePath,
-        bundle: readJson(filePath),
-      };
-    });
-}
-
 function buildEditionIndexItem({
   slug,
   label,
@@ -426,7 +407,7 @@ export function buildArchiveArtifacts(currentBundle) {
     }),
   ];
 
-  for (const entry of readArchiveSourceEntries()) {
+  for (const entry of listPersistedArchiveEditions()) {
     const { errors: entryErrors, bundle } = normalizePulseBundle(entry.bundle);
 
     for (const error of entryErrors) {
