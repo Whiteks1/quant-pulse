@@ -2,6 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import {
   archiveCurrentOutputPath,
+  archiveDeltaIndexOutputPath,
+  archiveDeltaOutputDir,
   archiveEditionOutputDir,
   archiveIndexOutputPath,
   buildArchiveArtifacts,
@@ -34,6 +36,7 @@ if (checkMode) {
     { outputPath, content: serialized },
     { outputPath: archiveCurrentOutputPath, content: archiveArtifacts.currentContent },
     { outputPath: archiveIndexOutputPath, content: archiveArtifacts.indexContent },
+    { outputPath: archiveDeltaIndexOutputPath, content: archiveArtifacts.deltaIndexContent },
     { outputPath: intentsOutputPath, content: intentsArtifact.content },
   ];
 
@@ -68,6 +71,28 @@ if (checkMode) {
     }
   }
 
+  const existingDeltaFiles = fs.existsSync(archiveDeltaOutputDir)
+    ? fs
+        .readdirSync(archiveDeltaOutputDir, { withFileTypes: true })
+        .filter((entry) => entry.isFile() && entry.name.endsWith(".json") && entry.name !== "index.json")
+        .map((entry) => entry.name)
+        .sort()
+    : [];
+
+  const expectedDeltaFiles = archiveArtifacts.archiveDeltaFiles
+    .map((entry) => path.basename(entry.outputPath))
+    .sort();
+
+  if (existingDeltaFiles.join("|") !== expectedDeltaFiles.join("|")) {
+    mismatches.push(path.relative(process.cwd(), archiveDeltaOutputDir));
+  } else {
+    for (const deltaFile of archiveArtifacts.archiveDeltaFiles) {
+      if (!fs.existsSync(deltaFile.outputPath) || fs.readFileSync(deltaFile.outputPath, "utf8") !== deltaFile.content) {
+        mismatches.push(path.relative(process.cwd(), deltaFile.outputPath));
+      }
+    }
+  }
+
   if (mismatches.length > 0) {
     console.error("Feed check failed:\n");
     for (const mismatch of mismatches) {
@@ -85,9 +110,11 @@ fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 fs.writeFileSync(outputPath, serialized, "utf8");
 fs.mkdirSync(path.dirname(archiveCurrentOutputPath), { recursive: true });
 fs.mkdirSync(archiveEditionOutputDir, { recursive: true });
+fs.mkdirSync(archiveDeltaOutputDir, { recursive: true });
 fs.writeFileSync(intentsOutputPath, intentsArtifact.content, "utf8");
 fs.writeFileSync(archiveCurrentOutputPath, archiveArtifacts.currentContent, "utf8");
 fs.writeFileSync(archiveIndexOutputPath, archiveArtifacts.indexContent, "utf8");
+fs.writeFileSync(archiveDeltaIndexOutputPath, archiveArtifacts.deltaIndexContent, "utf8");
 
 const existingOutputFiles = fs
   .readdirSync(archiveEditionOutputDir, { withFileTypes: true })
@@ -103,6 +130,22 @@ for (const file of existingOutputFiles) {
 
 for (const editionFile of archiveArtifacts.archiveEditionFiles) {
   fs.writeFileSync(editionFile.outputPath, editionFile.content, "utf8");
+}
+
+const existingDeltaOutputFiles = fs
+  .readdirSync(archiveDeltaOutputDir, { withFileTypes: true })
+  .filter((entry) => entry.isFile() && entry.name.endsWith(".json") && entry.name !== "index.json");
+
+for (const file of existingDeltaOutputFiles) {
+  const currentPath = path.join(archiveDeltaOutputDir, file.name);
+  const shouldKeep = archiveArtifacts.archiveDeltaFiles.some((entry) => entry.outputPath === currentPath);
+  if (!shouldKeep) {
+    fs.rmSync(currentPath);
+  }
+}
+
+for (const deltaFile of archiveArtifacts.archiveDeltaFiles) {
+  fs.writeFileSync(deltaFile.outputPath, deltaFile.content, "utf8");
 }
 
 console.log("Feed build completed.");
