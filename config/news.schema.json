@@ -98,7 +98,7 @@
       "properties": {
         "field": {
           "type": "string",
-          "enum": ["priority", "relevanceScore", "signalVsNoise", "section", "category", "scoreJustification.recency"]
+          "enum": ["priority", "relevanceScore", "signalVsNoise", "section", "category", "scoreJustification.recency", "scoreJustification.sourceQuality"]
         },
         "reason": { "type": "string", "minLength": 1 }
       }

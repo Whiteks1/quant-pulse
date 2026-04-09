@@ -3,7 +3,7 @@ import path from "node:path";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 import { listPersistedArchiveEditions } from "./archive-store.mjs";
-import { expectedRecencyScore, hasEditorialOverride } from "./scoring-model.mjs";
+import { expectedRecencyScore, expectedSourceQualityScore, hasEditorialOverride } from "./scoring-model.mjs";
 
 export const rootDir = process.cwd();
 export const sourcePath = path.join(rootDir, "content", "pulse.source.json");
@@ -244,6 +244,15 @@ export function normalizePulseBundle(bundle) {
         assert(
           item.scoreJustification.sourceQuality <= sourceQualityCap,
           `Item ${item.id} sourceQuality (${item.scoreJustification.sourceQuality}) exceeds cap for sourceTier (${item.sourceTier})`,
+          errors
+        );
+      }
+
+      const expectedSourceQuality = expectedSourceQualityScore(item);
+      if (expectedSourceQuality !== null && !hasEditorialOverride(item, "scoreJustification.sourceQuality")) {
+        assert(
+          item.scoreJustification.sourceQuality === expectedSourceQuality,
+          `Item ${item.id} sourceQuality (${item.scoreJustification.sourceQuality}) must match the deterministic value for sourceTier (${item.sourceTier} -> ${expectedSourceQuality}) or declare editorialOverride`,
           errors
         );
       }

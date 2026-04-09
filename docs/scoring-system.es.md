@@ -107,14 +107,18 @@ En el runtime actual, la recencia solo puede validarse de forma reproducible cua
 
 ## Regla operativa de enforcement
 
-En el runtime actual, `sourceQuality` no puede exceder el máximo esperable para `sourceTier`:
+En el runtime actual, `sourceQuality` se interpreta así:
 
-- `primary` → hasta 15
-- `tier_1` → hasta 12
-- `tier_2` → hasta 8
-- `tier_3` → hasta 3
+- `primary` → 15
+- `tier_1` → 12
+- `tier_2` → 8
+- `tier_3` → 3
 
-Si editorialmente se necesita romper esa regla, debe quedar documentado con `editorialOverride`.
+Para estos tiers explícitos, el valor ya es determinista y no solo un máximo.
+
+`unlisted` sigue en modo cap-only mientras no exista una clasificación canónica más fina para esas fuentes.
+
+Si editorialmente se necesita romper esa regla en un tier explícito, debe quedar documentado con `editorialOverride` sobre `scoreJustification.sourceQuality`.
 
 ## 5. Validación cruzada (0–10)
 

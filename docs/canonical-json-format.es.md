@@ -154,6 +154,8 @@ Desglose editorial del score por bloques y una explicación corta del porqué.
 Regla operativa:
 
 - `sourceQuality` no debe exceder el máximo permitido por `sourceTier`
+- para `primary`, `tier_1`, `tier_2` y `tier_3`, `sourceQuality` debe coincidir con el valor determinista esperado por tier salvo `editorialOverride`
+- `unlisted` sigue en modo cap-only mientras no exista una regla canónica más fina para esa clase
 - si existe `scoredAt`, `recency` debe coincidir con la ventana temporal documentada en `docs/scoring-system.es.md` salvo `editorialOverride`
 
 ### tags
@@ -192,6 +194,7 @@ Además, el pipeline impone validaciones de integridad editorial sobre el bundle
 - referencias del `executiveBrief`
 - coherencia `section` / `category`
 - límites de `sourceQuality` por `sourceTier`
+- coherencia determinista de `sourceQuality` para tiers explícitos
 - coherencia de `recency` cuando un item declara `scoredAt`
 - incompatibilidades fuertes entre `signalVsNoise`, `priority` y `relevanceScore` sin `editorialOverride`
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { expectedRecencyScore, hasEditorialOverride } from "../../scripts/scoring-model.mjs";
+import { expectedRecencyScore, expectedSourceQualityScore, hasEditorialOverride } from "../../scripts/scoring-model.mjs";
 
 describe("scoring model primitives", () => {
   it("returns null when no scoredAt is present", () => {
@@ -43,11 +43,25 @@ describe("scoring model primitives", () => {
     ).toBe(0);
   });
 
+  it("maps deterministic sourceQuality by explicit source tier", () => {
+    expect(expectedSourceQualityScore({ sourceTier: "primary" })).toBe(15);
+    expect(expectedSourceQualityScore({ sourceTier: "tier_1" })).toBe(12);
+    expect(expectedSourceQualityScore({ sourceTier: "tier_2" })).toBe(8);
+    expect(expectedSourceQualityScore({ sourceTier: "tier_3" })).toBe(3);
+    expect(expectedSourceQualityScore({ sourceTier: "unlisted" })).toBeNull();
+  });
+
   it("matches explicit recency override fields only", () => {
     expect(
       hasEditorialOverride(
         { editorialOverride: { field: "scoreJustification.recency", reason: "Timing context." } },
         "scoreJustification.recency"
+      )
+    ).toBe(true);
+    expect(
+      hasEditorialOverride(
+        { editorialOverride: { field: "scoreJustification.sourceQuality", reason: "Manual discount." } },
+        "scoreJustification.sourceQuality"
       )
     ).toBe(true);
     expect(
