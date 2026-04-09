@@ -28,10 +28,15 @@ La intención del producto está muy clara en la documentación del repo:
 - frontend estático en React + Vite + Tailwind + shadcn/ui
 - despliegue en GitHub Pages
 - carga del feed desde `public/data/pulse.json`
+- backend mínimo para `pulse` y `archive` con contrato vivo estable
+- adaptador frontend con fallback estático explícito
 - dashboard ligero de instrumentación editorial en home
 - archivo navegable con ruta dedicada y filtros por edición/facetas
 - comparativa entre ediciones en archive
 - manifiesto de archivo estático en `public/data/archive/`
+- histórico persistido en `content/archive/editions/`
+- artefacto downstream `public/data/intents.json`
+- smoke/E2E para home, archive, estados degradados, payload inválido y modo API
 - estructura visual para:
   - Hero
   - Pulse Dashboard
@@ -62,9 +67,9 @@ La intención del producto está muy clara en la documentación del repo:
 - normalización automática de fuentes
 - deduplicación automática
 - scoring automático
-- generación automática de `pulse.json`
+- generación automática de `pulse.json` desde ingestión viva
 - búsqueda real
-- backend/API
+- endpoints vivos adicionales más allá del baseline mínimo
 - GPT Actions útiles sobre datos vivos
 - alertas operativas
 
@@ -97,13 +102,15 @@ Todavía no es:
 - pipeline editorial y publicación estática bien definidos
 - contrato upstream `Quant Pulse -> QuantLab` más explícito
 - frontend más útil para lectura, priorización y comparación
+- baseline mínimo de Fase 2 ya implementado sin romper el contrato canónico del feed
+- cobertura funcional y smoke mucho más amplia que en la fase inicial
 
 ### Gaps operativos principales
 
-- cobertura E2E todavía demasiado superficial
-- validación runtime en cliente demasiado ligera para el nivel actual del sistema
 - histórico todavía con poca masa crítica publicada
-- gobernanza interna aún no completamente cerrada por la rama heredada
+- la ingesta, deduplicación y scoring siguen siendo manuales o semi-manuales
+- todavía no existe un uso operativo real de GPT Actions sobre datos vivos
+- falta decidir el siguiente paso rentable tras el baseline mínimo de backend
 
 ## 4. Principio rector del roadmap
 
@@ -114,9 +121,9 @@ El orden correcto, según el estado del repo y su propia documentación, es:
 1. blindar la confiabilidad de Fase 1
 2. cerrar deuda de gobernanza del repo
 3. explotar mejor el archivo como producto
-4. automatizar el feed
-5. introducir backend mínimo
-6. activar Actions
+4. introducir backend mínimo
+5. automatizar la ingesta y el scoring
+6. activar Actions solo cuando exista un caso útil y estable
 
 ## 5. Roadmap propuesto
 
@@ -219,6 +226,17 @@ Separar contenido y frontend, y dejar de depender progresivamente de edición ma
 
 La web ya no depende de edición manual directa de `public/data/pulse.json`.
 
+### Estado
+
+El baseline mínimo de esta fase ya está implementado en `main`. Lo que queda pendiente ya no es "tener API", sino decidir si merece ampliar esa frontera más allá de:
+
+- `GET /v1/pulse/current`
+- `GET /v1/archive/index`
+- `GET /v1/archive/editions/{editionSlug}`
+- persistencia local del histórico
+- adaptador frontend con fallback estático
+- smoke/E2E del modo API
+
 ## Fase 3 — Ingesta y scoring automatizados
 
 ### Objetivo
@@ -276,14 +294,14 @@ Quant Pulse ya funciona como radar, no solo como frontend de resúmenes.
 
 ## Prioridad alta
 
-- añadir E2E reales para home y archive
-- introducir validación runtime del subconjunto crítico del feed en cliente
-- cerrar la decisión sobre la rama heredada y la gobernanza interna del repo
+- seguir poblando el archivo con histórico real de ediciones estáticas
+- decidir el siguiente slice rentable tras el baseline mínimo de backend
+- mantener sincronizados feed, archive e intents con la fuente editorial
 
 ## Prioridad media
 
-- seguir poblando el archivo con histórico real de ediciones estáticas
 - reforzar la lectura editorial de cambios entre ediciones
+- preparar la siguiente frontera útil de automatización sin sobrediseñar Fase 3
 - reescribir README/demo para reflejar mejor la madurez real del producto
 
 ## Prioridad baja
@@ -306,10 +324,9 @@ El siguiente paso más rentable no es añadir más UI ni más backend.
 
 Es este:
 
-1. blindar confiabilidad: E2E y validación runtime
-2. cerrar la deuda de gobernanza interna
-3. seguir convirtiendo el archive en producto
-4. solo después abrir una automatización más ambiciosa del sistema
+1. seguir convirtiendo el archive en producto con ediciones reales
+2. decidir el primer slice útil de automatización de Fase 3
+3. evitar ampliar backend o Actions sin un beneficio downstream claro
 
 ## 9. Resumen ejecutivo
 
@@ -322,6 +339,8 @@ El repositorio ya tiene:
 - scoring
 - frontend publicado
 - feed estático funcional
+- backend mínimo vivo ya implementado
+- archive persistente y API baseline ya cubiertos por smoke
 - contrato upstream más explícito
 - frontend más instrumental que en la fase inicial
 
@@ -334,10 +353,7 @@ Lo que falta es cerrar el gap entre:
 
 El roadmap correcto es:
 
-- blindar confiabilidad
-- cerrar gobernanza interna
 - explotar mejor el histórico
-- automatizar validación y publicación
-- construir backend mínimo
-- añadir Actions
+- automatizar ingesta y scoring
+- abrir Actions solo si el caso downstream lo justifica
 - evolucionar a radar operativo completo
