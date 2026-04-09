@@ -26,14 +26,21 @@ jobs:
 
       - run: npm ci
 
-      - name: Detect feed-related changes
+      - name: Detect validation-relevant changes
         id: changes
         run: |
           CHANGED_FILES="$(git diff --name-only ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }})"
+
           if echo "$CHANGED_FILES" | grep -E '^(content/|public/data/|scripts/|config/news\.schema\.json|config/approved-sources\.yaml|docs/canonical-json-format\.es\.md|docs/feed-workflow\.es\.md)'; then
             echo "run_feed_check=true" >> "$GITHUB_OUTPUT"
           else
             echo "run_feed_check=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if echo "$CHANGED_FILES" | grep -E '^(src/data/|src/hooks/useArchiveEdition\.ts|src/hooks/usePulseData\.ts|scripts/live-feed-|scripts/archive-store\.mjs|scripts/run-playwright-api|e2e/api-mode\.spec\.ts|package\.json|package-lock\.json|playwright\.config\.ts|vite\.config\.ts)'; then
+            echo "run_api_smoke=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_api_smoke=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Check diff formatting
@@ -45,6 +52,14 @@ jobs:
 
       - run: npm run validate:feed
       - run: npm test
+
+      - name: Install Playwright browser for API smoke
+        if: steps.changes.outputs.run_api_smoke == 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Run API-mode smoke coverage
+        if: steps.changes.outputs.run_api_smoke == 'true'
+        run: npm run test:e2e:api -- api-mode.spec.ts
 
       - name: Build
         env:
