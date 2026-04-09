@@ -71,4 +71,24 @@ describe("runtime feed validation", () => {
       /payload\.currentEditionSlug must match one of the published editions/
     );
   });
+
+  it("accepts sourceQuality overrides through the runtime contract", () => {
+    const payload = readJson("public/data/pulse.json") as {
+      items: Array<Record<string, unknown>>;
+      executiveBrief: unknown[];
+      watchItems: unknown[];
+      version: number;
+      updatedAt: string;
+    };
+
+    payload.items[0] = {
+      ...payload.items[0],
+      editorialOverride: {
+        field: "scoreJustification.sourceQuality",
+        reason: "Editorial discount for source quality.",
+      },
+    };
+
+    expect(() => validatePulseBundle(payload, "pulse.json")).not.toThrow();
+  });
 });

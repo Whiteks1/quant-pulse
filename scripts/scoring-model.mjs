@@ -24,3 +24,18 @@ export function expectedRecencyScore({ publishedAt, scoredAt }) {
   if (ageInHours <= 72) return 5;
   return 0;
 }
+
+export function expectedSourceQualityScore({ sourceTier }) {
+  switch (sourceTier) {
+    case "primary":
+      return 15;
+    case "tier_1":
+      return 12;
+    case "tier_2":
+      return 8;
+    case "tier_3":
+      return 3;
+    default:
+      return null;
+  }
+}

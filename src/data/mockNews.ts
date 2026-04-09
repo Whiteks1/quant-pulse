@@ -14,7 +14,14 @@ export interface ScoreJustification {
 }
 
 export interface EditorialOverride {
-  field: "priority" | "relevanceScore" | "signalVsNoise" | "section" | "category" | "scoreJustification.recency";
+  field:
+    | "priority"
+    | "relevanceScore"
+    | "signalVsNoise"
+    | "section"
+    | "category"
+    | "scoreJustification.recency"
+    | "scoreJustification.sourceQuality";
   reason: string;
 }
 

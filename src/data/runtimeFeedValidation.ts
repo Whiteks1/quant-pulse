@@ -25,6 +25,7 @@ const allowedOverrideFields = new Set<EditorialOverride["field"]>([
   "section",
   "category",
   "scoreJustification.recency",
+  "scoreJustification.sourceQuality",
 ]);
 const isoDateTimePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z$/;
 const watchDatePattern = /^\d{4}-\d{2}-\d{2}$/;

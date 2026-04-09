@@ -167,6 +167,54 @@ describe("normalizePulseBundle contract checks", () => {
     );
   });
 
+  it("enforces deterministic sourceQuality for explicit tiers", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].sourceTier = "tier_1";
+    bundle.items[0].source = "Bloomberg";
+    bundle.items[0].scoreJustification.sourceQuality = 10;
+    bundle.items[0].scoreJustification.marketImpact = 22;
+    bundle.items[0].relevanceScore = 67;
+    bundle.items[0].priority = "P2";
+
+    const result = normalizePulseBundle(bundle);
+    expect(
+      result.errors.some((error) =>
+        error.includes("sourceQuality (10) must match the deterministic value for sourceTier (tier_1 -> 12)")
+      )
+    ).toBe(true);
+  });
+
+  it("allows deterministic sourceQuality mismatches when override is declared", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].sourceTier = "tier_1";
+    bundle.items[0].source = "Bloomberg";
+    bundle.items[0].scoreJustification.sourceQuality = 10;
+    bundle.items[0].scoreJustification.marketImpact = 22;
+    bundle.items[0].relevanceScore = 67;
+    bundle.items[0].priority = "P2";
+    bundle.items[0].editorialOverride = {
+      field: "scoreJustification.sourceQuality",
+      reason: "Source quality intentionally discounted despite tier due to editorial caution.",
+    };
+
+    const result = normalizePulseBundle(bundle);
+    expect(
+      result.errors.some((error) => error.includes("must match the deterministic value for sourceTier"))
+    ).toBe(false);
+  });
+
+  it("keeps unlisted sources in cap-only mode", () => {
+    const bundle = makeValidBundle();
+    bundle.items[0].sourceTier = "unlisted";
+    bundle.items[0].source = "DeFiLlama";
+    bundle.items[0].scoreJustification.sourceQuality = 10;
+
+    const result = normalizePulseBundle(bundle);
+    expect(
+      result.errors.some((error) => error.includes("must match the deterministic value for sourceTier"))
+    ).toBe(false);
+  });
+
   it("rejects noise items with P1 priority without override", () => {
     const bundle = makeValidBundle();
     bundle.items[0].signalVsNoise = "noise";
