@@ -8,6 +8,10 @@
 - PR mergeado en `main`
 - Issue cerrada
 - Commit en `main`: `<commit_sha>` `<commit_title>`
+- Rama remota del slice eliminada
+- Rama local o worktree del slice eliminados
+- `main` sincronizada con `origin/main`
+- Workspace limpio
 
 ## Exact files changed
 - `<path>`
@@ -35,6 +39,7 @@ Validation:
 - `<relevant command>`
 
 ## Workflow hygiene notes
+- para trabajo no trivial con diff real, ejecutar el flujo completo sin preguntar por cada paso salvo instruccion contraria del usuario
 - usar worktree nuevo si el arbol principal esta sucio
 - crear siempre desde `origin/main`
 - no seguir sobre ramas WIP con commits ya equivalentes a `main`
