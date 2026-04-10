@@ -19,7 +19,8 @@
     "test:e2e:api": "node scripts/run-playwright-api.mjs",
     "test:e2e:api:pages": "node scripts/run-playwright-api-pages.mjs",
     "test:e2e:pages": "node scripts/run-playwright-pages.mjs",
-    "validate:feed": "node scripts/validate-feed.mjs"
+    "validate:feed": "node scripts/validate-feed.mjs",
+    "validate:candidates": "node scripts/validate-candidates.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
