@@ -1,0 +1,35 @@
+{
+  "version": "1.0",
+  "retention_policy": "permanent",
+  "generated_at": "2026-04-10T14:30:00Z",
+  "total_events": 3,
+  "events": [
+    {
+      "timestamp": "2026-04-10T12:15:30Z",
+      "event_type": "candidate_rejected",
+      "candidate_id": "example_no_candidate_001",
+      "gate": "no_candidate",
+      "result": "reject",
+      "decision_reason": "Signal insufficient: confidence=0.42 (min 0.50), score=35 (min 40). Below minimum viability threshold.",
+      "evaluator": "scoring_engine_v1"
+    },
+    {
+      "timestamp": "2026-04-10T13:22:15Z",
+      "event_type": "candidate_accepted",
+      "candidate_id": "example_candidate_001",
+      "gate": "candidate",
+      "result": "accept",
+      "decision_reason": "Signal viable: confidence=0.68 (≥0.50), score=58 (≥40), source=coindesk (approved). Escalating for human review.",
+      "evaluator": "scoring_engine_v1"
+    },
+    {
+      "timestamp": "2026-04-10T14:05:45Z",
+      "event_type": "candidate_high_confidence",
+      "candidate_id": "example_ready_for_review_001",
+      "gate": "ready_for_review",
+      "result": "accept_high_confidence",
+      "decision_reason": "High confidence signal: confidence=0.82 (≥0.75), score=78 (≥70), source=chain_community_call (tier_1), category=Web3_Structure (material). Ready for QuantLab intake.",
+      "evaluator": "scoring_engine_v1"
+    }
+  ]
+}
