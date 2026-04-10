@@ -1,0 +1,35 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-04-10T14:30:00Z",
+  "total_candidates": 3,
+  "by_state": {
+    "no_candidate": 1,
+    "candidate": 1,
+    "ready_for_review": 1,
+    "published": 0,
+    "archived": 0
+  },
+  "candidates": [
+    {
+      "id": "example_no_candidate_001",
+      "state": "no_candidate",
+      "score": 35,
+      "confidence": 0.42,
+      "file": "automation/candidates/examples/example_no_candidate.json"
+    },
+    {
+      "id": "example_candidate_001",
+      "state": "candidate",
+      "score": 58,
+      "confidence": 0.68,
+      "file": "automation/candidates/examples/example_candidate.json"
+    },
+    {
+      "id": "example_ready_for_review_001",
+      "state": "ready_for_review",
+      "score": 78,
+      "confidence": 0.82,
+      "file": "automation/candidates/examples/example_ready_for_review.json"
+    }
+  ]
+}

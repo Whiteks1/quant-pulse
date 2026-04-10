@@ -1,0 +1,30 @@
+{
+  "id": "example_no_candidate_001",
+  "state": "no_candidate",
+  "source": "reddit_r_crypto",
+  "title": "Possible ETH Upgrade Rumor",
+  "summary": "Unconfirmed speculation about Ethereum upgrade timing from anonymous source",
+  "category": "Eth_Regulatory",
+  "score": 35,
+  "confidence": 0.42,
+  "decision": {
+    "gate_applied": "no_candidate",
+    "timestamp": "2026-04-10T12:15:30Z",
+    "reason": "Rejected by no_candidate gate. Confidence=0.42 (<0.50 min), Score=35 (<40 min). Source tier_2 + anonymous + unconfirmed reduce confidence. Does not meet minimum viability threshold.",
+    "evaluator": "scoring_engine_v1"
+  },
+  "state_transitions": [
+    {
+      "from": "no_candidate",
+      "to": "no_candidate",
+      "timestamp": "2026-04-10T12:15:30Z",
+      "reason": "Initial evaluation by scoring engine — below thresholds"
+    }
+  ],
+  "metadata": {
+    "detected_at": "2026-04-10T11:45:00Z",
+    "parent_signal_id": null,
+    "related_signals": [],
+    "notes": "Example fixture showing gate rejection. Demonstrates low confidence + low score → archived."
+  }
+}

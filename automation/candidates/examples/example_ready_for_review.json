@@ -1,0 +1,35 @@
+{
+  "id": "example_ready_for_review_001",
+  "state": "ready_for_review",
+  "source": "chain_community_call",
+  "title": "Ethereum Core Devs Announce EIP-7919 Activation Timeline",
+  "summary": "Official announcement from Ethereum Foundation core development team regarding critical infrastructure upgrade. Material impact on protocol roadmap and validator economics.",
+  "category": "Web3_Structure",
+  "score": 78,
+  "confidence": 0.82,
+  "decision": {
+    "gate_applied": "ready_for_review",
+    "timestamp": "2026-04-10T14:05:45Z",
+    "reason": "High confidence signal approved. Confidence=0.82 (≥0.75), Score=78 (≥70), Source=chain_community_call (tier_1, verified official), Category=Web3_Structure (material to QuantLab). May proceed directly to intent production or await QuantLab expedited review.",
+    "evaluator": "scoring_engine_v1"
+  },
+  "state_transitions": [
+    {
+      "from": "no_candidate",
+      "to": "ready_for_review",
+      "timestamp": "2026-04-10T14:05:45Z",
+      "reason": "Ready_for_review gate accepted signal — high confidence, tier_1 source, material impact"
+    }
+  ],
+  "metadata": {
+    "detected_at": "2026-04-10T13:30:00Z",
+    "parent_signal_id": null,
+    "related_signals": [],
+    "links": [
+      "https://github.com/ethereum/execution-specs/issues/eip-7919",
+      "https://ethereum.org/en/roadmap/"
+    ],
+    "protocol_impact": "High — affects validator economics, network security timeline, ecosystem incentives",
+    "notes": "Example fixture showing high-confidence signal. Demonstrates high confidence + high score + tier_1 source + material category → ready for direct intent production. QuantLab may review but signal strength allows autonomous production."
+  }
+}

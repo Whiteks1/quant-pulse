@@ -1,0 +1,96 @@
+# Approval Gates Configuration
+# Defines state machine transitions and decision thresholds for candidate signals
+# Source of truth for governance layer (automation/*)
+# Kept separate from canonical feed (content/pulse.source.json)
+
+gates:
+  - id: no_candidate
+    name: "Candidate Rejection"
+    description: "Signal falls below minimum viability thresholds"
+    conditions:
+      - confidence < 0.50
+      - score < 40
+    action: "Reject — signal insufficient for evaluation"
+    next_state: "archived"
+    audit_required: true
+    reason_template: "Rejected by no_candidate gate: confidence={confidence}, score={score}. Requires min confidence 0.50 or score 40."
+
+  - id: candidate
+    name: "Candidate Acceptance"
+    description: "Signal meets minimum viability. Ready for human review."
+    conditions:
+      - confidence >= 0.50
+      - score >= 40
+      - source in approved_sources
+    action: "Accept as candidate — escalate to review queue"
+    next_state: "candidate"
+    audit_required: true
+    reason_template: "Passed candidate gate: confidence={confidence}, score={score}, source={source}. Ready for human review by QuantLab."
+
+  - id: ready_for_review
+    name: "Ready for Review"
+    description: "Signal confidence high enough for direct QuantLab consumption. May skip human review."
+    conditions:
+      - confidence >= 0.75
+      - score >= 70
+      - source in tier_1_sources
+      - category_is_material_to_quantlab: true
+    action: "Accept and produce intent — optional human review"
+    next_state: "ready_for_review"
+    audit_required: true
+    reason_template: "High confidence signal: confidence={confidence}, score={score}, source={source}, tier=tier_1. Ready for QuantLab intake without human review if desired."
+
+# Scoring bands (priority classification)
+scoring_bands:
+  p1:
+    minimum_score: 70
+    maximum_score: 100
+    description: "Priority 1 — Material impact on trading, risk, or QuantLab product"
+    retention: "archive + historical"
+  p2:
+    minimum_score: 40
+    maximum_score: 69
+    description: "Priority 2 — Notable but not decision-driving"
+    retention: "6 months archive"
+  p3:
+    minimum_score: 0
+    maximum_score: 39
+    description: "Priority 3 — Context only, below decision threshold"
+    retention: "30 days archive"
+
+# Thresholds (enforced by validate-candidates.mjs)
+thresholds:
+  confidence_minimum: 0.50
+  confidence_ready_for_review: 0.75
+  score_minimum: 40
+  score_p1_minimum: 70
+
+# Approved sources (referenced in candidate evaluation)
+# Maps to config/approved-sources.yaml
+approved_sources:
+  tier_1:
+    - "coindesk"
+    - "chain_community_call"
+    - "sec_official"
+    - "ethereum_core_devs"
+  tier_2:
+    - "crypto_twitter"
+    - "reddit_r_crypto"
+    - "messari"
+  all: &approved_sources_list
+    - "coindesk"
+    - "chain_community_call"
+    - "sec_official"
+    - "ethereum_core_devs"
+    - "crypto_twitter"
+    - "reddit_r_crypto"
+    - "messari"
+
+# Audit trail requirements
+audit:
+  log_all_decisions: true
+  log_all_transitions: true
+  log_evaluator: true
+  log_timestamp: true
+  retention_policy: "permanent"
+  archive_path: "automation/archive/audit_trail.json"
